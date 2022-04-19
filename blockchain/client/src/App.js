@@ -46,9 +46,11 @@ class App extends Component {
   async handleSign(event, doc) {
     event.preventDefault();
     const {accounts, contract } = this.state;
-    await contract.methods.sign(this.state.name, doc).send({from: this.state.accounts});
-    const response = await contract.methods.get(this.state.name, 0).call();
-    this.setState({signMap: [...this.state.signMap, {name: this.state.name, document: response}]});
+    if(this.state.name != "") {
+      await contract.methods.sign(this.state.name, doc).send({from: this.state.accounts});
+      const response = await contract.methods.get(this.state.name, 0).call();
+      this.setState({signMap: [...this.state.signMap, {name: this.state.name, document: response}]});
+    }
   }
 
   render() {
@@ -57,31 +59,42 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <h1>Welcome to DocBlock!</h1>
-        <form onSubmit={this.handleChange}>
-          <label htmlFor="username">Username: </label>
-          <input type="text" id="username" value={this.state.name} onChange={this.handleChange.bind(this)}/>
-        </form>
-        <div> {this.state.newSignature.name} has signed {this.state.newSignature.document}</div>
-        <form onSubmit={(e) => this.handleSign(e, "Document1")}>
-          <p>Document 1</p>
-          <button type="submit">Sign</button>
-        </form>
-        <form onSubmit={(e) => this.handleSign(e, "Document2")}>
-          <p>Document 2</p>
-          <button type="submit">Sign</button>
-        </form>
-
-        <ul id="signDocs" className="list-unstyled">
-          { this.state.signMap.map((doc, key) => {
-            return(
-              <div key={key}>
-                <span className="content">{doc.name} has signed {doc.document}</span>
-              </div>
-            )
-          })}
-        </ul>
+        <div className="container">
+          <h1>Welcome to DocBlock!</h1>
+          <form>
+            <div className="form-group my-5">
+              <input type="email" className="form-control" id="username" value={this.state.name} onChange={this.handleChange.bind(this)} placeholder="Enter username"/>
+            </div>
+          </form>
+          <table className="table table-striped">
+            <thead>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Document 1</td>
+                <td>
+                  <button type="submit" className="btn btn-primary" onClick={(e) => this.handleSign(e, "Document 1")}>Sign</button>
+                </td>
+              </tr>
+              <tr>
+              <td>Document 2</td>
+                <td>
+                  <button type="submit" className="btn btn-primary" onClick={(e) => this.handleSign(e, "Document 2")}>Sign</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ul id="signDocs" className="list-unstyled">
+            { this.state.signMap.map((doc, key) => {
+              return(
+                <div key={key}>
+                  <span className="content">{doc.name} has signed {doc.document}</span>
+                </div>
+              )
+            })}
+          </ul>
       </div>
+    </div>
     );
   }
 }
