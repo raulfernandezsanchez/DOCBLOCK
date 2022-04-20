@@ -61,14 +61,13 @@ class App extends Component {
       <div className="App">
         <div className="container">
           <h1>Welcome to DocBlock!</h1>
-          <form>
+          <div className="form-row">
             <div className="form-group my-5">
+              <label htmlFor="username">Username</label>
               <input type="email" className="form-control" id="username" value={this.state.name} onChange={this.handleChange.bind(this)} placeholder="Enter username"/>
             </div>
-          </form>
+          </div>
           <table className="table table-striped">
-            <thead>
-            </thead>
             <tbody>
               <tr>
                 <td>Document 1</td>
@@ -82,13 +81,20 @@ class App extends Component {
                   <button type="submit" className="btn btn-primary" onClick={(e) => this.handleSign(e, "Document 2")}>Sign</button>
                 </td>
               </tr>
+              <tr>
+              <td>Document 3</td>
+                <td>
+                  <button type="submit" className="btn btn-primary" onClick={(e) => this.handleSign(e, "Document 3")}>Sign</button>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <ul id="signDocs" className="list-unstyled">
+          <ul className="list-group">
+            <li className="list-group-item">Log</li>
             { this.state.signMap.map((doc, key) => {
               return(
                 <div key={key}>
-                  <span className="content">{doc.name} has signed {doc.document}</span>
+                  <li className="content list-group-item list-group-item-success">{doc.name} has signed {doc.document}</li>
                 </div>
               )
             })}
