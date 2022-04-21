@@ -46,10 +46,26 @@ class App extends Component {
   async handleSign(event, doc) {
     event.preventDefault();
     const {accounts, contract } = this.state;
-    await contract.methods.sign(this.state.name, doc).send({from: this.state.accounts});
-    console.log("iepa");
-    const response = await contract.methods.get(this.state.name, 0).call();
-    this.setState({signMap: [...this.state.signMap, {name: this.state.name, document: response}]});
+    if(this.state.name != "") {
+      var alreadySigned = false;
+      this.state.signMap.map((docs, key) => {
+        if(docs.name == this.state.name){
+          if(docs.document == doc) {
+            alert("Document already signed!");
+            alreadySigned = true;
+          }
+        }
+      })
+      //const response = await contract.methods.get(this.state.name, 0).call();
+      //if(response = doc) {
+        //alreadySigned = true;
+      //}
+      if(!alreadySigned) {
+        await contract.methods.sign(this.state.name, doc).send({from: this.state.accounts});
+        //const response = await contract.methods.get(this.state.name, 0).call();
+        this.setState({signMap: [...this.state.signMap, {name: this.state.name, document: doc}]});
+      }
+    }
   }
 
   render() {
@@ -58,31 +74,48 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <h1>Welcome to DocBlock!</h1>
-        <form onSubmit={this.handleChange}>
-          <label htmlFor="username">Username: </label>
-          <input type="text" id="username" value={this.state.name} onChange={this.handleChange.bind(this)}/>
-        </form>
-        <div> {this.state.newSignature.name} has signed {this.state.newSignature.document}</div>
-        <form onSubmit={(e) => this.handleSign(e, "Document1")}>
-          <p>Document 1</p>
-          <button type="submit">Sign</button>
-        </form>
-        <form onSubmit={(e) => this.handleSign(e, "Document2")}>
-          <p>Document 2</p>
-          <button type="submit">Sign</button>
-        </form>
-
-        <ul id="signDocs" className="list-unstyled">
-          { this.state.signMap.map((doc, key) => {
-            return(
-              <div key={key}>
-                <span className="content">{doc.name} has signed {doc.document}</span>
-              </div>
-            )
-          })}
-        </ul>
+        <div className="container">
+          <h1>Welcome to DocBlock!</h1>
+          <div className="form-row">
+            <div className="form-group my-5">
+              <label htmlFor="username">Username</label>
+              <input type="email" className="form-control" id="username" value={this.state.name} onChange={this.handleChange.bind(this)} placeholder="Enter username"/>
+            </div>
+          </div>
+          <table className="table table-striped">
+            <tbody>
+              <tr>
+                <td>Document 1</td>
+                <td>
+                  <button type="submit" className="btn btn-primary" onClick={(e) => this.handleSign(e, "Document 1")}>Sign</button>
+                </td>
+              </tr>
+              <tr>
+              <td>Document 2</td>
+                <td>
+                  <button type="submit" className="btn btn-primary" onClick={(e) => this.handleSign(e, "Document 2")}>Sign</button>
+                </td>
+              </tr>
+              <tr>
+              <td>Document 3</td>
+                <td>
+                  <button type="submit" className="btn btn-primary" onClick={(e) => this.handleSign(e, "Document 3")}>Sign</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ul className="list-group">
+            <li className="list-group-item">Log</li>
+            { this.state.signMap.map((doc, key) => {
+              return(
+                <div key={key}>
+                  <li className="content list-group-item list-group-item-success">{doc.name} has signed {doc.document}</li>
+                </div>
+              )
+            })}
+          </ul>
       </div>
+    </div>
     );
   }
 }
