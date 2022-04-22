@@ -46,24 +46,35 @@ class App extends Component {
   async handleSign(event, doc) {
     event.preventDefault();
     const {accounts, contract } = this.state;
-    if(this.state.name != "") {
+    if(this.state.name !== "") {
+      const response = await contract.methods.get(this.state.name).call();
       var alreadySigned = false;
-      this.state.signMap.map((docs, key) => {
-        if(docs.name == this.state.name){
-          if(docs.document == doc) {
-            alert("Document already signed!");
+      if(response.length !== 0) {
+        for (var i=0; i<response.length; i++) {
+          if (response[i].document === doc) {
             alreadySigned = true;
+            alert(doc + " already signed.")
           }
         }
-      })
-      //const response = await contract.methods.get(this.state.name, 0).call();
-      //if(response = doc) {
-        //alreadySigned = true;
-      //}
+      }
       if(!alreadySigned) {
         await contract.methods.sign(this.state.name, doc).send({from: this.state.accounts});
-        //const response = await contract.methods.get(this.state.name, 0).call();
         this.setState({signMap: [...this.state.signMap, {name: this.state.name, document: doc}]});
+      }
+    }
+  }
+
+  async handleShow(){
+    const {accounts, contract } = this.state;
+    if(this.state.name !== "") {
+      const response = await contract.methods.get(this.state.name).call();
+      if(response.length !== 0) {
+        var x = document.getElementById("showDocs");
+        x.innerHTML = "Documents signed: <br>";
+        for (var i=0; i<response.length; i++) {
+          x.innerHTML += response[i].document
+          x.innerHTML += "<br>";
+        }
       }
     }
   }
@@ -105,15 +116,11 @@ class App extends Component {
             </tbody>
           </table>
           <ul className="list-group">
-            <li className="list-group-item">Log</li>
-            { this.state.signMap.map((doc, key) => {
-              return(
-                <div key={key}>
-                  <li className="content list-group-item list-group-item-success">{doc.name} has signed {doc.document}</li>
-                </div>
-              )
-            })}
+            <li className="list-group-item">{this.state.name}'s Log</li>
           </ul>
+          <button type="show" className="btn btn-primary" onClick={(e) => this.handleShow()}>Show</button>
+          <div id="showDocs">
+          </div>
       </div>
     </div>
     );

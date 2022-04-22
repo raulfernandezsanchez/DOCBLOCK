@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <0.7.0;
+pragma experimental ABIEncoderV2;
 
 contract DocBlock {
   address owner;
@@ -25,8 +26,8 @@ contract DocBlock {
     emit signAdded(msg.sender, name, newSign.document);
   }
 
-  function get(string memory name, uint256 index) public view returns (string memory) {
-    require(0 <= index && signs[name].length >= index, "array index out of bounds!");
-    return signs[name][index].document;
+  function get(string memory name) public view returns (Sign [] memory) {
+    require(bytes(name).length > 0, "name is empty!");
+    return signs[name];
   }
 }
