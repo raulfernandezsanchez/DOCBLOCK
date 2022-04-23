@@ -5,7 +5,7 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = { web3: null, accounts: null, contract: null, name: "", signMap: [], newSignature: { name: "", document: "" } };
+  state = { web3: null, accounts: null, contract: null, name: "", signMap: [], newSignature: { name: "", document: "" }, showSignedDocs: false };
 
   componentDidMount = async () => {
     try {
@@ -46,10 +46,47 @@ class App extends Component {
   async handleSign(event, doc) {
     event.preventDefault();
     const {accounts, contract } = this.state;
-    if(this.state.name != "") {
-      await contract.methods.sign(this.state.name, doc).send({from: this.state.accounts});
-      const response = await contract.methods.get(this.state.name, 0).call();
-      this.setState({signMap: [...this.state.signMap, {name: this.state.name, document: response}]});
+    if(this.state.name !== "") {
+      const response = await contract.methods.getSignedDocuments(this.state.name).call();
+      var alreadySigned = false;
+      if(response.length !== 0) {
+        for (var i = 0; i < response.length; i++) {
+          if (response[i].document === doc) {
+            alreadySigned = true;
+            alert(doc + " already signed.")
+          }
+        }
+      }
+      if(!alreadySigned) {
+        await contract.methods.signDocument(this.state.name, doc).send({from: this.state.accounts});
+        this.setState({signMap: [...this.state.signMap, {name: this.state.name, document: doc}]});
+      }
+    } else {
+      alert("Enter username!");
+    }
+  }
+
+  async handleShow(){
+    const {accounts, contract } = this.state;
+    if (this.state.showSignedDocs === false) {
+      if(this.state.name !== "") {
+        const response = await contract.methods.getSignedDocuments(this.state.name).call();
+        if(response.length !== 0) {
+          var x = document.getElementById("showDocs");
+          for (var i = 0; i < response.length; i++) {
+            x.innerHTML += response[i].document + "<br/>";
+          }
+        } else {
+          alert("No documents signed!");
+        }
+        this.setState({showSignedDocs: true});
+      } else {
+        alert("Enter username!");
+      }
+    } else {
+      var x = document.getElementById("showDocs");
+      x.innerHTML = "";
+      this.setState({showSignedDocs: false});
     }
   }
 
@@ -57,6 +94,7 @@ class App extends Component {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
+    const showDocsList = this.state.showSignedDocs;
     return (
       <div className="App">
         <div className="container">
@@ -89,6 +127,14 @@ class App extends Component {
               </tr>
             </tbody>
           </table>
+          <ul className="list-group mb-5">
+            { showDocsList
+              ? <button type="show" className="btn btn-primary" onClick={(e) => this.handleShow()}>Hide signed documents</button>
+              : <button type="show" className="btn btn-primary" onClick={(e) => this.handleShow()}>Show signed documents</button>
+            }
+            <div id="showDocs" className="my-3"></div>
+
+          </ul>
           <ul className="list-group">
             <li className="list-group-item">Log</li>
             { this.state.signMap.map((doc, key) => {
