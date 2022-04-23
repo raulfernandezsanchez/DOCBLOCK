@@ -5,7 +5,7 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = { web3: null, accounts: null, contract: null, name: "", signMap: [], newSignature: { name: "", document: "" }, showSignedDocs: false };
+  state = { web3: null, accounts: null, contract: null, name: "", signMap: [], showName: "", showSignedDocs: false };
 
   componentDidMount = async () => {
     try {
@@ -30,6 +30,9 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts: accounts[0], contract: instance }, this.runExample);
+      this.getPastLog();
+      this.logEvents();
+
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -38,6 +41,61 @@ class App extends Component {
       console.error(error);
     }
   };
+
+  getDate(timestamp) {
+    let t = new Date(timestamp * 1000);
+    return ('0' + t.getDate()).slice(-2) + '/' + ('0' + (t.getMonth() + 1) ).slice(-2) + '/' + (t.getFullYear());
+
+  }
+
+  getTime(timestamp) {
+    let t = new Date(timestamp * 1000);
+    return ('0' + t.getHours()).slice(-2) + ':' + ('0' + t.getMinutes()).slice(-2) + ':' + ('0' + t.getSeconds()).slice(-2);
+  }
+
+  getPastLog() {
+    console.log(`Returns all the past events`);
+    const {accounts, contract } = this.state;
+    contract.getPastEvents("signAdded", {fromBlock: 1}, (error, events) => {
+      if(!error) {
+        let log = document.getElementById("log");
+        for(let i = 0; i < events.length; ++i) {
+          let event = events[i];
+          log.innerHTML += `
+                  <tr class="table-success">
+                    <td class="table-success">${event.transactionHash}</td>
+                    <td class="table-success">${event.returnValues.name}</td>
+                    <td class="table-success">${event.returnValues.document}</td>
+                    <td class="table-success">${this.getDate(event.returnValues.timestamp)}</td>
+                    <td class="table-success">${this.getTime(event.returnValues.timestamp)}</td>
+                  </tr>
+          `;
+        }
+        console.log(events);
+      } else {
+        console.log(error);
+      } });
+  }
+
+  logEvents() {
+    console.log(`Listening Transfer events`);
+    const {accounts, contract } = this.state;
+    contract.events
+        .signAdded()
+        .on("data", (event) => {
+        document.getElementById("log").innerHTML += `
+                <tr class="table-success">
+                  <td class="table-success">${event.transactionHash}</td>
+                  <td class="table-success">${event.returnValues.name}</td>
+                  <td class="table-success">${event.returnValues.document}</td>
+                  <td class="table-success">${this.getDate(event.returnValues.timestamp)}</td>
+                  <td class="table-success">${this.getTime(event.returnValues.timestamp)}</td>
+                </tr>
+        `;
+        console.log(event);
+        })
+        .on("error", (error) => console.log(error));
+  }
 
   handleChange(event) {
     this.setState({name: event.target.value});
@@ -50,7 +108,7 @@ class App extends Component {
       const response = await contract.methods.getSignedDocuments(this.state.name).call();
       var alreadySigned = false;
       if(response.length !== 0) {
-        for (var i = 0; i < response.length; i++) {
+        for (let i = 0; i < response.length; i++) {
           if (response[i].document === doc) {
             alreadySigned = true;
             alert(doc + " already signed.")
@@ -58,8 +116,20 @@ class App extends Component {
         }
       }
       if(!alreadySigned) {
+        var x = document.getElementById("showDocs");
+        if(this.state.name !== this.state.showName){
+          this.state.showSignedDocs = false;
+          x.innerHTML = "";
+        }
         await contract.methods.signDocument(this.state.name, doc).send({from: this.state.accounts});
         this.setState({signMap: [...this.state.signMap, {name: this.state.name, document: doc}]});
+
+        if(this.state.showSignedDocs && this.state.name === this.state.showName) {
+          const response = await contract.methods.getSignedDocuments(this.state.name).call();
+          x.innerHTML += `
+            <li class="list-group-item list-group-item-primary">${response[response.length - 1].document}</li>
+          `;
+        }
       }
     } else {
       alert("Enter username!");
@@ -70,11 +140,14 @@ class App extends Component {
     const {accounts, contract } = this.state;
     if (this.state.showSignedDocs === false) {
       if(this.state.name !== "") {
+        this.setState({showName: this.state.name});
         const response = await contract.methods.getSignedDocuments(this.state.name).call();
         if(response.length !== 0) {
           var x = document.getElementById("showDocs");
-          for (var i = 0; i < response.length; i++) {
-            x.innerHTML += response[i].document + "<br/>";
+          for (let i = 0; i < response.length; i++) {
+            x.innerHTML += `
+              <li class="list-group-item list-group-item-primary">${response[i].document}</li>
+            `;
           }
         } else {
           alert("No documents signed!");
@@ -94,7 +167,9 @@ class App extends Component {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
+
     const showDocsList = this.state.showSignedDocs;
+
     return (
       <div className="App">
         <div className="container">
@@ -114,13 +189,13 @@ class App extends Component {
                 </td>
               </tr>
               <tr>
-              <td>Document 2</td>
+                <td>Document 2</td>
                 <td>
                   <button type="submit" className="btn btn-primary" onClick={(e) => this.handleSign(e, "Document 2")}>Sign</button>
                 </td>
               </tr>
               <tr>
-              <td>Document 3</td>
+                <td>Document 3</td>
                 <td>
                   <button type="submit" className="btn btn-primary" onClick={(e) => this.handleSign(e, "Document 3")}>Sign</button>
                 </td>
@@ -133,18 +208,19 @@ class App extends Component {
               : <button type="show" className="btn btn-primary" onClick={(e) => this.handleShow()}>Show signed documents</button>
             }
             <div id="showDocs" className="my-3"></div>
-
           </ul>
-          <ul className="list-group">
-            <li className="list-group-item">Log</li>
-            { this.state.signMap.map((doc, key) => {
-              return(
-                <div key={key}>
-                  <li className="content list-group-item list-group-item-success">{doc.name} has signed {doc.document}</li>
-                </div>
-              )
-            })}
-          </ul>
+          <table className="table border">
+            <thead>
+              <tr>
+                <th scope="col">Hash</th>
+                <th scope="col">User</th>
+                <th scope="col">Document</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+              </tr>
+            </thead>
+            <tbody id="log"></tbody>
+          </table>
       </div>
     </div>
     );
