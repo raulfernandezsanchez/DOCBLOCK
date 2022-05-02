@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import DocBlockContract from "./contracts/DocBlock.json";
 import getWeb3 from "./getWeb3";
+import Web3 from 'web3';
+
 
 import "./App.css";
 
 class App extends Component {
-  state = { web3: null, accounts: null, contract: null, name: "", signMap: [], showName: "", showSignedDocs: false };
+  state = { web3Provider: null, accounts: null, contract: null, name: "", signMap: [], showName: "", showSignedDocs: false };
 
   componentDidMount = async () => {
     try {
@@ -16,20 +18,18 @@ class App extends Component {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
 
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
-
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = DocBlockContract.networks[networkId];
+
       const instance = new web3.eth.Contract(
-        DocBlockContract.abi,
-        deployedNetwork && deployedNetwork.address,
+         DocBlockContract.abi,
+         deployedNetwork && deployedNetwork.address,
       );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts: accounts[0], contract: instance }, this.runExample);
+      this.setState({ web3Provider: web3, accounts: web3.eth.defaultAccount, contract: instance }, this.runExample);
       this.getPastLog();
       this.logEvents();
 
@@ -41,6 +41,47 @@ class App extends Component {
       console.error(error);
     }
   };
+
+  signTransaction(name, doc) {
+    const EthereumTx = require('ethereumjs-tx').Transaction;
+    const web3 = this.state.web3Provider;
+    const contract = this.state.contract;
+
+    web3.eth.defaultAccount = '0x5f3e094057ca756bd056f7d0b8895eae4426e2cf'; //account
+
+    var pk  = 'ce7a63acf831add091981fbc76a465fe89288a1194aee973a28850afa604424d';  // private key of your account
+
+    var address = '0x10B2acf5edC96f1443EBdf8fC08030e0E1B0519d'; //Contract Address
+
+    web3.eth.getTransactionCount(web3.eth.defaultAccount, function (err, nonce) {
+      console.log("nonce value is ", nonce);
+
+      const functionAbi = contract.methods.signDocument(String(name), String(doc)).encodeABI();
+
+      var details = {
+        "nonce": nonce,
+        "gasPrice": web3.utils.toHex(web3.utils.toWei('47', 'gwei')),
+        "gas": 300000,
+        "to": address,
+        "value": 0,
+        "data": functionAbi,
+      };
+
+      const transaction = new EthereumTx(details);
+      transaction.sign(Buffer.from(pk, 'hex'));
+      var rawData = '0x' + transaction.serialize().toString('hex');
+
+      web3.eth.sendSignedTransaction(rawData)
+
+      .on('transactionHash', function(hash) {
+      console.log(['transferToStaging Trx Hash:' + hash]);
+      })
+      .on('receipt', function(receipt){
+      console.log(['transferToStaging Receipt:', receipt]);
+      })
+      .on('error', console.error);
+    });
+  }
 
   getDate(timestamp) {
     let t = new Date(timestamp * 1000);
@@ -121,9 +162,8 @@ class App extends Component {
           this.state.showSignedDocs = false;
           x.innerHTML = "";
         }
-        await contract.methods.signDocument(this.state.name, doc).send({from: this.state.accounts});
+        await this.signTransaction(this.state.name, doc);
         this.setState({signMap: [...this.state.signMap, {name: this.state.name, document: doc}]});
-
         if(this.state.showSignedDocs && this.state.name === this.state.showName) {
           const response = await contract.methods.getSignedDocuments(this.state.name).call();
           x.innerHTML += `
@@ -164,7 +204,7 @@ class App extends Component {
   }
 
   render() {
-    if (!this.state.web3) {
+    if (!this.state.web3Provider) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
 
