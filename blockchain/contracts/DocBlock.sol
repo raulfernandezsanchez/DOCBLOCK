@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.21 <0.7.0;
+pragma solidity >=0.6.0 <0.7.0;
 pragma experimental ABIEncoderV2;
 
 contract DocBlock {
@@ -7,7 +7,6 @@ contract DocBlock {
   mapping (string => Sign[]) public signs;
 
   struct Sign {
-
     string document;
   }
 
@@ -15,18 +14,23 @@ contract DocBlock {
     owner = msg.sender;
   }
 
-  event signAdded(address user, string name, string document);
+  event signAdded(
+    address user,
+    string name,
+    string document,
+    uint256 timestamp
+  );
 
-  function sign(string memory name, string memory document) public {
+  function signDocument(string memory name, string memory document) public {
     require(bytes(name).length > 0, "name is empty!");
     require(bytes(document).length > 0, "document is empty!");
 
     Sign memory newSign = Sign(document);
     signs[name].push(newSign);
-    emit signAdded(msg.sender, name, newSign.document);
+    emit signAdded(msg.sender, name, newSign.document, block.timestamp);
   }
 
-  function get(string memory name) public view returns (Sign [] memory) {
+  function getSignedDocuments(string memory name) public view returns (Sign [] memory) {
     require(bytes(name).length > 0, "name is empty!");
     return signs[name];
   }
