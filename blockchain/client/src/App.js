@@ -3,7 +3,6 @@ import DocBlockContract from "./contracts/DocBlock.json";
 import getWeb3 from "./getWeb3";
 import Web3 from 'web3';
 
-
 import "./App.css";
 
 class App extends Component {
