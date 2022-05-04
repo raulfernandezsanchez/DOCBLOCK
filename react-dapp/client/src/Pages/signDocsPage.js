@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import '../Assets/styles.css';
 
 import Footer from "../Components/footer";
@@ -7,12 +7,20 @@ import NavBar from "../Components/navbar";
 import DocBlockContract from "./../contracts/DocBlock.json";
 import getWeb3 from "./../getWeb3";
 
-
 import "./../App.css";
 
-class SignDocsPage extends Component{
+class SignDocsPage extends Component {
 
-  state = { web3Provider: null, accounts: null, contract: null, name: "", signMap: [], showName: "", showSignedDocs: false };
+  state = {
+    web3Provider: null,
+    account: null,
+    contract: null,
+    name: "",
+    signMap: [],
+    showName: "",
+    showSignedDocs: false,
+    accountBalance: null
+  };
 
   componentDidMount = async () => {
     try {
@@ -32,16 +40,22 @@ class SignDocsPage extends Component{
          deployedNetwork && deployedNetwork.address,
       );
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
+      const acc = '0xbe096689ac22ea0e7661fb84dbfd5144d14ebba4'; //account
+
+      let ethBalance = await web3.eth.getBalance(acc);
+      ethBalance = web3.utils.fromWei(ethBalance, 'ether');
+      this.setState({ accountBalance: ethBalance });
+
+      // Set web3, account, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3Provider: web3, accounts: web3.eth.defaultAccount, contract: instance }, this.runExample);
-      this.getPastLog();
-      this.logEvents();
+      this.setState({ web3Provider: web3, account: acc, contract: instance });
+      this.getPastLog(instance);
+      this.logEvents(instance);
 
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
+        `Failed to load web3, account, or contract. Check console for details.`,
       );
       console.error(error);
     }
@@ -52,13 +66,11 @@ class SignDocsPage extends Component{
     const web3 = this.state.web3Provider;
     const contract = this.state.contract;
 
-    web3.eth.defaultAccount = '0x5f3e094057ca756bd056f7d0b8895eae4426e2cf'; //account
+    var pk  = 'b605ff5265446daae72ba6afc6c64eeedfd9214438d7caa403bf81784e2eb539';  // private key of your account
 
-    var pk  = 'ce7a63acf831add091981fbc76a465fe89288a1194aee973a28850afa604424d';  // private key of your account
+    var address = '0x5D4B19A49CE3a4C65969C60C6130D14971A50D9E'; //Contract Address
 
-    var address = '0x10B2acf5edC96f1443EBdf8fC08030e0E1B0519d'; //Contract Address
-
-    web3.eth.getTransactionCount(web3.eth.defaultAccount, function (err, nonce) {
+    web3.eth.getTransactionCount(this.state.account, function (err, nonce) {
       console.log("nonce value is ", nonce);
 
       const functionAbi = contract.methods.signDocument(String(name), String(doc)).encodeABI();
@@ -66,7 +78,7 @@ class SignDocsPage extends Component{
       var details = {
         "nonce": nonce,
         "gasPrice": web3.utils.toHex(web3.utils.toWei('47', 'gwei')),
-        "gas": 300000,
+        "gas": 1000000,
         "to": address,
         "value": 0,
         "data": functionAbi,
@@ -99,10 +111,11 @@ class SignDocsPage extends Component{
     return ('0' + t.getHours()).slice(-2) + ':' + ('0' + t.getMinutes()).slice(-2) + ':' + ('0' + t.getSeconds()).slice(-2);
   }
 
-  getPastLog() {
+  getPastLog(contract) {
     console.log(`Returns all the past events`);
-    const {accounts, contract } = this.state;
-    contract.getPastEvents("signAdded", {fromBlock: 1}, (error, events) => {
+    //const {account, contract } = this.state;
+
+    contract.getPastEvents("signAdded", {fromBlock: 0}, (error, events) => {
       if(!error) {
         let log = document.getElementById("log");
         for(let i = 0; i < events.length; ++i) {
@@ -123,9 +136,9 @@ class SignDocsPage extends Component{
       } });
   }
 
-  logEvents() {
+  logEvents(contract) {
     console.log(`Listening Transfer events`);
-    const {accounts, contract } = this.state;
+    //const {account, contract } = this.state;
     contract.events
         .signAdded()
         .on("data", (event) => {
@@ -149,7 +162,7 @@ class SignDocsPage extends Component{
 
   async handleSign(event, doc) {
     event.preventDefault();
-    const {accounts, contract } = this.state;
+    const {account, contract } = this.state;
     if(this.state.name !== "") {
       const response = await contract.methods.getSignedDocuments(this.state.name).call();
       var alreadySigned = false;
@@ -182,7 +195,7 @@ class SignDocsPage extends Component{
   }
 
   async handleShow(){
-    const {accounts, contract } = this.state;
+    const {account, contract } = this.state;
     if (this.state.showSignedDocs === false) {
       if(this.state.name !== "") {
         this.setState({showName: this.state.name});
@@ -210,7 +223,7 @@ class SignDocsPage extends Component{
 
   render() {
     if (!this.state.web3Provider) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+      return <div>Loading Web3, account, and contract...</div>;
     }
 
     const showDocsList = this.state.showSignedDocs;
@@ -219,7 +232,7 @@ class SignDocsPage extends Component{
         <>
         <NavBar></NavBar>
         <div id="signDocs">
-            <h1>Sign Docs page</h1>
+            <h1>Sign Docs Page</h1>
         </div>
         <div className="App">
           <div className="container">
@@ -251,13 +264,20 @@ class SignDocsPage extends Component{
                 </tr>
               </tbody>
             </table>
-            <ul className="list-group mb-5">
+            <ul className="list-group">
               { showDocsList
                 ? <button type="show" className="btn btn-primary" onClick={(e) => this.handleShow()}>Hide signed documents</button>
                 : <button type="show" className="btn btn-primary" onClick={(e) => this.handleShow()}>Show signed documents</button>
               }
               <div id="showDocs" className="my-3"></div>
             </ul>
+            <div className="card border-secondary mb-3">
+              <div className="card-header">Account</div>
+              <div className="card-body text-secondary">
+                <h5 className="card-title">{this.state.account}</h5>
+                <p className="card-text">Balance: {this.state.accountBalance} ETH</p>
+              </div>
+            </div>
             <table className="table border">
               <thead>
                 <tr>
@@ -277,17 +297,3 @@ class SignDocsPage extends Component{
     );
   }
 } export default SignDocsPage;
-
-  /*  render() {
-        return (
-            <>
-            <NavBar></NavBar>
-            <div id="signDocs" style={rootStyle}>
-                <h1>Sign Docs page</h1>
-            </div>
-
-            <Footer></Footer>
-            </>
-        );
-    }
-} export default SignDocsPage;*/

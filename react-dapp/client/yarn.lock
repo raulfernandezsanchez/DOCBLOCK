@@ -12430,6 +12430,18 @@
   dependencies:
     "minimalistic-assert" "^1.0.0"
 
+"web-vitals-reporter@^1.0.0":
+  "integrity" "sha512-7XmkVg7ce/jQjBovYzFs8ekRCgBdha+gQaE0Fg0wHGJdyj25nKZxqdEHcw998ytfls9d8eDly/mF8Cwd0f8BlQ=="
+  "resolved" "https://registry.npmjs.org/web-vitals-reporter/-/web-vitals-reporter-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "web-vitals" "^1.0.1"
+
+"web-vitals@^1.0.1":
+  "integrity" "sha512-PFMKIY+bRSXlMxVAQ+m2aw9c/ioUYfDgrYot0YUa+/xa0sakubWhSDyxAKwzymvXVdF4CZI71g06W+mqhzu6ig=="
+  "resolved" "https://registry.npmjs.org/web-vitals/-/web-vitals-1.1.2.tgz"
+  "version" "1.1.2"
+
 "web3-bzz@1.6.1":
   "integrity" "sha512-JbnFNbRlwwHJZPtVuCxo7rC4U4OTg+mPsyhjgPQJJhS0a6Y54OgVWYk9UA/95HqbmTJwTtX329gJoSsseEfrng=="
   "resolved" "https://registry.npmjs.org/web3-bzz/-/web3-bzz-1.6.1.tgz"
