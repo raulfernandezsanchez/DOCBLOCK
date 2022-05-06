@@ -2,7 +2,7 @@ import React from "react";
 import '../Assets/styles.css';
 
 import Footer from "../Components/footer";
-import NavBarUser from "../Components/navbaruser";
+import NavBarCompany from "../Components/navbarcompany";
 
 
 var rootStyle = {
@@ -12,20 +12,21 @@ var rootStyle = {
     'bottom': '20px'
 }
 
-export default function UserPage(){
-    const userID = localStorage.getItem('userID');
+export default function CompanyPage(){
+    const companyID = localStorage.getItem('userID');
     return (
         <>
-        <NavBarUser></NavBarUser>
-        <div id="homeuser" style={rootStyle}>
-            <h3 align='left'>Hello user: {userID}</h3>
+        <NavBarCompany></NavBarCompany>
+        <div id="homeCompany" style={rootStyle}>
+            <h3 align='left'>Hello company: {companyID}</h3>
             <ul>
+                <li>Contacts tracking</li>
                 <li>Pending contracts</li>
                 <li>General information</li>
-                <li>Overview of the user's status</li>
+                <li>Overview of the companys's status</li>
             </ul>
         </div>
         <Footer></Footer>
         </>
     );
-};
+}

@@ -15,6 +15,7 @@ var rootStyle = {
 
 export default function SignupPage() {
     const navigate = useNavigate();
+    const [isCompany, setChecked] = useState(false);
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [firstname, setFirstname] = useState();
@@ -22,17 +23,50 @@ export default function SignupPage() {
 
     async function handleSubmit (event) {
         event.preventDefault();
-        //comprobacion de que el email y la password son validos:
-        //si no lo son, wrong credentials y seguimos en la pagina
-        if (typeof email === 'undefined' || typeof password === 'undefined' || typeof firstname === 'undefined' || typeof lastname === 'undefined'){
-            alert('Wrong credentials');
+        //comprobacion de que los campos tienen contenido:
+        if (typeof email === 'undefined' || typeof password === 'undefined'  || typeof firstname === 'undefined' || typeof lastname === 'undefined'){
+            alert('Wrong credentials, please try again');
         }
-        //si son validas, vamos a la pagina de usuario
+        //si tienen contenido, se comprueban con la api
         else{
-            alert("Valid credentials")
-            navigate("/homeuser");
+            //signup de company
+            if(isCompany){
+                /*
+                if( signApiCompany(email,password, firstname, lastname) ){
+                    saveSession(email);
+                    navigate("/homeCompany");
+                }
+                else{
+                    alert(mensajeError);
+                }
+                */
+                localStorage.setItem('isAuthenticated', true);
+                localStorage.setItem('isCompany', true);
+                localStorage.setItem('userID', email);
+                navigate("/homeCompany");
+            }
+            //login de user
+            else{
+                /*
+                if( signApiUser(email,password, firstname, lastname) ){
+                    saveSession(email);
+                    navigate("/homeUser");
+                }
+                else{
+                    alert(mensajeError);
+                }
+                */
+                localStorage.setItem('isAuthenticated', true);
+                localStorage.setItem('isCompany', false);
+                localStorage.setItem('userID', email);
+                navigate("/homeUser");
+            }
         }
     }
+
+    const handleCheck = () =>{
+        setChecked(!isCompany);
+    };
 
     return (
         <>
@@ -56,6 +90,9 @@ export default function SignupPage() {
             <div className="form-group">
                 <p>Password</p>
                 <input type="password" onChange={e => setPassword(e.target.value)} placeholder="password" />
+                <br/><br/><br/>
+                <label><input type="checkbox" checked={isCompany} onChange={handleCheck}/> Create account as company</label>
+                <br/><br/>
             </div>
             <br/>
             <button type="submit" className="btn btn-primary btn-block" onClick={handleSubmit} >Sign Up</button>

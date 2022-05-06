@@ -9,59 +9,59 @@ class HomePage extends Component{
         return (
             <>
             <NavBar></NavBar>
-            <div className="container px-4 px-lg-5">
-                <div className="row gx-4 gx-lg-5 align-items-center my-5">
-                    <div className="col-lg-7"><img className="img-fluid rounded mb-4 mb-lg-0" src={require("../Assets/logo_name.png")} alt="Logo & name" /></div>
-                    <div className="col-lg-5">
-                        <h4>Descripción de DocBlock</h4>
-                        <p>Descripción de la "empresa"</p>
-                        <a className="btn btn-primary" href="/">Explorar planes de pago</a>
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 align-items-center my-5">
+                    <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0" src={require("../Assets/logo_name.png")} alt="Logo & name" /></div>
+                    <div class="col-lg-5">
+                        <h4>What is DocBlock?</h4>
+                        <p>DocBlock is the most suitable tool to<br/>track, sign and manage your documents.</p>
+                        <a class="btn btn-primary" href="/">Explore payment plans</a>
                     </div>
                 </div>
-                <div className="card text-white bg-secondary my-5 py-4 text-center">
-                    <div className="card-body">
-                        <p className="text-white m-0" fontSize="xx-large">Catchphrase de DocBlock</p>
+                <div class="card text-white bg-secondary my-5 py-4 text-center">
+                    <div class="card-body">
+                        <h3 class="text-white m-0" font-size="xx-large">Managing contracts has never been easier</h3>
                     </div>
                 </div>
             </div>
-            <div className="row gx-4 gx-lg-5">
+            <div class="row gx-4 gx-lg-5">
 
-                <div className="col-sm-3 mb-5">
-                    <div className="card h-100">
-                        <div className="card-body">
-                            <h2 className="card-title">Functionalities</h2>
-                            <p className="card-text">Cabecera de las diferentes funcionalidades que ofrece DocBlock</p>
+                <div class="col-sm-3 mb-5">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h2 class="card-title">Functionalities</h2>
+                            <p class="card-text">Explore all the functionalities DocBlock offers</p>
                         </div>
-                        <div className="card-footer"><a className="btn btn-primary btn-sm" href="/">More Info</a></div>
+                        <div class="card-footer"><a class="btn btn-primary btn-sm" href="/services">Learn more</a></div>
                     </div>
                 </div>
 
-                <div className="col-sm-3 mb-5">
-                    <div className="card h-100">
-                        <div className="card-body">
-                            <h2 className="card-title">Our product</h2>
-                            <p className="card-text">Descripción del producto que ofrecemos</p>
+                <div class="col-sm-3 mb-5">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h2 class="card-title">Our product</h2>
+                            <p class="card-text">Platform to manage<br/> and sign documents</p>
                         </div>
-                        <div className="card-footer"><a className="btn btn-primary btn-sm" href="/">More Info</a></div>
+                        <div class="card-footer"><a class="btn btn-primary btn-sm" href="/services">Learn more</a></div>
                     </div>
                 </div>
 
-                <div className="col-sm-3 mb-5">
-                    <div className="card h-100">
-                        <div className="card-body">
-                            <h2 className="card-title">Our team</h2>
-                            <p className="card-text">Descripción de los componentes que forman el equipo.</p>
+                <div class="col-sm-3 mb-5">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h2 class="card-title">Our team</h2>
+                            <p class="card-text">Young professionals</p>
                         </div>
-                        <div className="card-footer"><a className="btn btn-primary btn-sm" href="/">More Info</a></div>
+                        <div class="card-footer"><a class="btn btn-primary btn-sm" href="/about">Learn more</a></div>
                     </div>
                 </div>
-                <div className="col-sm-3 mb-5">
-                    <div className="card h-100">
-                        <div className="card-body">
-                            <h2 className="card-title">Our partners</h2>
-                            <p className="card-text">Descripción de las empresas partner (fundació  épica)</p>
+                <div class="col-sm-3 mb-5">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h2 class="card-title">Our partners</h2>
+                            <p class="card-text">Companies that trust<br/> in our product</p>
                         </div>
-                        <div className="card-footer"><a className="btn btn-primary btn-sm" href="/">More Info</a></div>
+                        <div class="card-footer"><a class="btn btn-primary btn-sm" href="/about">Learn more</a></div>
                     </div>
                 </div>
             </div>
