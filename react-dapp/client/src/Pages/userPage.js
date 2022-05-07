@@ -6,10 +6,7 @@ import NavBarUser from "../Components/navbaruser";
 
 
 var rootStyle = {
-    'position': 'relative',
-    'top': '0px',
-    'height': '86vh',
-    'bottom': '20px'
+    'height': '86vh'
 }
 
 export default function UserPage(){
@@ -18,7 +15,7 @@ export default function UserPage(){
         <>
         <NavBarUser></NavBarUser>
         <div id="homeuser" style={rootStyle}>
-            <h3 align='left'>Hello user: {userID}</h3>
+            <h4>{userID}</h4>
             <ul>
                 <li>Pending contracts</li>
                 <li>General information</li>

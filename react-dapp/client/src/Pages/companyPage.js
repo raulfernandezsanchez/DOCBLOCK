@@ -6,10 +6,8 @@ import NavBarCompany from "../Components/navbarcompany";
 
 
 var rootStyle = {
-    'position': 'relative',
-    'top': '0px',
     'height': '86vh',
-    'bottom': '20px'
+    'marginLeft': '20px'
 }
 
 export default function CompanyPage(){
@@ -18,7 +16,7 @@ export default function CompanyPage(){
         <>
         <NavBarCompany></NavBarCompany>
         <div id="homeCompany" style={rootStyle}>
-            <h3 align='left'>Hello company: {companyID}</h3>
+            <h4>{companyID}</h4>
             <ul>
                 <li>Contacts tracking</li>
                 <li>Pending contracts</li>

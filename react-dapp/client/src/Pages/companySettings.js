@@ -5,7 +5,8 @@ import Footer from "../Components/footer";
 import NavBarCompany from "../Components/navbarcompany";
 
 var rootStyle = {
-    'height': '86vh'
+    'height': '86vh',
+    'marginLeft':'20px'
 }
 
 class CompanySettings extends Component{
@@ -15,19 +16,19 @@ class CompanySettings extends Component{
         <NavBarCompany></NavBarCompany>
         <div style={rootStyle}>
             <h4>Company settings</h4>
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">Profile</button>
+            <ul className="nav nav-tabs" id="myTab" role="tablist">
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">Profile</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="notifications-tab" data-bs-toggle="tab" data-bs-target="#notifications" type="button" role="tab" aria-controls="notifications" aria-selected="false">Notifications</button>
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link" id="notifications-tab" data-bs-toggle="tab" data-bs-target="#notifications" type="button" role="tab" aria-controls="notifications" aria-selected="false">Notifications</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="safety-tab" data-bs-toggle="tab" data-bs-target="#safety" type="button" role="tab" aria-controls="safety" aria-selected="false">Safety and privacy</button>
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link" id="safety-tab" data-bs-toggle="tab" data-bs-target="#safety" type="button" role="tab" aria-controls="safety" aria-selected="false">Safety and privacy</button>
                 </li>
             </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade align-items-start show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div className="tab-content" id="myTabContent">
+                <div className="tab-pane fade align-items-start show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <ul>
                         <li>Company NIF</li>
                         <li>Change name</li>
@@ -35,7 +36,7 @@ class CompanySettings extends Component{
                         <li>Change address</li>
                     </ul>
                 </div>
-                <div class="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
+                <div className="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
                     <ul>
                         <li>Allow email notifications</li>
                         <li>Manage email notifications
@@ -53,7 +54,7 @@ class CompanySettings extends Component{
                         </li>
                     </ul>
                 </div>
-                <div class="tab-pane fade" id="safety" role="tabpanel" aria-labelledby="safety-tab">
+                <div className="tab-pane fade" id="safety" role="tabpanel" aria-labelledby="safety-tab">
                     <ul>
                         <li>Change password</li>
                         <li>Set Multi Factor Authentication</li>

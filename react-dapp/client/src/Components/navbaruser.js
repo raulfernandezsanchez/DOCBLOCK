@@ -1,6 +1,5 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import '../Assets/styles.css';
 
 const NavBarUser = () =>{
     const handleClick = () =>{
@@ -21,7 +20,7 @@ const NavBarUser = () =>{
                             <NavLink to="/homeUser" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>My page</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/userContracts" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>My contracts</NavLink>
+                            <NavLink to="/userContracts" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Contracts</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink to="/userSettings" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Settings</NavLink>
