@@ -5,10 +5,8 @@ import NavBar from '../Components/navbar';
 import Footer from '../Components/footer';
 
 var rootStyle = {
-    'position': 'relative',
-    'top': '0px',
     'height': '86vh',
-    'bottom': '20px'
+    'textAlign': 'center'
 }
 
 
@@ -83,7 +81,8 @@ export default function LoginPage(){
                 </div>
                 <div>
                     <button type='submit' onClick={handleSubmit} className="btn btn-primary btn-block">Log in</button>
-                </div><br/><br/><br/>
+                </div><br/>
+                <a href="/recovery">Forgot password?</a><br/><br/>
                 <a href="/signup">New user? Sign up</a>
             </form>
         </div>

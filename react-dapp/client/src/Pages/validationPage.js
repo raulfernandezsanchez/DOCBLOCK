@@ -6,10 +6,8 @@ import NavBar from "../Components/navbar";
 
 
 var rootStyle = {
-    'position': 'relative',
-    'top': '0px',
     'height': '86vh',
-    'bottom': '20px'
+    'textAlign':'center'
 }
 
 function ValidationPage(){

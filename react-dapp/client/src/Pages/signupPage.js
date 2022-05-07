@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "../Assets/styles.css";
-
 import NavBar from "../Components/navbar";
 import Footer from "../Components/footer";
 
 var rootStyle = {
-    'position': 'relative',
-    'top': '0px',
     'height': '86vh',
-    'bottom': '20px'
+    'textAlign': 'center'
 }
 
 export default function SignupPage() {
