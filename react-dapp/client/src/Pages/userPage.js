@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import '../Assets/styles.css';
 
 import Footer from "../Components/footer";
@@ -6,22 +6,23 @@ import NavBarUser from "../Components/navbaruser";
 
 
 var rootStyle = {
-    'position': 'relative',
-    'top': '0px',
-    'height': '86vh',
-    'bottom': '20px'
+    'height': '86vh'
 }
 
-class UserPage extends Component{
-    render() {
-        return (
-            <>
-            <NavBarUser></NavBarUser>
-            <div id="homeuser" style={rootStyle}>
-                <h1>User page</h1>
-            </div>
-            <Footer></Footer>
-            </>
-        );
-    }
-} export default UserPage;
+export default function UserPage(){
+    const userID = localStorage.getItem('userID');
+    return (
+        <>
+        <NavBarUser></NavBarUser>
+        <div id="homeuser" style={rootStyle}>
+            <h4>{userID}</h4>
+            <ul>
+                <li>Pending contracts</li>
+                <li>General information</li>
+                <li>Overview of the user's status</li>
+            </ul>
+        </div>
+        <Footer></Footer>
+        </>
+    );
+};

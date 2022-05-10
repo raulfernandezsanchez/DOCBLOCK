@@ -5,10 +5,8 @@ import NavBar from '../Components/navbar';
 import Footer from '../Components/footer';
 
 var rootStyle = {
-    'position': 'relative',
-    'top': '0px',
     'height': '86vh',
-    'bottom': '20px'
+    'textAlign': 'center'
 }
 
 
@@ -16,18 +14,52 @@ export default function LoginPage(){
     const navigate = useNavigate();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const [isCompany, setChecked] = useState(false);
+
+    const handleCheck = () =>{
+        setChecked(!isCompany);
+    };
 
     async function handleSubmit (event) {
         event.preventDefault();
-        //comprobacion de que el email y la password son validos:
-        //si no lo son, wrong credentials y seguimos en la pagina
+        //comprobacion de que el email y la password tienen contenido:
         if (typeof email === 'undefined' || typeof password === 'undefined'){
-            alert('Wrong credentials');
+            alert('Wrong credentials, please try again');
         }
-        //si son validas, vamos a la pagina de usuario
+        //si tienen contenido, se comprueban con la api
         else{
-            alert("Valid credentials")
-            navigate("/homeuser");
+            //login de company
+            if(isCompany){
+                /*
+                if( checkApiCompany(email,password) ){
+                    saveSession(email);
+                    navigate("/homeCompany");
+                }
+                else{
+                    alert(mensajeError);
+                }
+                */
+                localStorage.setItem('isAuthenticated', true);
+                localStorage.setItem('isCompany', true);
+                localStorage.setItem('userID', email);
+                navigate("/homeCompany");
+            }
+            //login de user
+            else{
+                /*
+                if( checkApiUser(email,password) ){
+                    saveSession(email);
+                    navigate("/homeUser");
+                }
+                else{
+                    alert(mensajeError);
+                }
+                */
+                localStorage.setItem('isAuthenticated', true);
+                localStorage.setItem('isCompany', false);
+                localStorage.setItem('userID', email);
+                navigate("/homeUser");
+            }
         }
     }
 
@@ -43,10 +75,14 @@ export default function LoginPage(){
                 <div>
                     <p>Password</p>
                     <input type="password" onChange={e => setPassword(e.target.value)} placeholder="password"></input>
-                </div><br/>
+                    <br/><br/><br/>
+                    <label><input type="checkbox" checked={isCompany} onChange={handleCheck}/> Log in as a company</label>
+                    <br/><br/>
+                </div>
                 <div>
-                    <button type='submit' onClick={handleSubmit} className="btn btn-primary btn-block">Submit</button>
-                </div><br/><br/><br/>
+                    <button type='submit' onClick={handleSubmit} className="btn btn-primary btn-block">Log in</button>
+                </div><br/>
+                <a href="/recovery">Forgot password?</a><br/><br/>
                 <a href="/signup">New user? Sign up</a>
             </form>
         </div>

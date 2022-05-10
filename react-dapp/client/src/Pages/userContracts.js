@@ -11,16 +11,19 @@ var rootStyle = {
     'bottom': '20px'
 }
 
-class NotImplemented extends Component{
+class UserContracts extends Component{
     render() {
         return (
             <>
             <NavBarUser></NavBarUser>
             <div id="services" style={rootStyle}>
-                <h1>Feature not available</h1>
+                <h1>Main page to manage contracts</h1>
+                <br/><br/>
+                <h3>This page will show the different contracts a<br/>
+                    user has and will allow him/her to sign them</h3>
             </div>
             <Footer></Footer>
             </>
         );
     }
-} export default NotImplemented;
+} export default UserContracts;

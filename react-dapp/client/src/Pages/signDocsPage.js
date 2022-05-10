@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+/*import React, { Component } from "react";
 import '../Assets/styles.css';
 
 import Footer from "../Components/footer";
@@ -297,3 +297,4 @@ class SignDocsPage extends Component {
     );
   }
 } export default SignDocsPage;
+*/

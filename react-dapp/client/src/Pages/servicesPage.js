@@ -17,7 +17,18 @@ class ServicesPage extends Component{
             <>
             <NavBar></NavBar>
             <div id="services" style={rootStyle}>
-                <h1>Services Page</h1>
+                <h2>For companies</h2>
+                <ul>
+                    <li>Assign contracts to users</li>
+                    <li>Follow and control the progress</li>
+                    <li>External consult</li>
+                </ul>
+                <br/>
+                <h2>For users</h2>
+                <ul>
+                    <li>Easy sign</li>
+                    <li>Validate experience</li>
+                </ul>
             </div>
             <Footer></Footer>
             </>

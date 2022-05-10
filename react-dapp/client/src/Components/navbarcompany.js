@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const NavBarUser = () =>{
+const NavBarCompany = () =>{
     const handleClick = () =>{
         localStorage.removeItem("isAuthenticated");
         localStorage.removeItem("userID");
@@ -17,13 +17,13 @@ const NavBarUser = () =>{
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <NavLink to="/homeUser" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>My page</NavLink>
+                            <NavLink to="/homeCompany" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>My page</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/userContracts" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Contracts</NavLink>
+                            <NavLink to="/companyContracts" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Contracts</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/userSettings" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Settings</NavLink>
+                            <NavLink to="/companySettings" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Settings</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink to="/" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")} onClick={handleClick}>Log out</NavLink>
@@ -35,4 +35,4 @@ const NavBarUser = () =>{
         </>
     );
 }
-export default NavBarUser;
+export default NavBarCompany;

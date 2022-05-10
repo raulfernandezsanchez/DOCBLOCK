@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import '../Assets/styles.css';
 
 const NavBar = () =>{
+    const [display, setDisplay] = useState('none');
+    const handleCheck = () =>{
+        if (display === 'none'){
+            setDisplay('block')
+        }
+        else{
+            setDisplay('none')
+        }
+    }
     return (
         <>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="container px-5">
+            <div className="container px-4">
                 <a className="navbar-brand" href="/">DocBlock</a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"></span></button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -21,14 +29,14 @@ const NavBar = () =>{
                             <NavLink to="/services" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Services</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/contact" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Contact</NavLink>
+                            <NavLink to="/validation" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Validation</NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink to="/signDocs" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Sign Docs</NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink to="/login" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Log in</NavLink>
-                        </li>
+                        <div className="nav-item nav-link"  onClick={handleCheck} >User
+                            <div>
+                                <li><NavLink to='/login' style={{display: display}} className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Log in</NavLink></li>
+                                <li><NavLink to='/signup' style={{display: display}} className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Sign up</NavLink></li>
+                            </div>
+                        </div>
                     </ul>
                 </div>
             </div>
