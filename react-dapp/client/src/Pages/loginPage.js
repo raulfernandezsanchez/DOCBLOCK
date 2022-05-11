@@ -42,6 +42,7 @@ export default function LoginPage(){
                 localStorage.setItem('isAuthenticated', true);
                 localStorage.setItem('isCompany', true);
                 localStorage.setItem('userID', email);
+                localStorage.setItem('password', password);
                 navigate("/homeCompany");
             }
             //login de user
@@ -58,6 +59,7 @@ export default function LoginPage(){
                 localStorage.setItem('isAuthenticated', true);
                 localStorage.setItem('isCompany', false);
                 localStorage.setItem('userID', email);
+                localStorage.setItem('password', password);
                 navigate("/homeUser");
             }
         }
