@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import '../Assets/styles.css';
+import '../css/styles.css';
 
 import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
@@ -7,7 +7,6 @@ import NavBarUser from "../Components/navbaruser";
 var rootStyle = {
     'position': 'relative',
     'top': '0px',
-    'height': '86vh',
     'bottom': '20px'
 }
 

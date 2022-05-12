@@ -1,6 +1,6 @@
 import React from 'react';
-import './App.css';
-import './Assets/styles.css';
+import './css/App.css';
+import './css/styles.css';
 import {Routes, Route} from 'react-router-dom';
 
 import NotFound from './Pages/notFoundPage';
@@ -30,7 +30,7 @@ function App() {
         <Route path='/home' element={<HomePage/>}></Route>
         <Route path='/about' element={<AboutPage/>}></Route>
         <Route path='/services' element={<ServicesPage/>}></Route>
-        
+
         <Route path='/validation' element={<ValidationPage/>}></Route>
         <Route path='/login' element={<LoginPage/>}></Route>
         <Route path='/signup' element={<SignupPage/>}></Route>

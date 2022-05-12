@@ -1,0 +1,46 @@
+/* ----------- Footer ------------ */
+
+footer {
+  position: relative;
+  padding: 10px 10px 0px 10px;
+  bottom: 0;
+  width: 100%;
+  background: grey;
+  margin-top: auto;
+}
+
+footer .button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+footer .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
+  background-color: black;
+  border-radius: 50px;
+}
+
+.btn img {
+  height: 25px;
+  width: 25px;
+}
+
+footer p {
+  font-size: 14px;
+  color: #cccccc;
+}
+
+@media (min-width: 600px) {
+  footer .container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

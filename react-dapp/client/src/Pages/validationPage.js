@@ -1,12 +1,11 @@
 import React, {useState} from "react";
-import '../Assets/styles.css';
+import '../css/styles.css';
 
 import Footer from "../Components/footer";
 import NavBar from "../Components/navbar";
 
 
 var rootStyle = {
-    'height': '86vh',
     'textAlign':'center'
 }
 

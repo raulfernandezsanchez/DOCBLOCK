@@ -4,7 +4,6 @@ import Footer from "../Components/footer";
 import NavBarCompany from "../Components/navbarcompany";
 
 var rootStyle = {
-    'height': '86vh',
     'marginLeft': '20px'
 }
 

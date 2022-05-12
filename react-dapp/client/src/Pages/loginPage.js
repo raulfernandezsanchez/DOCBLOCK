@@ -5,7 +5,6 @@ import NavBar from '../Components/navbar';
 import Footer from '../Components/footer';
 
 var rootStyle = {
-    'height': '86vh',
     'textAlign': 'center'
 }
 

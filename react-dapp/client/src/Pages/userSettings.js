@@ -5,7 +5,6 @@ import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
 
 var rootStyle = {
-    'height': '86vh',
     'marginLeft': '20px'
 }
 
@@ -25,7 +24,7 @@ export default function UserSettings(){
     const [password, setPassword] = useState();
     const [newPassword, setNewPassword] = useState();
     const [newPasswordConfirm, setNewPasswordConfirm] = useState();
-    
+
     const [deletion, setDeletion] = useState();
 
     const [mailNotifications, setMailNotifications] = useState(true);
@@ -86,7 +85,7 @@ export default function UserSettings(){
             }
         }
     };
-    
+
 
     async function confirmAccountDeletion() {
         if (typeof deletion === "undefined" || deletion !== 'Delete'){
@@ -101,7 +100,7 @@ export default function UserSettings(){
             window.location.reload();
         }
     };
-    
+
     return (
         <>
         <NavBarUser></NavBarUser>
@@ -274,7 +273,7 @@ export default function UserSettings(){
                                     <label><input type="checkbox" checked={newDocMail} onChange={e => setNewDocMail(!newDocMail)} disabled={!mailNotifications}/> New document to sign</label><br/>
                                     <label><input type="checkbox" checked={docSignedMail} onChange={e => setDocSignedMail(!docSignedMail)} disabled={!mailNotifications}/> Document signed successfully</label>
                                 </ul>
-                            </div>    
+                            </div>
                         </ul></div>
                         <div className="col"><ul>
                             <h4>SMS notifications</h4>
