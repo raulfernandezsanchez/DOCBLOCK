@@ -6,6 +6,7 @@ const NavBarUser = () =>{
         localStorage.removeItem("isAuthenticated");
         localStorage.removeItem("userID");
         localStorage.removeItem("isCompany");
+        localStorage.removeItem("password");
         alert("Logging out");
     };
     return (
