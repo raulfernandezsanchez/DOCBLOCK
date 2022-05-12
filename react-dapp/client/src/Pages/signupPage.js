@@ -36,6 +36,21 @@ export default function SignupPage() {
                     alert(mensajeError);
                 }
                 */
+                let name = firstname.concat(" ", lastname); 
+                let item ={email,password,name}
+
+                let result = await fetch("http://localhost:3000/api/users",{
+                    method:'GET',
+                    //body: JSON.stringify(item),
+                    headers:{
+                        "Content-Type":'application/json',
+                    }
+                })
+                result = await result.json()
+                console.log(result)
+
+
+
                 localStorage.setItem('isAuthenticated', true);
                 localStorage.setItem('isCompany', true);
                 localStorage.setItem('userID', email);
@@ -52,6 +67,20 @@ export default function SignupPage() {
                     alert(mensajeError);
                 }
                 */
+
+                let name = firstname.concat(" ", lastname); 
+                let item ={email,password,name}
+
+                let result = await fetch("http://localhost:3000/api/users",{
+                    method:'GET',
+                    //body: JSON.stringify(item),
+                    headers:{
+                        "Content-Type":'application/json',
+                    }
+                })
+                result = await result.json()
+                console.log(result)
+                
                 localStorage.setItem('isAuthenticated', true);
                 localStorage.setItem('isCompany', false);
                 localStorage.setItem('userID', email);
