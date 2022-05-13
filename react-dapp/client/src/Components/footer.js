@@ -10,14 +10,17 @@ class Footer extends Component{
                   Projecte Aplicat d'Enginyeria - UPC
                 </p>
                 <section className="button-wrapper">
-                  <a className="btn btn-outline-light btn-floating m-1" href="https://www.upc.edu/ca" role="button">
+                  <a className="btn btn-outline-light btn-floating m-1" target="_blank" rel="noopener noreferrer" href="https://www.upc.edu/ca" role="button">
                     <img rel="icon" src="logo_upc_black.png" alt="UPC"/>
                   </a>
-                  <a className="btn btn-outline-light btn-floating m-1" href="https://twitter.com/la_UPC" role="button">
+                  <a className="btn btn-outline-light btn-floating m-1" target="_blank" rel="noopener noreferrer" href="https://twitter.com/la_UPC" role="button">
                     <i className="fab fa-twitter"></i>
                   </a>
-                  <a className="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                  <a className="btn btn-outline-light btn-floating m-1" target="_blank" rel="noopener noreferrer" href="https://epicalab.com/es/" role="button">
                     <i className="fab fa-github"></i>
+                  </a>
+                  <a className="btn btn-outline-light btn-floating m-1" href="mailto:info@docblock.com?subject=DocBlock%20information" role="button">
+                    <i className="fa fa-envelope"></i>
                   </a>
                 </section>
                 <p className="text-center m-2">
