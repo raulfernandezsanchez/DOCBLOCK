@@ -9,9 +9,26 @@ var rootStyle = {
 
 export default function CompanyContracts(){
     const [filename, setFilename] = useState('')
+    const [pdfform, setpdfform] = useState('')
+    const [pdfInput, setpdfinput] = useState('')
+
+
     function handleSubmit(e){
-        setFilename(e.target.value);
-        alert(filename);
+        console.log("llega")
+        //setFilename(e.target.value);
+        alert("llega");
+
+        //get secure url from our server
+        const {url} = fetch("/s3Url",{
+            headers : {
+                'Content-type': 'application/json',
+                'Accept': 'application/son'
+            }
+        }).then(res => res.json())
+        console.log("llega")
+        console.log(url)
+
+        
     };
     return (
         <>
@@ -45,9 +62,9 @@ export default function CompanyContracts(){
                         <li>Upload contract</li>
                         <li>Assign contract</li>
                     </ul>
-                    <div className="mb-3" width="100px">
+                    <div className="mb-3" width="100px" id="pdfform" onChange={e => setpdfform(e.target.value)}>
                         <label htmlFor="formFile" className="form-label">Select a contract to upload
-                        <input className="form-control" type="file" accept=".pdf" id="formFile"/></label>
+                        <input className="form-control" type="file" accept=".pdf" id="formFile" onChange={e => setpdfinput(e.target.value)}/></label>
                         <br/><button type='submit' onClick={handleSubmit} className="btn btn-primary btn-block">Upload</button>
                     </div>
                 </div>
