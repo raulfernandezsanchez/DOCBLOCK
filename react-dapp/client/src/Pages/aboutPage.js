@@ -36,10 +36,10 @@ class AboutPage extends Component{
                     <div className="card">
                         <img src={require("../Assets/pink.jpg")} alt="Arnau Llobet" style={memberStyle}/>
                         <div className="container">
-                            <h2>Member 1</h2>
+                            <h2>Arnau Llobet</h2>
                             <p className="title">Blockchain developer</p>
-                            <p>Description</p>
-                            <p><button className="button">Contact</button></p>
+                            <p>UPC 4th year student with computer science expertise.</p>
+                            <a href="mailto:arnau.llobet.massalle@estudiantat.upc.edu" className="button">Contact</a>
                         </div>
                     </div>
                 </div>
@@ -47,9 +47,9 @@ class AboutPage extends Component{
                     <div className="card">
                     <img src={require("../Assets/orange.jpg")} alt="Raúl Sánchez" style={memberStyle}/>
                     <div className="container">
-                        <h2>Member 2</h2>
+                        <h2>Raúl Fernández</h2>
                         <p className="title">Back-end developer</p>
-                        <p>Description</p>
+                        <p>UPC 4th year student with software expertise.</p>
                         <p><button className="button">Contact</button></p>
                     </div>
                     </div>
@@ -58,9 +58,9 @@ class AboutPage extends Component{
                     <div className="card">
                         <img src={require("../Assets/light_blue.jpg")} alt="Diego Núñez" style={memberStyle}/>
                         <div className="container">
-                            <h2>Member 3</h2>
+                            <h2>Diego Núñez</h2>
                             <p className="title">Blockchain developer</p>
-                            <p>Description</p>
+                            <p>UPC 4th year student with computer science expertise.</p>
                             <p><button className="button">Contact</button></p>
                         </div>
                     </div>
@@ -69,9 +69,9 @@ class AboutPage extends Component{
                     <div className="card">
                         <img src={require("../Assets/green.jpg")} alt="Xavier Gervilla" style={memberStyle}/>
                         <div className="container">
-                            <h2>Member 4</h2>
+                            <h2>Xavier Gervilla</h2>
                             <p className="title">Front-end developer</p>
-                            <p>Description</p>
+                            <p>UPC 4th year student with computer science expertise.</p>
                             <p><button className="button">Contact</button></p>
                         </div>
                     </div>
@@ -84,11 +84,11 @@ class AboutPage extends Component{
                     <div className="card">
                         <img src={require("../Assets/green.jpg")} alt="John" style={partnerStyle}/>
                         <div className="container">
-                            <h2>Company 1</h2>
+                            <h2>Universitat Politècnica de Catalunya</h2>
                             <p className="title">Lema</p>
                             <p>Description of the company</p>
                             <p></p>
-                            <p><button className="button">Contact</button></p>
+                            <a href="https://www.upc.edu/ca" class="button">Contact UPC</a>
                         </div>
                     </div>
                 </div>
@@ -96,11 +96,11 @@ class AboutPage extends Component{
                     <div className="card">
                         <img src={require("../Assets/light_blue.jpg")} alt="John" style={partnerStyle}/>
                         <div className="container">
-                            <h2>Company 2</h2>
+                            <h2>Fundació Èpica</h2>
                             <p className="title">Lema</p>
                             <p>Description of the company</p>
                             <p></p>
-                            <p><button className="button">Contact</button></p>
+                            <a href="https://epicalab.com/es/" class="button">Contact Fundació Èpica</a>
                         </div>
                     </div>
                 </div>

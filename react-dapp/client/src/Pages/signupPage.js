@@ -26,7 +26,7 @@ export default function SignupPage() {
         else{
             //signup de company
             if(isCompany){
-                //let name = firstname.concat(" ", lastname); 
+                //let name = firstname.concat(" ", lastname);
                 //let item ={email,password,name}
                 let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies",{
                     method:'GET',
@@ -44,7 +44,7 @@ export default function SignupPage() {
             }
             //login de user
             else{
-               //let name = firstname.concat(" ", lastname); 
+               //let name = firstname.concat(" ", lastname);
                 //let item ={email,password,name}
                 let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users",{
                     method:'GET',

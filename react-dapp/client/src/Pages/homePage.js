@@ -39,7 +39,7 @@ class HomePage extends Component{
                     <div className="card h-100">
                         <div className="card-body">
                             <h2 className="card-title">Our product</h2>
-                            <p className="card-text">Platform to manage<br/> and sign documents</p>
+                            <p className="card-text">Platform to manage and sign documents</p>
                         </div>
                         <div className="card-footer"><a className="btn btn-primary btn-sm" href="/services">Learn more</a></div>
                     </div>
@@ -58,7 +58,7 @@ class HomePage extends Component{
                     <div className="card h-100">
                         <div className="card-body">
                             <h2 className="card-title">Our partners</h2>
-                            <p className="card-text">Companies that trust<br/> in our product</p>
+                            <p className="card-text">Companies that trust in our product</p>
                         </div>
                         <div className="card-footer"><a className="btn btn-primary btn-sm" href="/about">Learn more</a></div>
                     </div>
