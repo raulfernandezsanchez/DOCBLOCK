@@ -13,11 +13,8 @@ footer .button-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-<<<<<<< HEAD
-=======
   margin-left: 60px;
   margin-right: 60px;
->>>>>>> main
 }
 
 footer .btn {
@@ -42,15 +39,8 @@ footer p {
 
 @media (min-width: 600px) {
   footer .container {
-<<<<<<< HEAD
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px
-=======
     display: inline-flex;
     align-items: center;
     justify-content: center;
->>>>>>> main
   }
 }

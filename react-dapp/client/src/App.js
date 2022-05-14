@@ -7,10 +7,6 @@ import NotFound from './Pages/notFoundPage';
 import HomePage from './Pages/homePage';
 import AboutPage from './Pages/aboutPage';
 import LoginPage from './Pages/loginPage';
-<<<<<<< HEAD
-import ContactPage from './Pages/contactPage';
-=======
->>>>>>> main
 import ServicesPage from './Pages/servicesPage';
 import SignupPage from './Pages/signupPage';
 import UserPage from './Pages/userPage';
@@ -37,10 +33,6 @@ function App() {
         <Route path='/validation' element={<ValidationPage/>}></Route>
         <Route path='/login' element={<LoginPage/>}></Route>
         <Route path='/signup' element={<SignupPage/>}></Route>
-<<<<<<< HEAD
-        <Route path='/contact' element={<ContactPage/>}></Route>
-=======
->>>>>>> main
 
 
         <Route path='/homeUser' element={<PrivateRoute><UserPage/></PrivateRoute>}></Route>
