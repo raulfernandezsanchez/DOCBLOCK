@@ -72,7 +72,7 @@ export default function SignupPage() {
                 let name = firstname.concat(" ", lastname); 
                 let item ={email,password,name}
 
-                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users/",{
+                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users",{
                     method:'GET',
                     //body: JSON.stringify(item),
                     headers:{
