@@ -1,5 +1,9 @@
 import React, {Component} from "react";
+<<<<<<< HEAD
 import '../css/styles.css';
+=======
+import '../css/aboutPage.css';
+>>>>>>> main
 
 import Footer from "../Components/footer";
 import NavBar from "../Components/navbar";
@@ -15,6 +19,7 @@ class ServicesPage extends Component{
         return (
             <>
             <NavBar></NavBar>
+<<<<<<< HEAD
             <div id="services" style={rootStyle}>
                 <h2>For companies</h2>
                 <ul>
@@ -28,6 +33,10 @@ class ServicesPage extends Component{
                     <li>Easy sign</li>
                     <li>Validate experience</li>
                 </ul>
+=======
+            <div className="container">
+
+>>>>>>> main
             </div>
             <Footer></Footer>
             </>

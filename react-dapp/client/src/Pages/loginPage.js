@@ -29,6 +29,7 @@ export default function LoginPage(){
         else{
             //login de company
             if(isCompany){
+<<<<<<< HEAD
                 /*
                 if( checkApiCompany(email,password) ){
                     saveSession(email);
@@ -38,6 +39,18 @@ export default function LoginPage(){
                     alert(mensajeError);
                 }
                 */
+=======
+                //let item ={email,password}
+                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies",{
+                    method:'GET',
+                    headers:{
+                        "Content-Type":'application/json',
+                    },
+                });
+                result = await result.json();
+                console.log(result);
+
+>>>>>>> main
                 localStorage.setItem('isAuthenticated', true);
                 localStorage.setItem('isCompany', true);
                 localStorage.setItem('userID', email);
@@ -46,6 +59,7 @@ export default function LoginPage(){
             }
             //login de user
             else{
+<<<<<<< HEAD
                 /*
                 if( checkApiUser(email,password) ){
                     saveSession(email);
@@ -55,6 +69,18 @@ export default function LoginPage(){
                     alert(mensajeError);
                 }
                 */
+=======
+                //let item ={email,password}
+                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users",{
+                    method:'GET',
+                    headers:{
+                        "Content-Type":'application/json',
+                    },
+                });
+                result = await result.json();
+                console.log(result);
+
+>>>>>>> main
                 localStorage.setItem('isAuthenticated', true);
                 localStorage.setItem('isCompany', false);
                 localStorage.setItem('userID', email);
