@@ -16,6 +16,13 @@ export default function SignupPage() {
     const [firstname, setFirstname] = useState();
     const [lastname, setLastname] = useState()
 
+    function isRegistered(registered){
+        for(let i = 0; i<registered.length; ++i){
+            if(registered[i].email === email) return true;
+        }
+        return false;
+    }
+
     async function handleSubmit (event) {
         event.preventDefault();
         //comprobacion de que los campos tienen contenido:
@@ -26,39 +33,78 @@ export default function SignupPage() {
         else{
             //signup de company
             if(isCompany){
-                //let name = firstname.concat(" ", lastname);
-                //let item ={email,password,name}
-                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies",{
+                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
                     method:'GET',
                     headers:{
                         "Content-Type":'application/json',
-                    },
+                    }
                 });
                 result = await result.json();
-                console.log(result);
 
-                localStorage.setItem('isAuthenticated', true);
-                localStorage.setItem('isCompany', true);
-                localStorage.setItem('userID', email);
-                navigate("/homeCompany");
+                //comprobar si el usuario ya tiene una cuenta
+                if (!isRegistered(result)) {
+                    //nuevo usuario
+                    let new_user = {
+                        useremail : email,
+                        userpassword : password,
+                        username : firstname.concat(' ', lastname),
+                    };
+                    let resultPost = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
+                        body: JSON.stringify(new_user),
+                        method:'POST',
+                        headers:{
+                            "Content-Type":'application/json',
+                        },
+                    });
+                    //checkear errores de resultPost
+                    console.log(resultPost)
+
+                    localStorage.setItem('isAuthenticated', true);
+                    localStorage.setItem('isCompany', true);
+                    localStorage.setItem('userID', email);
+                    navigate("/homeCompany");
+                }
+                else {
+                    alert('The mail address is already being used!');
+                }
             }
             //login de user
             else{
-               //let name = firstname.concat(" ", lastname);
-                //let item ={email,password,name}
-                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users",{
+               let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users", {
                     method:'GET',
                     headers:{
                         "Content-Type":'application/json',
-                    },
+                    }
                 });
                 result = await result.json();
                 console.log(result);
 
-                localStorage.setItem('isAuthenticated', true);
-                localStorage.setItem('isCompany', false);
-                localStorage.setItem('userID', email);
-                navigate("/homeUser");
+                //comprobar si el usuario ya tiene una cuenta
+                if (!isRegistered(result)) {
+                    //nuevo usuario
+                    let new_user = {
+                        useremail : email,
+                        userpassword : password,
+                        username : firstname.concat(' ', lastname),
+                    };
+                    let resultPost = await fetch("https://vast-peak-05541.herokuapp.com/api/users", {
+                        body: JSON.stringify(new_user),
+                        method:'POST',
+                        headers:{
+                            "Content-Type":'application/json',
+                        },
+                    });
+                    //checkear errores de resultPost
+                    console.log(resultPost);
+                    
+                    localStorage.setItem('isAuthenticated', true);
+                    localStorage.setItem('isCompany', false);
+                    localStorage.setItem('userID', email);
+                    navigate("/homeUser");
+                }
+                else {
+                    alert('The mail address is already being used!');
+                }
             }
         }
     }
