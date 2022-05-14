@@ -38,16 +38,17 @@ export default function SignupPage() {
                 */
                 let name = firstname.concat(" ", lastname); 
                 let item ={email,password,name}
-
-                let result = await fetch("http://localhost:3000/api/users",{
+                alert("llega")
+                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users",{
                     method:'GET',
                     //body: JSON.stringify(item),
                     headers:{
                         "Content-Type":'application/json',
-                    }
-                })
-                result = await result.json()
-                console.log(result)
+                    },
+                    //mode: 'no-cors'
+                });
+                result = await result.text();
+                console.log(result);
 
 
 
@@ -71,15 +72,17 @@ export default function SignupPage() {
                 let name = firstname.concat(" ", lastname); 
                 let item ={email,password,name}
 
-                let result = await fetch("http://localhost:3000/api/users",{
+                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users/",{
                     method:'GET',
                     //body: JSON.stringify(item),
                     headers:{
                         "Content-Type":'application/json',
-                    }
-                })
-                result = await result.json()
-                console.log(result)
+                    },
+                    //mode: 'no-cors'
+                });
+                result = await result.text();
+                if(!result) alert("vacío")
+                console.log(result);
                 
                 localStorage.setItem('isAuthenticated', true);
                 localStorage.setItem('isCompany', false);
