@@ -4,10 +4,6 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "../Components/navbar";
 import Footer from "../Components/footer";
 
-var rootStyle = {
-    'textAlign': 'center'
-}
-
 export default function SignupPage() {
     const navigate = useNavigate();
     const [isCompany, setChecked] = useState(false);
@@ -115,7 +111,7 @@ export default function SignupPage() {
     return (
         <>
         <NavBar></NavBar>
-        <form style={rootStyle} onSubmit={handleSubmit} >
+        <form style={{'textAlign':'center'}} onSubmit={handleSubmit} >
             <div className="form-group">
                 <p>First name</p>
                 <input type="text" onChange={e => setFirstname(e.target.value)} placeholder="Juan" />

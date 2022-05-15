@@ -4,11 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from '../Components/navbar';
 import Footer from '../Components/footer';
 
-var rootStyle = {
-    'textAlign': 'center'
-}
-
-
 export default function LoginPage(){
     const navigate = useNavigate();
     const [email, setEmail] = useState();
@@ -85,7 +80,7 @@ export default function LoginPage(){
     return(
         <>
         <NavBar></NavBar>
-        <div style={rootStyle}>
+        <div style={{'textAlign':'center'}}>
             <form onSubmit={handleSubmit}>
                 <div>
                     <p>Email</p>
@@ -101,7 +96,7 @@ export default function LoginPage(){
                 <div>
                     <button type='submit' onClick={handleSubmit} className="btn btn-primary btn-block">Log in</button>
                 </div><br/>
-                <a href="/recovery">Forgot password?</a><br/><br/>
+                <a href="/recovery">Forgot password? Reset</a><br/><br/>
                 <a href="/signup">New user? Sign up</a>
             </form>
         </div>

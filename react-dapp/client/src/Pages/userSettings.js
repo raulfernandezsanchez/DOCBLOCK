@@ -4,10 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
 
-var rootStyle = {
-    'marginLeft': '20px'
-}
-
 export default function UserSettings(){
     const navigate = useNavigate();
     //contraseña
@@ -104,7 +100,7 @@ export default function UserSettings(){
     return (
         <>
         <NavBarUser></NavBarUser>
-        <div style={rootStyle}>
+        <div style={{'marginLeft': '20px'}}>
         <h4>User settings</h4>
             <ul className="nav nav-tabs" id="myTab" role="tablist">
                 <li className="nav-item" role="presentation">
@@ -371,7 +367,6 @@ export default function UserSettings(){
                     </div>
                     </div>
                 </div>
-
             </div>
         </div>
         <Footer></Footer>

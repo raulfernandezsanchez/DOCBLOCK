@@ -1,28 +1,20 @@
 import React, {Component} from "react";
-import '../css/styles.css';
 
 import Footer from "../Components/footer";
 import NavBar from "../Components/navbar";
-
-var rootStyle = {
-    'position': 'relative',
-    'top': '0px',
-    'bottom': '20px'
-}
 
 class NotFound extends Component{
     render() {
         return (
             <>
             <NavBar></NavBar>
-            <div id="notfound" style={rootStyle}>
+            <div id="notfound" style={{'textAlign': 'center'}}>
                 <div class="notfound">
                     <div class="notfound-404">
-                        <div></div>
-                        <h1>404</h1>
+                        <br/>
+                        <h1>Page not found</h1>
+                        <p>The page you are looking for is not available.</p>
                     </div>
-                    <h2>Page not found</h2>
-                    <p>The page you are looking for might have been removed had its name changed or is temporarily unavailable.</p>
                 </div>
             </div>
             <Footer></Footer>
