@@ -41,9 +41,9 @@ export default function SignupPage() {
                 if (!isRegistered(result)) {
                     //nuevo usuario
                     let new_user = {
-                        useremail : email,
-                        userpassword : password,
-                        username : firstname.concat(' ', lastname),
+                        companyemail : email,
+                        companypassword : password,
+                        companyname : firstname.concat(' ', lastname),
                     };
                     let resultPost = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
                         body: JSON.stringify(new_user),
