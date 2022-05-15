@@ -15,6 +15,13 @@ export default function LoginPage(){
     const [password, setPassword] = useState();
     const [isCompany, setChecked] = useState(false);
 
+    function isRegistered(registered){
+        for(let i = 0; i<registered.length; ++i){
+            if(registered[i].email === email) return true;
+        }
+        return false;
+    }
+
     const handleCheck = () =>{
         setChecked(!isCompany);
     };
@@ -27,41 +34,50 @@ export default function LoginPage(){
         }
         //si tienen contenido, se comprueban con la api
         else{
-            //login de company
             if(isCompany){
-                //let item ={email,password}
-                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies",{
+                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
                     method:'GET',
                     headers:{
                         "Content-Type":'application/json',
-                    },
+                    }
                 });
                 result = await result.json();
-                console.log(result);
 
-                localStorage.setItem('isAuthenticated', true);
-                localStorage.setItem('isCompany', true);
-                localStorage.setItem('userID', email);
-                localStorage.setItem('password', password);
-                navigate("/homeCompany");
+                //comprobar si el usuario ya tiene una cuenta
+                if (!isRegistered(result)) {
+                    alert('No account with this mail!')
+                }
+                else {
+                    //comprobar que la contraseña es correcta
+                    localStorage.setItem('isAuthenticated', true);
+                    localStorage.setItem('isCompany', true);
+                    localStorage.setItem('userID', email);
+                    localStorage.setItem('password', password);
+                    navigate("/homeCompany");
+                }
             }
             //login de user
             else{
-                //let item ={email,password}
-                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users",{
+                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users", {
                     method:'GET',
                     headers:{
                         "Content-Type":'application/json',
-                    },
+                    }
                 });
                 result = await result.json();
-                console.log(result);
 
-                localStorage.setItem('isAuthenticated', true);
-                localStorage.setItem('isCompany', false);
-                localStorage.setItem('userID', email);
-                localStorage.setItem('password', password);
-                navigate("/homeUser");
+                //comprobar si el usuario ya tiene una cuenta
+                if (!isRegistered(result)) {
+                    alert('No account with this mail!')
+                }
+                else {
+                    //comprobar que la contraseña es correcta
+                    localStorage.setItem('isAuthenticated', true);
+                    localStorage.setItem('isCompany', false);
+                    localStorage.setItem('userID', email);
+                    localStorage.setItem('password', password);
+                    navigate("/homeUser");
+                }
             }
         }
     }
