@@ -1,13 +1,7 @@
 import React, {useState} from "react";
-import '../css/styles.css';
 
 import Footer from "../Components/footer";
 import NavBar from "../Components/navbar";
-
-
-var rootStyle = {
-    'textAlign':'center'
-}
 
 function ValidationPage(){
     const [searchShow, setSearchShow] = useState(false);
@@ -29,7 +23,7 @@ function ValidationPage(){
     return (
         <>
         <NavBar></NavBar>
-        <div id="validation" style={rootStyle}>
+        <div id="validation" style={{'textAlign': 'center'}}>
             <h3>Enter an ID to validate its experience</h3>
             <input onChange={changeSubmit} placeholder="User code"></input>
             <br/><br/>

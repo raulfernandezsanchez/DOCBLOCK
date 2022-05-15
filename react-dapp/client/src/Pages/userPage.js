@@ -1,5 +1,4 @@
 import React from "react";
-import '../css/styles.css';
 
 import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
@@ -10,7 +9,7 @@ export default function UserPage(){
     return (
         <>
         <NavBarUser></NavBarUser>
-        <div id="homeuser">
+        <div id="homeuser" style={{'marginLeft': '20px'}}>
             <h4>{userID}</h4>
             <ul>
                 <li>Pending contracts</li>

@@ -73,3 +73,17 @@
       display: block;
     }
   }
+
+  #titleSection{
+    text-align: center;
+  }
+
+  #memberImage{
+    width: 100%;
+    height: 350px;
+  }
+
+  #partnerImage{
+    width: 100%;
+    height: 300px;
+  }

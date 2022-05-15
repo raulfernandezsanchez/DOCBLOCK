@@ -3,10 +3,6 @@ import React, { useState } from "react";
 import Footer from "../Components/footer";
 import NavBarCompany from "../Components/navbarcompany";
 
-var rootStyle = {
-    'marginLeft': '20px'
-}
-
 export default function CompanyContracts(){
     const [filename, setFilename] = useState('')
     function handleSubmit(e){
@@ -16,7 +12,7 @@ export default function CompanyContracts(){
     return (
         <>
         <NavBarCompany></NavBarCompany>
-        <div id="services" style={rootStyle}>
+        <div id="services" style={{'marginLeft': '20px'}}>
             <h4>Main page to manage contracts</h4>
             <p>This page will show the different contracts a user has and will allow him/her to sign them</p>
             <br/>
