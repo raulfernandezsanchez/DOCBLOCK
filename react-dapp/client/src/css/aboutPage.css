@@ -37,6 +37,10 @@
     color: white;
   }
 
+  .about-section h1 {
+    font-size: 50px;
+  }
+
   .container {
     padding: 0 16px;
   }

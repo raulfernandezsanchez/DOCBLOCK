@@ -1,6 +1,6 @@
 /* USER LIST TABLE */
 .user-list tbody td > img {
-    position: relative;
+  position: relative;
 	max-width: 50px;
 	float: left;
 	margin-right: 15px;
@@ -59,9 +59,11 @@
 .search-wrapper {
   border: 1px solid;
   border-image: black;
-  border-radius: 25px;
+  border-radius: 20px;
   padding: 20px;
   box-shadow: 0 0 5px #000;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .search-wrapper h2 {
@@ -69,3 +71,63 @@
   justify-content: center;
   font-size: 30px;
 }
+
+/* POPUP */
+.popup-user-info {
+  padding: 0 12px;
+  margin-bottom: 30px;
+}
+
+.popup-user-info .name {
+  font-size: 30px;
+}
+
+.popup-user-info .row {
+  display: flex;
+  justify-content: center;
+}
+
+.c-pill {
+  align-items: center;
+	font-weight: bold;
+	font-size: 11px;
+  display: inline-block;
+  height: 100%;
+  white-space: nowrap;
+  width: auto;
+
+  position: relative;
+  border-radius: 100px;
+  line-height: 1;
+  overflow: hidden;
+  padding: 0px 12px 0px 20px;
+  text-overflow: ellipsis;
+	line-height: 1.25rem;
+	color: #595959;
+
+  word-break: break-word;
+}
+
+.c-pill:before {
+  border-radius: 50%;
+  content: '';
+  height: 10px;
+  left: 6px;
+  margin-top: -5px;
+  position: absolute;
+  top: 50%;
+  width: 10px;
+}
+
+.c-pill--success {
+  background: #b4eda0; }
+  .c-pill--success:before {
+    background: #6BC167; }
+.c-pill--warning {
+  background: #ffebb6; }
+  .c-pill--warning:before {
+    background: #ffc400; }
+.c-pill--danger {
+  background: #ffd5d1; }
+  .c-pill--danger:before {
+    background: #ff4436; }

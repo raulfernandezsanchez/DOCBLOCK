@@ -11,7 +11,7 @@ class ServicesPage extends Component{
             <NavBar></NavBar>
             <div className="about-section" width="100%">
                 <h1>Services</h1>
-                <p>DocBlock has different functionah2ties.</p>
+                <p>DocBlock has different functionalities.</p>
             </div>
             <div className="row d-flex justify-content-center">
               <div className="column">

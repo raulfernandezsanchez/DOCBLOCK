@@ -13,7 +13,7 @@ export default function SignupPage() {
     const [lastname, setLastname] = useState()
 
     function isRegistered(registered){
-        for(let i = 0; i<registered.length; ++i){
+        for(let i = 0; i < registered.length; ++i){
             if(registered[i].email === email) return true;
         }
         return false;
@@ -39,11 +39,13 @@ export default function SignupPage() {
 
                 //comprobar si el usuario ya tiene una cuenta
                 if (!isRegistered(result)) {
+
+                    let companyName = firstname.concat(' ', lastname);
                     //nuevo usuario
                     let new_user = {
                         companyemail : email,
                         companypassword : password,
-                        companyname : firstname.concat(' ', lastname),
+                        companyname : companyName,
                     };
                     let resultPost = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
                         body: JSON.stringify(new_user),
@@ -58,6 +60,7 @@ export default function SignupPage() {
                     localStorage.setItem('isAuthenticated', true);
                     localStorage.setItem('isCompany', true);
                     localStorage.setItem('userID', email);
+                    localStorage.setItem('companyName', companyName);
                     navigate("/homeCompany");
                 }
                 else {
