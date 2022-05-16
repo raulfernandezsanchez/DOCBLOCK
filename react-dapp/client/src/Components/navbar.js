@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import '../css/navbar.css'
 
 const NavBar = () =>{
     const [display, setDisplay] = useState('none');
@@ -21,7 +22,7 @@ const NavBar = () =>{
                 </a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"></span></button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <ul className="navbar-nav ms-auto mb-2 mb-lg-0" id="menu">
                         <li className="nav-item">
                             <NavLink to="/" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Home</NavLink>
                         </li>
@@ -34,12 +35,13 @@ const NavBar = () =>{
                         <li className="nav-item">
                             <NavLink to="/validation" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Validation</NavLink>
                         </li>
-                        <div className="nav-item nav-link"  onClick={handleCheck} >User
-                            <div>
-                                <li><NavLink to='/login' style={{display: display}} className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Log in</NavLink></li>
-                                <li><NavLink to='/signup' style={{display: display}} className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Sign up</NavLink></li>
-                            </div>
-                        </div>
+                        <li>
+                          <a href="#"> User</a>
+                          <ul className="menu-vertical">
+                            <li><a href="/login">Log in</a></li>
+                            <li><a href="/signup">Sign up</a></li>
+                          </ul>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -15,7 +15,7 @@ class ServicesPage extends Component{
             </div>
             <div className="row d-flex justify-content-center">
               <div className="column">
-                <div className="cardServices">
+                <div className="card" id="serv">
                   <h5>Companies</h5>
                   <h2>Assign contracts to users.</h2>
                   <h2>Follow and control the progress.</h2>
@@ -23,7 +23,7 @@ class ServicesPage extends Component{
                 </div>
               </div>
               <div className="column">
-                <div className="cardServices">
+                <div className="card" id="serv">
                     <h5>Users</h5>
                     <h2>Sign your documents.</h2>
                     <h2>Validate your experience.</h2>
