@@ -11,11 +11,11 @@ class ServicesPage extends Component{
             <NavBar></NavBar>
             <div className="about-section" width="100%">
                 <h1>Services</h1>
-                <p>DocBlock has different functionah2ties.</p>
+                <p>DocBlock has different functionalities.</p>
             </div>
             <div className="row d-flex justify-content-center">
               <div className="column">
-                <div className="cardServices">
+                <div className="card" id="serv">
                   <h5>Companies</h5>
                   <h2>Assign contracts to users.</h2>
                   <h2>Follow and control the progress.</h2>
@@ -23,7 +23,7 @@ class ServicesPage extends Component{
                 </div>
               </div>
               <div className="column">
-                <div className="cardServices">
+                <div className="card" id="serv">
                     <h5>Users</h5>
                     <h2>Sign your documents.</h2>
                     <h2>Validate your experience.</h2>

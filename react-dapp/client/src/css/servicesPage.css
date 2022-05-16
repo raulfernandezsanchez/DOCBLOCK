@@ -2,9 +2,7 @@
   box-sizing: inherit;
 }
 
-.cardServices{
-  width: 400px;
-  height: 350px;
+#serv {
   display: inline-block;
   border-radius: 10px;
   padding: 15px 25px;
@@ -22,11 +20,13 @@
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.5rem;
   align-items: center;
+  position: absolute;
 }
 
-.cardServices:hover{
+#serv:hover{
   transform: translateY(-10px);
 }
+
 
 .button:hover {
   background-color: #555;
@@ -44,7 +44,7 @@ h2{
 h5{
   font-size: 35px;
   font-weight: bold;
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 
 @media screen and (max-width: 650px) {
