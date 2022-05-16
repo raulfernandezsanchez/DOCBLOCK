@@ -46,6 +46,12 @@ export default function CompanyContracts(){
         };
         reader.readAsDataURL(e.target.files[0]);
     }
+    
+    function uploadFile(){
+      alert('File '+ filename +' updated')
+      localStorage.setItem('contractFile', filename);
+      localStorage.setItem('contractContent', fileContent);
+    }
 
 
    const filter = (e) => {
@@ -138,7 +144,7 @@ export default function CompanyContracts(){
                             </label>
                             <br/>
                             {/*<a href={filename} target='_blank' className="btn btn-primary btn-block" rel='noopener noreferrer' onClick={() => alert(filename)}>Upload</a>*/}
-                            <button className="btn btn-primary btn-block" onClick={() => alert(filename)}>Upload</button>
+                            <button className="btn btn-primary btn-block" onClick={uploadFile}>Upload</button>
                         </div>
                         <div className="col-sm-8">
                         {fileContent ? <iframe src={fileContent} title='PDF' width="100%" height={window.innerHeight*0.85}></iframe> : <></>}
