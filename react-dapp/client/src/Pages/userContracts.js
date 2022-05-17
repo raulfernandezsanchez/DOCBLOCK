@@ -13,10 +13,16 @@ export default function UserContracts(){
     const [minVal] = useState(1000000);
     const [maxVal] = useState(1000000000);
     const [randomNum, setRandomNum] = useState(0);
-    window.onload = () =>{
+
+    const generateRandomNum = () =>{
         let newVal = Math.floor(Math.random() * (maxVal - minVal + 1) + minVal);
         setRandomNum(newVal);
+        console.log(newVal)
     }
+
+    window.onload = () =>{
+        generateRandomNum();
+    };
 
     const sendEmail = (e) =>{
         const firstNameInput = document.getElementById('signInput');
@@ -39,9 +45,9 @@ export default function UserContracts(){
     
     const handleSign = () => {
         const firstNameInput = document.getElementById('signInput');
-        console.log(randomNum);
         if (parseInt(firstNameInput.value,10) !== randomNum){
             alert('Wrong number, try again');
+            console.log(randomNum);
         }
         else{
             const modalSigned = document.getElementById('signModal');
@@ -67,14 +73,14 @@ export default function UserContracts(){
                             <div className="modal-content">
                                 <div className="modal-header">
                                     <h4 className="modal-title" id="multifactor">Sign {filename}</h4>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setRandomNum(0)}></button>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={generateRandomNum}></button>
                                 </div>
                                 <div className="modal-body">
                                     <p>Enter the code from your email:</p>
                                     <input type='number' id='signInput'/>
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={generateRandomNum}>Close</button>
                                     <button type="button" id='signModal' className="btn btn-primary" hidden={false} onClick={handleSign}>Confirm signature</button>
                                 </div>
                             </div>
