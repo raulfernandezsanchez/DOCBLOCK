@@ -18,8 +18,10 @@ function getUnique(arr, index) {
 
 export default function CompanyPage(){
 
-    //popup button
-    const [buttonPopup, setButtonPopup] = useState(false);
+    //popup button info
+    const [buttonPopupInfo, setButtonPopupInfo] = useState(false);
+    //popup button assigned
+    const [buttonPopupAssign, setButtonPopupAssign] = useState(false);
 
     //popup info
     const [popupUserName, setPopupUserName] = useState('');
@@ -37,14 +39,10 @@ export default function CompanyPage(){
 
     // loaded users
     const [loadedUsers, setLoadedUsers] = useState('');
-
-    function handlePopup(event, username, useremail, contracts) {
-      event.preventDefault();
-      setPopupUserName(username);
-      setPopupUserEmail(useremail);
-      setPopupUserContracts(contracts);
-      setButtonPopup(true);
-    }
+    // loaded contracts
+    const [foundContracts, setFoundContracts] = useState('');
+    //
+    const [assignedUser, setAssignedUser] = useState('');
 
     // load users and contracts
      React.useEffect(() => {
@@ -59,8 +57,68 @@ export default function CompanyPage(){
           setFoundUsers(users);
           setLoadedUsers(users);
         });
+        fetch("https://vast-peak-05541.herokuapp.com/api/contracts", {
+            method:'GET',
+            headers:{
+                "Content-Type":'application/json',
+            }
+        }).then(response => response.json())
+          .then(data => {
+            let contracts = getUnique(data, 'name');
+            setFoundContracts(contracts);
+          });
 
        }, []);
+
+    function handlePopupInfo(event, username, useremail, contracts) {
+      event.preventDefault();
+      setPopupUserName(username);
+      setPopupUserEmail(useremail);
+      setPopupUserContracts(contracts);
+      setButtonPopupInfo(true);
+    }
+
+    function handlePopupAssign(event, user) {
+      event.preventDefault();
+      setAssignedUser(user);
+      setButtonPopupAssign(true);
+    }
+
+    function isContractAssigned(contract) {
+      let already_assigned_contracts = assignedUser.assignedContracts;
+      let assign = false;
+      let i = 0;
+      while (!assign && i < already_assigned_contracts.length) {
+        if (contract == already_assigned_contracts[i]) {
+          assign = true;
+        }
+        ++i;
+      }
+      return assign;
+    }
+
+    function assignContract(event, contract) {
+      event.preventDefault();
+
+      if (!isContractAssigned(contract)) {
+        let new_contract = {
+          userassignedContracts : contract
+        }
+        fetch("https://vast-peak-05541.herokuapp.com/api/users/" + assignedUser._id, {
+            body: JSON.stringify(new_contract),
+            method:'PUT',
+            headers:{
+                "Content-Type":'application/json',
+            }
+        }).then(response => response.json())
+          .then(data => {
+            console.log(assignedUser);
+          });
+
+      } else {
+        console.log("Contract already assigned!");
+      }
+    }
 
     const filter = (e) => {
       const keyword = e.target.value;
@@ -108,12 +166,26 @@ export default function CompanyPage(){
                           <td className="user-id">{user.name}</td>
                           <td className="user-name">{user.email}</td>
                           <td>
-                            <a onClick={(e) => handlePopup(e, user.name, user.email, user.assignedContracts)} className="table-link">
-            									<span className="fa-stack">
-            										<i className="fa fa-square fa-stack-2x"></i>
-            										<i className="fa fa-search-plus fa-stack-1x fa-inverse"></i>
-            									</span>
-            								</a>
+                          <div className="row">
+                            <div className="col d-flex justify-content-center">
+                              <a onClick={(e) => handlePopupInfo(e, user.name, user.email, user.assignedContracts)} className="table-link">
+                                <span className="fa-stack info-button">
+                                  <i className="fa fa-square fa-stack-2x"></i>
+                                  <i className="fa fa-info-circle fa-stack-1x fa-inverse"></i>
+                                </span>
+                                <div className="hide hide-info-button">User information</div>
+                              </a>
+                            </div>
+                            <div className="col d-flex justify-content-center">
+                              <a onClick={(e) => handlePopupAssign(e, user)} className="table-link">
+                                  <span className="fa-stack assign-button">
+                                      <i className="fa fa-square fa-stack-2x"></i>
+                                      <i className="fa fa-file fa-stack-1x fa-inverse"></i>
+                                  </span>
+                                  <div className="hide hide-assign-button">Assign contract</div>
+                              </a>
+                            </div>
+                          </div>
                           </td>
                         </tr>
                       ))
@@ -130,7 +202,7 @@ export default function CompanyPage(){
           </div>
         </div>
         <Footer></Footer>
-        <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+        <Popup trigger={buttonPopupInfo} setTrigger={setButtonPopupInfo}>
           <div className="popup-user-info">
             <div className="row name">
               {popupUserName}
@@ -161,6 +233,40 @@ export default function CompanyPage(){
                       ) : (
                         <tr>
                           <td colSpan="2">No contracts assigned!</td>
+                        </tr>
+                      )}
+                    </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </Popup>
+        <Popup trigger={buttonPopupAssign} setTrigger={setButtonPopupAssign}>
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="main-box clearfix">
+                <div className="table-responsive">
+                  <table className="table user-list">
+                    <thead>
+                      <tr>
+                        <th><span>Contract</span></th>
+                        <th>&nbsp;</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {foundContracts && foundContracts.length > 0 ? (
+                        foundContracts.map((contract) => (
+                          <tr key={contract.name} className="">
+                            <td className="user-id">{contract.name}</td>
+                            <td>
+                              <button onClick={(e) => assignContract(e, contract.name)} type="button" className="btn btn-primary">Assign</button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="2">No contracts available!</td>
                         </tr>
                       )}
                     </tbody>

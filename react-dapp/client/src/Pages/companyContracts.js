@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 
 import Footer from "../Components/footer";
 import NavBarCompany from "../Components/navbarcompany";
@@ -14,13 +14,14 @@ function getUnique(arr, index) {
 }
 
 export default function CompanyContracts(){
-  // the value of the search field
+
+    // the value of the search field
     const [filename, setFilename] = useState('');
     const [fileContent, setFileContent] = useState('');
     // the search result
     const [foundContract, setFoundContract] = useState('');
 
-    // loaded users
+    // loaded contracts
     const [loadedContracts, setLoadedContracts] = useState('');
 
     React.useEffect(() => {
@@ -46,7 +47,7 @@ export default function CompanyContracts(){
         };
         reader.readAsDataURL(e.target.files[0]);
     }
-    
+
     function uploadFile(){
       alert('File '+ filename +' updated')
       localStorage.setItem('contractFile', filename);

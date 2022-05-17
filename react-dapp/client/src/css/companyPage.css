@@ -56,6 +56,42 @@
 	color: #2aa493;
 }
 
+.table a button {
+  width: 20px !important;
+}
+
+.hide {
+  display: none;
+  position: absolute;
+  background-color: grey;
+  z-index: 1001;
+}
+
+@media screen and (max-width: 768px) {
+  .info-button:hover + .hide {
+    display: none !important;
+  }
+}
+
+.info-button:hover + .hide {
+  display: block;
+  color: white;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.assign-button:hover + .hide {
+  display: block;
+  color: white;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.check-assign {
+  color: green;
+  display: block;
+}
+
 .search-wrapper {
   border: 1px solid;
   border-image: black;
