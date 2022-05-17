@@ -1,18 +1,23 @@
 import React from 'react';
-import './App.css';
-import './Assets/styles.css';
+import './css/App.css';
+import './css/styles.css';
 import {Routes, Route} from 'react-router-dom';
 
 import NotFound from './Pages/notFoundPage';
 import HomePage from './Pages/homePage';
 import AboutPage from './Pages/aboutPage';
 import LoginPage from './Pages/loginPage';
-import ContactPage from './Pages/contactPage';
-import SignDocsPage from './Pages/signDocsPage';
 import ServicesPage from './Pages/servicesPage';
 import SignupPage from './Pages/signupPage';
 import UserPage from './Pages/userPage';
-import NotImplemented from './Pages/notImplementedPage';
+import UserSettings from './Pages/userSettings';
+import UserContracts from './Pages/userContracts';
+import ValidationPage from './Pages/validationPage';
+import CompanyPage from './Pages/companyPage';
+import CompanyContracts from './Pages/companyContracts';
+import CompanySettings from './Pages/companySettings';
+
+import { PrivateRoute } from './Components/privateRoot';
 
 
 
@@ -23,14 +28,21 @@ function App() {
         <Route path='/' element={<HomePage/>}></Route>
         <Route path='/home' element={<HomePage/>}></Route>
         <Route path='/about' element={<AboutPage/>}></Route>
-        <Route path='/login' element={<LoginPage/>}></Route>
-        <Route path='/contact' element={<ContactPage/>}></Route>
-        <Route path='/signDocs' element={<SignDocsPage/>}></Route>
         <Route path='/services' element={<ServicesPage/>}></Route>
+
+        <Route path='/validation' element={<ValidationPage/>}></Route>
+        <Route path='/login' element={<LoginPage/>}></Route>
         <Route path='/signup' element={<SignupPage/>}></Route>
-        <Route path='/homeuser' element={<UserPage/>}></Route>
-        <Route path='/settings' element={<NotImplemented/>}></Route>
-        <Route path='/mycontracts' element={<NotImplemented/>}></Route>
+
+
+        <Route path='/homeUser' element={<PrivateRoute><UserPage/></PrivateRoute>}></Route>
+        <Route path='/userSettings' element={<PrivateRoute><UserSettings/></PrivateRoute>}></Route>
+        <Route path='/userContracts' element={<PrivateRoute><UserContracts/></PrivateRoute>}></Route>
+
+        <Route path='/homeCompany' element={<PrivateRoute><CompanyPage/></PrivateRoute>}></Route>
+        <Route path='/companySettings' element={<PrivateRoute><CompanySettings/></PrivateRoute>}></Route>
+        <Route path='/companyContracts' element={<PrivateRoute><CompanyContracts/></PrivateRoute>}></Route>
+
         <Route path='*' element={<NotFound/>}></Route>
       </Routes>
     </div>

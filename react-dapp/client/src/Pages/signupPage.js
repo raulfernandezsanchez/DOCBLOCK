@@ -1,43 +1,120 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import "../Assets/styles.css";
-
 import NavBar from "../Components/navbar";
 import Footer from "../Components/footer";
 
-var rootStyle = {
-    'position': 'relative',
-    'top': '0px',
-    'height': '86vh',
-    'bottom': '20px'
-}
-
 export default function SignupPage() {
     const navigate = useNavigate();
+    const [isCompany, setChecked] = useState(false);
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [firstname, setFirstname] = useState();
     const [lastname, setLastname] = useState()
 
+    function isRegistered(registered){
+        for(let i = 0; i < registered.length; ++i){
+            if(registered[i].email === email) return true;
+        }
+        return false;
+    }
+
     async function handleSubmit (event) {
         event.preventDefault();
-        //comprobacion de que el email y la password son validos:
-        //si no lo son, wrong credentials y seguimos en la pagina
-        if (typeof email === 'undefined' || typeof password === 'undefined' || typeof firstname === 'undefined' || typeof lastname === 'undefined'){
-            alert('Wrong credentials');
+        //comprobacion de que los campos tienen contenido:
+        if (typeof email === 'undefined' || typeof password === 'undefined'  || typeof firstname === 'undefined' || typeof lastname === 'undefined'){
+            alert('Wrong credentials, please try again');
         }
-        //si son validas, vamos a la pagina de usuario
+        //si tienen contenido, se comprueban con la api
         else{
-            alert("Valid credentials")
-            navigate("/homeuser");
+            //signup de company
+            if(isCompany){
+                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
+                    method:'GET',
+                    headers:{
+                        "Content-Type":'application/json',
+                    }
+                });
+                result = await result.json();
+
+                //comprobar si el usuario ya tiene una cuenta
+                if (!isRegistered(result)) {
+
+                    let companyName = firstname.concat(' ', lastname);
+                    //nuevo usuario
+                    let new_user = {
+                        companyemail : email,
+                        companypassword : password,
+                        companyname : companyName,
+                    };
+                    let resultPost = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
+                        body: JSON.stringify(new_user),
+                        method:'POST',
+                        headers:{
+                            "Content-Type":'application/json',
+                        },
+                    });
+                    //checkear errores de resultPost
+                    console.log(resultPost)
+
+                    localStorage.setItem('isAuthenticated', true);
+                    localStorage.setItem('isCompany', true);
+                    localStorage.setItem('userID', email);
+                    localStorage.setItem('companyName', companyName);
+                    navigate("/homeCompany");
+                }
+                else {
+                    alert('The mail address is already being used!');
+                }
+            }
+            //login de user
+            else{
+               let result = await fetch("https://vast-peak-05541.herokuapp.com/api/users", {
+                    method:'GET',
+                    headers:{
+                        "Content-Type":'application/json',
+                    }
+                });
+                result = await result.json();
+
+                //comprobar si el usuario ya tiene una cuenta
+                if (!isRegistered(result)) {
+                    //nuevo usuario
+                    let new_user = {
+                        useremail : email,
+                        userpassword : password,
+                        username : firstname.concat(' ', lastname),
+                    };
+                    let resultPost = await fetch("https://vast-peak-05541.herokuapp.com/api/users", {
+                        body: JSON.stringify(new_user),
+                        method:'POST',
+                        headers:{
+                            "Content-Type":'application/json',
+                        },
+                    });
+                    //checkear errores de resultPost
+                    console.log(resultPost);
+
+                    localStorage.setItem('isAuthenticated', true);
+                    localStorage.setItem('isCompany', false);
+                    localStorage.setItem('userID', email);
+                    navigate("/homeUser");
+                }
+                else {
+                    alert('The mail address is already being used!');
+                }
+            }
         }
     }
+
+    const handleCheck = () =>{
+        setChecked(!isCompany);
+    };
 
     return (
         <>
         <NavBar></NavBar>
-        <form style={rootStyle} onSubmit={handleSubmit} >
+        <form style={{'textAlign':'center'}} onSubmit={handleSubmit} >
             <div className="form-group">
                 <p>First name</p>
                 <input type="text" onChange={e => setFirstname(e.target.value)} placeholder="Juan" />
@@ -56,6 +133,9 @@ export default function SignupPage() {
             <div className="form-group">
                 <p>Password</p>
                 <input type="password" onChange={e => setPassword(e.target.value)} placeholder="password" />
+                <br/><br/><br/>
+                <label><input type="checkbox" checked={isCompany} onChange={handleCheck}/> Create account as company</label>
+                <br/><br/>
             </div>
             <br/>
             <button type="submit" className="btn btn-primary btn-block" onClick={handleSubmit} >Sign Up</button>

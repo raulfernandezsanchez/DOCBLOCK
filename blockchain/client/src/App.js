@@ -46,11 +46,11 @@ class App extends Component {
     const web3 = this.state.web3Provider;
     const contract = this.state.contract;
 
-    web3.eth.defaultAccount = '0xbe096689ac22ea0e7661fb84dbfd5144d14ebba4'; //account
+    web3.eth.defaultAccount = '0x5f3e094057ca756bd056f7d0b8895eae4426e2cf'; //account
 
-    var pk  = 'b605ff5265446daae72ba6afc6c64eeedfd9214438d7caa403bf81784e2eb539';  // private key of your account
+    var pk  = 'ce7a63acf831add091981fbc76a465fe89288a1194aee973a28850afa604424d';  // private key of your account
 
-    var address = '0x5D4B19A49CE3a4C65969C60C6130D14971A50D9E'; //Contract Address
+    var address = '0x10B2acf5edC96f1443EBdf8fC08030e0E1B0519d'; //Contract Address
 
     web3.eth.getTransactionCount(web3.eth.defaultAccount, function (err, nonce) {
       console.log("nonce value is ", nonce);
@@ -203,9 +203,9 @@ class App extends Component {
   }
 
   render() {
-    /*if (!this.state.web3Provider) {
+    if (!this.state.web3Provider) {
       return <div>Loading Web3, accounts, and contract...</div>;
-    }*/
+    }
 
     const showDocsList = this.state.showSignedDocs;
 
