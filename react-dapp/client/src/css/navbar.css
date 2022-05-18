@@ -4,11 +4,19 @@
   padding: 10px;
   display: block;
   text-decoration: none;
-  min-width: 100px;
+  align-items: center;
+  margin-left: 10px;
+  align-content: center;
 }
 #menu li>a:hover{
   color: #000;
   background-color: #999;
+  align-items: center;
+  background-size: cover;
+}
+
+#menu {
+  align-items: center;
 }
 
 .menu-vertical{
@@ -18,10 +26,19 @@
   background-color: rgba(10,10,10,0.9);
 }
 
+#submenu li>a{
+  background-color: rgba(0,0,0,0.0);
+  color: white;
+  list-style: none;
+  padding-right: 10px;
+  margin-right: 40px;
+}
+
 #menu ul{
   list-style: none;
 }
 
 #menu li:hover .menu-vertical{
   display:block;
+  background-size: cover;
 }
