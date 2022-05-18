@@ -24,20 +24,20 @@ const NavBar = () =>{
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0" id="menu">
                         <li className="nav-item">
-                            <a href="/">Home</a>
+                            <NavLink to="/" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Home</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a href="/about">About</a>
+                            <NavLink to="/about" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>About</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a href="/services">Services</a>
+                            <NavLink to="/services" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Services</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a href="/validation">Validation</a>
+                            <NavLink to="/validation" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Validation</NavLink>
                         </li>
                         <li>
                           <a href="#"> User</a>
-                          <ul className="menu-vertical" id="submenu">
+                          <ul className="menu-vertical">
                             <li><a href="/login">Log in</a></li>
                             <li><a href="/signup">Sign up</a></li>
                           </ul>
