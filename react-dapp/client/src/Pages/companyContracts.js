@@ -90,7 +90,6 @@ export default function CompanyContracts(){
             <div className="tab-content" id="myTabContent">
                 <div className="tab-pane fade align-items-start show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <div className="container search-wrapper">
-                    <h2>Contracts</h2>
                     <div className="input-group rounded">
                       <input type="search" value={filename} onChange={filter} className="input form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                     </div>
@@ -138,14 +137,16 @@ export default function CompanyContracts(){
                     </div>
                 </div>
                 <div className="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
-                    <div className="row justify-content-around">
+                    <div className="row justify-content-around m-2">
                         <div className="col-sm-4">
-                            <label htmlFor="formFile" className="form-label">Select a contract to upload
-                                <input className="form-control" type="file" accept=".pdf" id="formFile" onChange={updateFilename}/>
-                            </label>
-                            <br/>
+                          <div className="row mx-3 my-3">
+                            <label htmlFor="formFile" className="form-label text-center">Select a contract to upload</label>
+                            <input className="form-control" type="file" accept=".pdf" id="formFile" onChange={updateFilename}/>
+                          </div>
+                          <div className="row mx-3">
                             {/*<a href={filename} target='_blank' className="btn btn-primary btn-block" rel='noopener noreferrer' onClick={() => alert(filename)}>Upload</a>*/}
                             <button className="btn btn-primary btn-block" onClick={uploadFile}>Upload</button>
+                          </div>
                         </div>
                         <div className="col-sm-8">
                         {fileContent ? <iframe src={fileContent} title='PDF' width="100%" height={window.innerHeight*0.85}></iframe> : <></>}

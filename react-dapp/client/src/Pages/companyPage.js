@@ -20,6 +20,11 @@ function getUnique(arr, index) {
    return unique;
 }
 
+function getMyUser(arr, email) {
+  const myuser = arr.filter(user => user.email == email);
+  return myuser;
+}
+
 export default function CompanyPage(){
 
     //popup button info
@@ -34,7 +39,8 @@ export default function CompanyPage(){
     const [popupUserUnassignedContracts, setPopupUserUnassignedContracts] = useState([]);
 
     const companyID = localStorage.getItem('userID');
-    const companyName = localStorage.getItem('companyName');
+
+    const [myUser, setMyUser] = useState('');
 
     // the value of the search field
     const [name, setName] = useState('');
@@ -51,6 +57,15 @@ export default function CompanyPage(){
 
     // load users and contracts
      React.useEffect(() => {
+         fetch("https://vast-peak-05541.herokuapp.com/api/companies/" + companyID, {
+           method:'GET',
+           headers:{
+               "Content-Type":'application/json',
+           }
+         }).then(response => response.json())
+         .then(data => {
+           setMyUser(data.company);
+         });
         fetch("https://vast-peak-05541.herokuapp.com/api/users", {
           method:'GET',
           headers:{
@@ -175,10 +190,10 @@ export default function CompanyPage(){
         <NavBarCompany></NavBarCompany>
         <ReactNotifications/>
         <div className="about-section" width="100%">
-            <h1>{companyName}</h1>
-            <p>{companyID}</p>
+            <h1>{myUser.name}</h1>
+            <p>{myUser.email}</p>
         </div>
-        <div className="container search-wrapper">
+        <div className="search-wrapper p-5 m-5">
         <h2>Users</h2>
         <div className="rounded">
           <input type="search" value={name} onChange={filter} className="input form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
