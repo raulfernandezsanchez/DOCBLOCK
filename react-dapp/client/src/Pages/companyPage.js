@@ -1,5 +1,9 @@
 import React from "react";
 import { useState } from 'react';
+
+import { ReactNotifications, Store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+
 import Footer from "../Components/footer";
 import NavBarCompany from "../Components/navbarcompany";
 import Popup from "../Components/popup"
@@ -27,6 +31,7 @@ export default function CompanyPage(){
     const [popupUserName, setPopupUserName] = useState('');
     const [popupUserEmail, setPopupUserEmail] = useState('');
     const [popupUserContracts, setPopupUserContracts] = useState([]);
+    const [popupUserUnassignedContracts, setPopupUserUnassignedContracts] = useState([]);
 
     const companyID = localStorage.getItem('userID');
     const companyName = localStorage.getItem('companyName');
@@ -40,7 +45,7 @@ export default function CompanyPage(){
     // loaded users
     const [loadedUsers, setLoadedUsers] = useState('');
     // loaded contracts
-    const [foundContracts, setFoundContracts] = useState('');
+    const [loadedContracts, setLoadedContracts] = useState('');
     //
     const [assignedUser, setAssignedUser] = useState('');
 
@@ -65,7 +70,7 @@ export default function CompanyPage(){
         }).then(response => response.json())
           .then(data => {
             let contracts = getUnique(data, 'name');
-            setFoundContracts(contracts);
+            setLoadedContracts(contracts);
           });
 
        }, []);
@@ -81,7 +86,20 @@ export default function CompanyPage(){
     function handlePopupAssign(event, user) {
       event.preventDefault();
       setAssignedUser(user);
+      let loadedContracts_name = [];
+      for (let i = 0; i < loadedContracts.length; ++i) {
+        loadedContracts_name.push(loadedContracts[i].name)
+      }
+      let unassignedContracts = diff(user.assignedContracts, loadedContracts_name);
+      setPopupUserUnassignedContracts(unassignedContracts);
       setButtonPopupAssign(true);
+    }
+
+    function diff(first, second) {
+      return [
+          ...first.filter(x => !second.includes(x)),
+          ...second.filter(x => !first.includes(x))
+      ];
     }
 
     function isContractAssigned(contract) {
@@ -115,6 +133,23 @@ export default function CompanyPage(){
             console.log(assignedUser);
           });
 
+          setPopupUserUnassignedContracts(popupUserUnassignedContracts.filter(function(assigned_contract) {
+            return assigned_contract !== contract
+          }));
+
+          Store.addNotification({
+            message: contract + " assigned to " + assignedUser.name + "!",
+            type: "success",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 5000,
+              onScreen: true
+            }
+          });
+
       } else {
         console.log("Contract already assigned!");
       }
@@ -138,6 +173,7 @@ export default function CompanyPage(){
     return (
         <>
         <NavBarCompany></NavBarCompany>
+        <ReactNotifications/>
         <div className="about-section" width="100%">
             <h1>{companyName}</h1>
             <p>{companyID}</p>
@@ -255,18 +291,18 @@ export default function CompanyPage(){
                       </tr>
                     </thead>
                     <tbody>
-                      {foundContracts && foundContracts.length > 0 ? (
-                        foundContracts.map((contract) => (
+                      {popupUserUnassignedContracts && popupUserUnassignedContracts.length > 0 ? (
+                        popupUserUnassignedContracts.map((contract) => (
                           <tr key={contract.name} className="">
-                            <td className="user-id">{contract.name}</td>
+                            <td className="user-id">{contract}</td>
                             <td>
-                              <button onClick={(e) => assignContract(e, contract.name)} type="button" className="btn btn-primary">Assign</button>
+                              <button onClick={(e) => assignContract(e, contract)} type="button" className="btn btn-primary">Assign</button>
                             </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="2">No contracts available!</td>
+                          <td colSpan="2">All contracts assigned!</td>
                         </tr>
                       )}
                     </tbody>
