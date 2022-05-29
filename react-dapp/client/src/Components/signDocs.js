@@ -1,4 +1,4 @@
-/*import React, { Component } from "react";
+import React, { Component } from "react";
 import '../css/styles.css';
 
 import Footer from "../Components/footer";
@@ -7,9 +7,13 @@ import NavBar from "../Components/navbar";
 import DocBlockContract from "./../contracts/DocBlock.json";
 import getWeb3 from "./../getWeb3";
 
-import "./../App.css";
+import Deploy from "./../deploy.json"
 
-class SignDocsPage extends Component {
+const acc = Deploy.account; //account
+const pk  = Deploy.private_key;  // private key of your account
+const address = Deploy.contract_address; //Contract Address
+
+class SignDocs extends Component {
 
   state = {
     web3Provider: null,
@@ -40,8 +44,6 @@ class SignDocsPage extends Component {
          deployedNetwork && deployedNetwork.address,
       );
 
-      const acc = '0x5f3e094057ca756bd056f7d0b8895eae4426e2cf'; //account
-
       let ethBalance = await web3.eth.getBalance(acc);
       ethBalance = web3.utils.fromWei(ethBalance, 'ether');
       this.setState({ accountBalance: ethBalance });
@@ -65,10 +67,6 @@ class SignDocsPage extends Component {
     const EthereumTx = require('ethereumjs-tx').Transaction;
     const web3 = this.state.web3Provider;
     const contract = this.state.contract;
-
-    var pk  = 'ce7a63acf831add091981fbc76a465fe89288a1194aee973a28850afa604424d';  // private key of your account
-
-    var address = '0x10B2acf5edC96f1443EBdf8fC08030e0E1B0519d'; //Contract Address
 
     web3.eth.getTransactionCount(this.state.account, function (err, nonce) {
       console.log("nonce value is ", nonce);
@@ -230,10 +228,6 @@ class SignDocsPage extends Component {
 
     return (
         <>
-        <NavBar></NavBar>
-        <div id="signDocs">
-            <h1>Sign Docs page</h1>
-        </div>
         <div className="App">
           <div className="container">
             <div className="form-row">
@@ -292,9 +286,7 @@ class SignDocsPage extends Component {
             </table>
         </div>
       </div>
-      <Footer></Footer>
       </>
     );
   }
-} export default SignDocsPage;
-*/
+} export default SignDocs;

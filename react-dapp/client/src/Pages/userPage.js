@@ -1,7 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
 import { useState } from 'react';
 import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
+import SignDocs from "../Components/signDocs"
+
 import "../css/companyPage.css"
 
 function getUnique(arr, index) {
@@ -14,7 +16,7 @@ function getUnique(arr, index) {
    return unique;
 }
 
-export default function CompanyPage(){
+export default function UserPage(){
 
     const userID = localStorage.getItem('userID');
 
@@ -57,7 +59,7 @@ export default function CompanyPage(){
             <h1>{user.name}</h1>
             <p>{user.email}</p>
         </div>
-        <div className="row">
+        <div className="row mx-5 my-5">
           <div className="col-lg-12">
             <div className="main-box clearfix">
               <div className="table-responsive">
