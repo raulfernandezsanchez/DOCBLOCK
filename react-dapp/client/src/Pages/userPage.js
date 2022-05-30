@@ -92,7 +92,7 @@ export default function UserPage(){
     function handleContractInfo(event, contractID) {
         event.preventDefault();
         setPopupContract(contractID);
-        sendEmail(event);
+        //sendEmail(event);
     };
 
     const handleSign = () => {

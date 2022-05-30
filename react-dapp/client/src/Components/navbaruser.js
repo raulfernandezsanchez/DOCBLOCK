@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import '../css/navbar.css'
 
 const NavBarUser = () =>{
@@ -25,7 +25,7 @@ const NavBarUser = () =>{
                             <NavLink to="/homeUser" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>My page</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/userContracts" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Contracts</NavLink>
+                            <NavLink reloadDocument to="/userHistory" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>History</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink to="/userSettings" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Settings</NavLink>
