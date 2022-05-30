@@ -11,11 +11,11 @@ Per utilitzar blockchain seguir els següents passos:
 
    Hem de veure que estem a truffle(develop) i han d'aparèixer les adreçes, si apareix el següent error:
 
-   Error: error:0308010C:digital envelope routines::unsupported
+       Error: error:0308010C:digital envelope routines::unsupported
 
-   Fer a la carpeta arrel:
+       Fer a la carpeta arrel:
 
-###   `export NODE_OPTIONS=--openssl-legacy-provider`
+       ###   `export NODE_OPTIONS=--openssl-legacy-provider`
 
 4. Compilar el contracte:
 
@@ -28,3 +28,11 @@ Per utilitzar blockchain seguir els següents passos:
   Si volem fer un redeploy:
 
 ###   `migrate --reset`
+
+6. Al fitxer src/deploy.json
+
+  (omplir el fitxer amb les dades que apareixen al terminal)
+
+   6.1. Enganxar address, private key de la compte que volguem utilitzar.
+
+   6.2. Enganxar contract address.
