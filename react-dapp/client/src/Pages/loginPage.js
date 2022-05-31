@@ -71,7 +71,7 @@ export default function LoginPage(){
                     localStorage.setItem('isCompany', false);
                     localStorage.setItem('userID', email);
                     localStorage.setItem('password', password);
-                    navigate("/homeUser");
+                    navigate("/homeUser")
                 }
             }
         }

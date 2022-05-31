@@ -36,3 +36,10 @@ Per utilitzar blockchain seguir els següents passos:
    6.1. Enganxar address, private key de la compte que volguem utilitzar.
 
    6.2. Enganxar contract address.
+
+7. Intal·lar extensió del chrome `Metamask`
+
+  Configurar a metamask el mateix port en local que en el fitxer src/getWeb3.js
+
+  (El primer cop que ens connectem a la blockchain després d'arrencar el servidor
+  metamask ens demanarà la contrasenya que hem configurat durant la instal·lació)

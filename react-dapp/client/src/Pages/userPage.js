@@ -4,6 +4,10 @@ import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
 import "../css/companyPage.css";
 
+import DocBlockContract from "./../contracts/DocBlock.json";
+import getWeb3 from "./../getWeb3";
+import Deploy from "./../deploy.json"
+
 function getUnique(arr, index) {
   const unique = arr
        .map(e => e[index])
@@ -20,6 +24,7 @@ export default function UserPage(){
 
     // user
     const [user, setUser] = useState('');
+    const [name, setName] = useState('');
     const [userContracts, setUserContracts] = useState('');
 
     // loaded contracts
@@ -32,6 +37,80 @@ export default function UserPage(){
     const [maxVal] = useState(1000000000);
     const [randomNum, setRandomNum] = useState(0);
     const fileContent = localStorage.getItem('contractContent');
+
+    //web3
+    const [web3Provider, setWeb3Provider] = useState('');
+    const [account, setAccount] = useState('');
+    const [contract, setContract] = useState('');
+    const [accountBalance, setAccountBalance] = useState('');
+    const [signMap, setSignMap] = useState('');
+
+    const acc = Deploy.account; //account
+    const pk  = Deploy.private_key;  // private key of your account
+    const address = Deploy.contract_address; //Contract Address
+
+    async function connectWeb3() {
+      try {
+        // Get network provider and web3 instance.
+        const web3 = await getWeb3();
+
+        // Get the contract instance.
+        const networkId = await web3.eth.net.getId();
+        const deployedNetwork = DocBlockContract.networks[networkId];
+
+        const instance = new web3.eth.Contract(
+           DocBlockContract.abi,
+           deployedNetwork && deployedNetwork.address,
+        );
+
+        let ethBalance = await web3.eth.getBalance(acc);
+        ethBalance = web3.utils.fromWei(ethBalance, 'ether');
+        setAccountBalance(ethBalance);
+
+        // Set web3, account, and contract to the state, and then proceed with an
+        // example of interacting with the contract's methods.
+        setWeb3Provider(web3);
+        setAccount(acc);
+        setContract(instance);
+        getPastLog(instance);
+        logEvents(instance);
+
+      } catch (error) {
+        // Catch any errors for any of the above operations.
+        alert(
+          `Failed to load web3, account, or contract. Check console for details.`,
+        );
+        console.error(error);
+      }
+    };
+
+    // load users and contracts
+    React.useEffect(() => {
+       fetch("https://vast-peak-05541.herokuapp.com/api/users/" + userID, {
+           method:'GET',
+           headers:{
+               "Content-Type":'application/json',
+           }
+       }).then(response => response.json())
+         .then(data => {
+           setUser(data.user);
+           setName(data.user.name);
+           setUserContracts(data.user.assignedContracts);
+         });
+        fetch("https://vast-peak-05541.herokuapp.com/api/contracts", {
+            method:'GET',
+            headers:{
+                "Content-Type":'application/json',
+            }
+        }).then(response => response.json())
+          .then(data => {
+            let contracts = getUnique(data, 'name');
+            setFoundContracts(contracts);
+          });
+          
+          connectWeb3();
+
+       }, []);
 
     const generateRandomNum = () =>{
         let newVal = Math.floor(Math.random() * (maxVal - minVal + 1) + minVal);
@@ -63,49 +142,110 @@ export default function UserPage(){
         });
     };
 
-
-    // load users and contracts
-    React.useEffect(() => {
-       fetch("https://vast-peak-05541.herokuapp.com/api/users/" + userID, {
-           method:'GET',
-           headers:{
-               "Content-Type":'application/json',
-           }
-       }).then(response => response.json())
-         .then(data => {
-           setUser(data.user);
-           setUserContracts(data.user.assignedContracts);
-         });
-        fetch("https://vast-peak-05541.herokuapp.com/api/contracts", {
-            method:'GET',
-            headers:{
-                "Content-Type":'application/json',
-            }
-        }).then(response => response.json())
-          .then(data => {
-            let contracts = getUnique(data, 'name');
-            setFoundContracts(contracts);
-          });
-
-       }, []);
-
     function handleContractInfo(event, contractID) {
         event.preventDefault();
         setPopupContract(contractID);
         //sendEmail(event);
     };
 
-    const handleSign = () => {
+    function signTransaction(name, doc) {
+     const EthereumTx = require('ethereumjs-tx').Transaction;
+
+     web3Provider.eth.getTransactionCount(account, function (err, nonce) {
+       console.log("nonce value is ", nonce);
+
+       const functionAbi = contract.methods.signDocument(String(name), String(doc)).encodeABI();
+
+       var details = {
+         "nonce": nonce,
+         "gasPrice": web3Provider.utils.toHex(web3Provider.utils.toWei('47', 'gwei')),
+         "gas": 300000,
+         "to": address,
+         "value": 0,
+         "data": functionAbi,
+       };
+
+       const transaction = new EthereumTx(details);
+       transaction.sign(Buffer.from(pk, 'hex'));
+       var rawData = '0x' + transaction.serialize().toString('hex');
+
+       web3Provider.eth.sendSignedTransaction(rawData)
+
+       .on('transactionHash', function(hash) {
+       console.log(['transferToStaging Trx Hash:' + hash]);
+       })
+       .on('receipt', function(receipt){
+       console.log(['transferToStaging Receipt:', receipt]);
+       })
+       .on('error', console.error);
+     });
+    }
+
+    function getPastLog(contract) {
+      console.log(`Returns all the past events`);
+
+      contract.getPastEvents("signAdded", {fromBlock: 0}, (error, events) => {
+        if(!error) {
+          let list = document.getElementById("contracts-list");
+          for(let i = 0; i < events.length; ++i) {
+            let event = events[i];
+            list.innerHTML += `
+              <tr>
+                <td class="user-id">${event.returnValues.document}</td>
+                <td class="user-name" style="width:62.2%"><span class="c-pill c-pill--success">Signed</span></td>
+              </tr>
+            `;
+          }
+          console.log(events);
+        } else {
+          console.log(error);
+        } });
+    }
+
+    function logEvents(contract) {
+      console.log(`Listening Transfer events`);
+      contract.events
+          .signAdded()
+          .on("data", (event) => {
+          document.getElementById("contracts-list").innerHTML += `
+            <tr>
+              <td class="user-id">${event.returnValues.document}</td>
+              <td class="user-name" style="width:62.2%"><span class="c-pill c-pill--success">Signed</span></td>
+            </tr>
+          `;
+          console.log(event);
+          })
+          .on("error", (error) => console.log(error));
+    }
+
+
+    async function handleSign(event, doc) {
+        event.preventDefault();
         const signInput = document.getElementById('signInput');
         if (parseInt(signInput.value,10) !== randomNum){
-            alert('Wrong number, try again');
-            console.log(randomNum);
+          alert('Wrong number, try again');
+          console.log(randomNum);
         }
         else{
+          const response = await contract.methods.getSignedDocuments(name).call();
+          var alreadySigned = false;
+          if(response.length !== 0) {
+            for (let i = 0; i < response.length; i++) {
+              if (response[i].document === doc) {
+                alreadySigned = true;
+                alert(doc + " already signed.")
+              }
+            }
+          }
+          if(!alreadySigned) {
+            var x = document.getElementById("contracts-list");
+            await signTransaction(name, doc);
+            setSignMap([...signMap, {name: name, document: doc}]);
             const modalSigned = document.getElementById('signModal');
             alert('Successfully signed');
             modalSigned.hidden = true;
             signInput.disabled = true;
+          }
         }
         signInput.value = '';
     };
@@ -132,7 +272,7 @@ export default function UserPage(){
                   <tbody>
                     {userContracts && userContracts.length > 0 ? (
                       userContracts.map((contract) => (
-                        <tr key={contract} className="">
+                        <tr key={contract}>
                           <td className="user-id">{contract}</td>
                           <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
                           <td>
@@ -158,7 +298,7 @@ export default function UserPage(){
                                             </div>
                                             <div className="modal-footer">
                                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={generateRandomNum}>Close</button>
-                                                <button type="button" id='signModal' className="btn btn-primary" hidden={false} onClick={handleSign}>Confirm signature</button>
+                                                <button type="button" id='signModal' className="btn btn-primary" hidden={false} onClick={(e) => handleSign(e, popupContract)}>Confirm signature</button>
                                             </div>
                                         </div>
                                     </div>
@@ -169,12 +309,20 @@ export default function UserPage(){
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="2">No contracts assigned!</td>
+                        <td colSpan="2">No pending contracts!</td>
                       </tr>
                     )}
                   </tbody>
                   </table>
                 </div>
+                <div className="table-responsive">
+                  <table className="table user-list">
+                    <thead>
+                    </thead>
+                    <tbody id="contracts-list">
+                    </tbody>
+                    </table>
+                  </div>
               </div>
             </div>
           </div>

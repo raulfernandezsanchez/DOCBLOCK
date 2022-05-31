@@ -79,39 +79,6 @@ export default function UserContracts(){
 
      }, []);
 
-  function signTransaction(name, doc) {
-   const EthereumTx = require('ethereumjs-tx').Transaction;
-
-   web3Provider.eth.getTransactionCount(account, function (err, nonce) {
-     console.log("nonce value is ", nonce);
-
-     const functionAbi = contract.methods.signDocument(String(name), String(doc)).encodeABI();
-
-     var details = {
-       "nonce": nonce,
-       "gasPrice": web3Provider.utils.toHex(web3Provider.utils.toWei('47', 'gwei')),
-       "gas": 300000,
-       "to": address,
-       "value": 0,
-       "data": functionAbi,
-     };
-
-     const transaction = new EthereumTx(details);
-     transaction.sign(Buffer.from(pk, 'hex'));
-     var rawData = '0x' + transaction.serialize().toString('hex');
-
-     web3Provider.eth.sendSignedTransaction(rawData)
-
-     .on('transactionHash', function(hash) {
-     console.log(['transferToStaging Trx Hash:' + hash]);
-     })
-     .on('receipt', function(receipt){
-     console.log(['transferToStaging Receipt:', receipt]);
-     })
-     .on('error', console.error);
-   });
-  }
-
   function getDate(timestamp) {
    let t = new Date(timestamp * 1000);
    return ('0' + t.getDate()).slice(-2) + '/' + ('0' + (t.getMonth() + 1) ).slice(-2) + '/' + (t.getFullYear());
@@ -144,65 +111,6 @@ export default function UserContracts(){
       } else {
         console.log(error);
       } });
-  }
-
-  async function handleSign(event, doc) {
-    event.preventDefault();
-    if(name !== "") {
-      const response = await contract.methods.getSignedDocuments(name).call();
-      var alreadySigned = false;
-      if(response.length !== 0) {
-        for (let i = 0; i < response.length; i++) {
-          if (response[i].document === doc) {
-            alreadySigned = true;
-            alert(doc + " already signed.")
-          }
-        }
-      }
-      if(!alreadySigned) {
-        var x = document.getElementById("showDocs");
-        if(name !== showName){
-          setShowSignedDocs(false);
-          x.innerHTML = "";
-        }
-        await signTransaction(name, doc);
-        setSignMap([...signMap, {name: name, document: doc}]);
-        if(showSignedDocs && name === showName) {
-          const response = await contract.methods.getSignedDocuments(name).call();
-          x.innerHTML += `
-            <li class="list-group-item list-group-item-primary">${response[response.length - 1].document}</li>
-          `;
-        }
-      }
-    } else {
-      alert("Enter username!");
-    }
-  }
-
-  async function handleShow(){
-    if (showSignedDocs === false) {
-      if(name !== "") {
-        setShowName(name);
-        const response = await contract.methods.getSignedDocuments(name).call();
-        if(response.length !== 0) {
-          var x = document.getElementById("showDocs");
-          for (let i = 0; i < response.length; i++) {
-            x.innerHTML += `
-              <li class="list-group-item list-group-item-primary">${response[i].document}</li>
-            `;
-          }
-        } else {
-          alert("No documents signed!");
-        }
-        setShowSignedDocs(true);
-      } else {
-        alert("Enter username!");
-      }
-    } else {
-      var x = document.getElementById("showDocs");
-      x.innerHTML = "";
-      setShowSignedDocs(false);
-    }
   }
 
   if (!web3Provider) {
