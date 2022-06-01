@@ -2,6 +2,23 @@ import React, { useState } from "react";
 
 import Footer from "../Components/footer";
 import NavBarCompany from "../Components/navbarcompany";
+import UploadImageToS3WithReactS3 from "../Components/UploadImageToS3WithReactS3"
+import AWS from 'aws-sdk'
+
+
+const S3_BUCKET ='eu-west-3';
+const REGION ='dockblock-contracts';
+
+
+AWS.config.update({
+  accessKeyId: 'AKIAWCVOKIGWQHB33LHL',
+  secretAccessKey: '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'
+})
+
+const myBucket = new AWS.S3({
+  params: { Bucket: S3_BUCKET},
+  region: REGION,
+})
 
 function getUnique(arr, index) {
   const unique = arr
@@ -24,6 +41,9 @@ export default function CompanyContracts(){
     // loaded contracts
     const [loadedContracts, setLoadedContracts] = useState('');
 
+    const [progress , setProgress] = useState(0);
+    const [selectedFile, setSelectedFile] = useState(null);
+
     React.useEffect(() => {
        fetch("https://vast-peak-05541.herokuapp.com/api/contracts", {
          method:'GET',
@@ -38,7 +58,7 @@ export default function CompanyContracts(){
        });
    }, []);
 
-    function updateFilename(e){
+  function updateFilename(e){
         e.preventDefault();
         setFilename(e.target.files[0].name);
         const reader = new FileReader();
@@ -46,12 +66,38 @@ export default function CompanyContracts(){
             setFileContent(e.target.result);
         };
         reader.readAsDataURL(e.target.files[0]);
-    }
+  }
 
-    function uploadFile(){
-      alert('File '+ filename +' updated')
+  const handleFileInput = (e) => {
+      setSelectedFile(e.target.files[0]);
+  }
+
+  /*const handleUpload = async (e) => {
+      uploadFile(selectedFile, config)
+      .then(data => console.log(data))
+      .catch(err => console.error(err))
+      
+  }*/
+
+
+    const uploadFile = (file) => {
+      /*alert('File '+ filename +' updated')
       localStorage.setItem('contractFile', filename);
-      localStorage.setItem('contractContent', fileContent);
+      localStorage.setItem('contractContent', fileContent);*/
+      const params = {
+        ACL: 'public-read',
+        Body: file,
+        Bucket: S3_BUCKET,
+        Key: 'raul'//file.name
+      }
+
+    myBucket.putObject(params)
+        .on('httpUploadProgress', (evt) => {
+            setProgress(Math.round((evt.loaded / evt.total) * 100))
+        })
+        .send((err) => {
+            if (err) console.log(err)
+        })
     }
 
 
@@ -90,6 +136,7 @@ export default function CompanyContracts(){
             <div className="tab-content" id="myTabContent">
                 <div className="tab-pane fade align-items-start show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <div className="container search-wrapper">
+                    <h2>Contracts</h2>
                     <div className="input-group rounded">
                       <input type="search" value={filename} onChange={filter} className="input form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                     </div>
@@ -137,18 +184,9 @@ export default function CompanyContracts(){
                     </div>
                 </div>
                 <div className="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
-                    <div className="row justify-content-around m-2">
+                    <div className="row justify-content-around">
                         <div className="col-sm-4">
-                          <div className="row mx-3 my-3">
-                            <label htmlFor="formFile" className="form-label text-center">Select a contract to upload</label>
-                            <input className="form-control" type="file" accept=".pdf" id="formFile" onChange={updateFilename}/>
-                          </div>
-                          <div className="row mx-3">
-                            {/*<a href={filename} target='_blank' className="btn btn-primary btn-block" rel='noopener noreferrer' onClick={() => alert(filename)}>Upload</a>*/}
-                            <button className="btn btn-primary btn-block" onClick={uploadFile}>Upload</button>
-                          </div>
-                        </div>
-                        <div className="col-sm-8">
+                        <UploadImageToS3WithReactS3></UploadImageToS3WithReactS3>
                         {fileContent ? <iframe src={fileContent} title='PDF' width="100%" height={window.innerHeight*0.85}></iframe> : <></>}
                         </div>
                     </div>
