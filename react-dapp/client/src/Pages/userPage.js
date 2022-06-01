@@ -2,7 +2,11 @@ import React, {useState} from "react";
 import emailjs from 'emailjs-com';
 import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
+import Popup from "../Components/popup"
 import "../css/companyPage.css";
+
+import { ReactNotifications, Store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 
 import DocBlockContract from "./../contracts/DocBlock.json";
 import getWeb3 from "./../getWeb3";
@@ -31,7 +35,7 @@ export default function UserPage(){
     const [foundContracts, setFoundContracts] = useState('');
 
     //popup de contrato
-    //const [buttonPopupInfo, setButtonPopupInfo] = useState(false);
+    const [buttonPopup, setButtonPopup] = useState(false);
     const [popupContract, setPopupContract] = useState('');
     const [minVal] = useState(1000000);
     const [maxVal] = useState(1000000000);
@@ -107,7 +111,7 @@ export default function UserPage(){
             let contracts = getUnique(data, 'name');
             setFoundContracts(contracts);
           });
-          
+
           connectWeb3();
 
        }, []);
@@ -117,9 +121,7 @@ export default function UserPage(){
         setRandomNum(newVal);
         console.log(newVal)
     };
-    window.onload = () =>{
-        generateRandomNum();
-    };
+
     //para debugar
     let mail = 'infodocblock@gmail.com';
 
@@ -142,18 +144,36 @@ export default function UserPage(){
         });
     };
 
+    function closePopup(event) {
+        event.preventDefault();
+        setButtonPopup(false);
+    };
+
     function handleContractInfo(event, contractID) {
         event.preventDefault();
+        setButtonPopup(true);
         setPopupContract(contractID);
+        generateRandomNum();
         //sendEmail(event);
     };
+
+    function removeUserContract(doc) {
+      let pendingContracts = [];
+      for (let i = 0; i < userContracts.length; ++i) {
+        let contractName = userContracts[i];
+        if (contractName !== doc) {
+          pendingContracts.push(contractName);
+        }
+      }
+      console.log(userContracts);
+      setUserContracts(pendingContracts);
+    }
 
     function signTransaction(name, doc) {
      const EthereumTx = require('ethereumjs-tx').Transaction;
 
      web3Provider.eth.getTransactionCount(account, function (err, nonce) {
-       console.log("nonce value is ", nonce);
-
+       //console.log("nonce value is ", nonce);
        const functionAbi = contract.methods.signDocument(String(name), String(doc)).encodeABI();
 
        var details = {
@@ -195,6 +215,7 @@ export default function UserPage(){
                 <td class="user-name" style="width:62.2%"><span class="c-pill c-pill--success">Signed</span></td>
               </tr>
             `;
+            removeUserContract(event.returnValues.document);
           }
           console.log(events);
         } else {
@@ -213,6 +234,7 @@ export default function UserPage(){
               <td class="user-name" style="width:62.2%"><span class="c-pill c-pill--success">Signed</span></td>
             </tr>
           `;
+          removeUserContract(event.returnValues.document);
           console.log(event);
           })
           .on("error", (error) => console.log(error));
@@ -241,18 +263,36 @@ export default function UserPage(){
             var x = document.getElementById("contracts-list");
             await signTransaction(name, doc);
             setSignMap([...signMap, {name: name, document: doc}]);
-            const modalSigned = document.getElementById('signModal');
-            alert('Successfully signed');
-            modalSigned.hidden = true;
-            signInput.disabled = true;
+
+            var pendingContracts = userContracts.filter(x => {
+              return x != doc;
+            })
+            setUserContracts(pendingContracts);
+
+            setButtonPopup(false);
+
+            Store.addNotification({
+              message: doc + " signed successfully!",
+              type: "success",
+              insert: "top",
+              container: "top-right",
+              animationIn: ["animate__animated", "animate__fadeIn"],
+              animationOut: ["animate__animated", "animate__fadeOut"],
+              dismiss: {
+                duration: 5000,
+                onScreen: true
+              }
+            });
+
           }
         }
-        signInput.value = '';
+
     };
 
     return (
         <>
         <NavBarUser></NavBarUser>
+        <ReactNotifications/>
         <div className="about-section" width="100%">
             <h1>{user.name}</h1>
             <p>{user.email}</p>
@@ -276,40 +316,12 @@ export default function UserPage(){
                           <td className="user-id">{contract}</td>
                           <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
                           <td>
-                            <div className="col d-flex justify-content-center">
-                                <button className="button" variant="primary" data-bs-toggle="modal" data-bs-target="#multifactor" onClick={(e) => handleContractInfo(e, contract)}>Sign</button>
-                                <div className="modal fade " id="multifactor" tabIndex="-1" aria-labelledby="multifactor" aria-hidden="true">
-                                    <div className="modal-dialog modal-xl">
-                                        <div className="modal-content">
-                                            <div className="modal-header">
-                                                <h4 className="modal-title" id="multifactor">Sign {popupContract}</h4>
-                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={generateRandomNum}></button>
-                                            </div>
-                                            <div className="modal-body" >
-                                                <div className="row">
-                                                    <div className="col-sm-4">
-                                                        <p>Enter the code from your email:</p>
-                                                        <input type='number' id='signInput'/>
-                                                    </div>
-                                                    <div className="col-sm-8">
-                                                        {fileContent ? <iframe src={fileContent} title='PDF' width='100%' height={window.innerHeight*0.8}></iframe> : <></>}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={generateRandomNum}>Close</button>
-                                                <button type="button" id='signModal' className="btn btn-primary" hidden={false} onClick={(e) => handleSign(e, popupContract)}>Confirm signature</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <button className="button" variant="primary" onClick={(e) => handleContractInfo(e, contract)}>Sign</button>
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="2">No pending contracts!</td>
                       </tr>
                     )}
                   </tbody>
@@ -327,6 +339,28 @@ export default function UserPage(){
             </div>
           </div>
           <Footer></Footer>
+          <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+            <div className="row">
+              <div className="col d-flex justify-content-center">
+                <h4>Sign {popupContract}</h4>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-sm-4">
+                  <p>Enter the code from your email:</p>
+                  <input type='text' id='signInput'/>
+              </div>
+              <div className="col-sm-8">
+                  {fileContent ? <iframe src={fileContent} title='PDF' width='100%' height={window.innerHeight*0.8}></iframe> : <></>}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col d-flex justify-content-end">
+                <button type="button" className="btn btn-secondary mx-2" onClick={(e) => closePopup(e)}>Close</button>
+                <button type="button" className="btn btn-primary" hidden={false} onClick={(e) => handleSign(e, popupContract)}>Confirm signature</button>
+              </div>
+            </div>
+          </Popup>
         </>
     );
 }
