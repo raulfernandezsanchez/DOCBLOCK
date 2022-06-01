@@ -12,15 +12,6 @@ import DocBlockContract from "./../contracts/DocBlock.json";
 import getWeb3 from "./../getWeb3";
 import Deploy from "./../deploy.json"
 
-function getUnique(arr, index) {
-  const unique = arr
-       .map(e => e[index])
-       // store the keys of the unique objects
-       .map((e, i, final) => final.indexOf(e) === i && i)
-       // eliminate the dead keys & store unique objects
-      .filter(e => arr[e]).map(e => arr[e]);
-   return unique;
-}
 
 export default function UserPage(){
 
@@ -30,9 +21,7 @@ export default function UserPage(){
     const [user, setUser] = useState('');
     const [name, setName] = useState('');
     const [userContracts, setUserContracts] = useState('');
-
-    // loaded contracts
-    const [foundContracts, setFoundContracts] = useState('');
+    const [renderPending, setRenderPending] = useState(false);
 
     //popup de contrato
     const [buttonPopup, setButtonPopup] = useState(false);
@@ -76,7 +65,10 @@ export default function UserPage(){
         setWeb3Provider(web3);
         setAccount(acc);
         setContract(instance);
-        getPastLog(instance);
+        setTimeout(() => {
+          getPastLog(instance)
+          setTimeout(() => setRenderPending(true), "100")
+        }, "500")
         logEvents(instance);
 
       } catch (error) {
@@ -90,31 +82,22 @@ export default function UserPage(){
 
     // load users and contracts
     React.useEffect(() => {
-       fetch("https://vast-peak-05541.herokuapp.com/api/users/" + userID, {
+
+        fetch("https://vast-peak-05541.herokuapp.com/api/users/" + userID, {
            method:'GET',
            headers:{
                "Content-Type":'application/json',
            }
-       }).then(response => response.json())
-         .then(data => {
-           setUser(data.user);
-           setName(data.user.name);
-           setUserContracts(data.user.assignedContracts);
-         });
-        fetch("https://vast-peak-05541.herokuapp.com/api/contracts", {
-            method:'GET',
-            headers:{
-                "Content-Type":'application/json',
-            }
-        }).then(response => response.json())
-          .then(data => {
-            let contracts = getUnique(data, 'name');
-            setFoundContracts(contracts);
-          });
+         }).then(response => response.json())
+           .then(data => {
+             setUser(data.user);
+             setName(data.user.name);
+             setUserContracts(data.user.assignedContracts);
+        });
 
-          connectWeb3();
+        connectWeb3();
 
-       }, []);
+    }, []);
 
     const generateRandomNum = () =>{
         let newVal = Math.floor(Math.random() * (maxVal - minVal + 1) + minVal);
@@ -165,7 +148,6 @@ export default function UserPage(){
           pendingContracts.push(contractName);
         }
       }
-      console.log(userContracts);
       setUserContracts(pendingContracts);
     }
 
@@ -310,7 +292,7 @@ export default function UserPage(){
                     </tr>
                   </thead>
                   <tbody>
-                    {userContracts && userContracts.length > 0 ? (
+                    {userContracts && userContracts.length && renderPending > 0 ? (
                       userContracts.map((contract) => (
                         <tr key={contract}>
                           <td className="user-id">{contract}</td>
