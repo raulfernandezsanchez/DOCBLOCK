@@ -3,22 +3,6 @@ import React, { useState } from "react";
 import Footer from "../Components/footer";
 import NavBarCompany from "../Components/navbarcompany";
 import UploadImageToS3WithReactS3 from "../Components/UploadImageToS3WithReactS3"
-import AWS from 'aws-sdk'
-
-
-const S3_BUCKET ='eu-west-3';
-const REGION ='dockblock-contracts';
-
-
-AWS.config.update({
-  accessKeyId: 'AKIAWCVOKIGWQHB33LHL',
-  secretAccessKey: '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'
-})
-
-const myBucket = new AWS.S3({
-  params: { Bucket: S3_BUCKET},
-  region: REGION,
-})
 
 function getUnique(arr, index) {
   const unique = arr
@@ -57,48 +41,6 @@ export default function CompanyContracts(){
          setLoadedContracts(contracts);
        });
    }, []);
-
-  function updateFilename(e){
-        e.preventDefault();
-        setFilename(e.target.files[0].name);
-        const reader = new FileReader();
-        reader.onload = async (e) =>{
-            setFileContent(e.target.result);
-        };
-        reader.readAsDataURL(e.target.files[0]);
-  }
-
-  const handleFileInput = (e) => {
-      setSelectedFile(e.target.files[0]);
-  }
-
-  /*const handleUpload = async (e) => {
-      uploadFile(selectedFile, config)
-      .then(data => console.log(data))
-      .catch(err => console.error(err))
-      
-  }*/
-
-
-    const uploadFile = (file) => {
-      /*alert('File '+ filename +' updated')
-      localStorage.setItem('contractFile', filename);
-      localStorage.setItem('contractContent', fileContent);*/
-      const params = {
-        ACL: 'public-read',
-        Body: file,
-        Bucket: S3_BUCKET,
-        Key: 'raul'//file.name
-      }
-
-    myBucket.putObject(params)
-        .on('httpUploadProgress', (evt) => {
-            setProgress(Math.round((evt.loaded / evt.total) * 100))
-        })
-        .send((err) => {
-            if (err) console.log(err)
-        })
-    }
 
 
    const filter = (e) => {
