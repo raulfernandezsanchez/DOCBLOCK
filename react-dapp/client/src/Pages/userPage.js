@@ -29,7 +29,7 @@ export default function UserPage(){
     const [minVal] = useState(1000000);
     const [maxVal] = useState(1000000000);
     const [randomNum, setRandomNum] = useState(0);
-    const fileContent = localStorage.getItem('contractContent');
+    const [fileContent, setFileContent] = useState();
 
     //web3
     const [web3Provider, setWeb3Provider] = useState('');
@@ -110,8 +110,8 @@ export default function UserPage(){
 
     const sendEmail = (e) =>{
         const firstNameInput = document.getElementById('signInput');
-        const modalSigned = document.getElementById('signModal');
-        modalSigned.hidden = false;
+        //const modalSigned = document.getElementById('signModal');
+        //modalSigned.hidden = false;
         firstNameInput.disabled = false;
         var templateParams = {
             user_email: mail, //user.mail,
@@ -132,12 +132,13 @@ export default function UserPage(){
         setButtonPopup(false);
     };
 
-    function handleContractInfo(event, contractID) {
+    function handleContractInfo(event, contractID, contractURL) {
         event.preventDefault();
         setButtonPopup(true);
         setPopupContract(contractID);
         generateRandomNum();
         //sendEmail(event);
+        setFileContent(contract.contractPDF);
     };
 
     function removeUserContract(doc) {
@@ -298,7 +299,7 @@ export default function UserPage(){
                           <td className="user-id">{contract}</td>
                           <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
                           <td>
-                            <button className="button" variant="primary" onClick={(e) => handleContractInfo(e, contract)}>Sign</button>
+                            <button className="button" variant="primary" onClick={(e) => handleContractInfo(e, contract.name, contract.contractPDF)}>Sign</button>
                           </td>
                         </tr>
                       ))

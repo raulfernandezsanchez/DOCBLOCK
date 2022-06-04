@@ -26,7 +26,6 @@ export default function LoginPage(){
         }
         //si tienen contenido, se comprueban con la api
         else{
-            //let isCompany = localStorage.getItem('isCompany');
             if(isCompany){
                 let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
                     method:'GET',
