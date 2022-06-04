@@ -28,25 +28,25 @@ export default function LoginPage(){
         else{
             //let isCompany = localStorage.getItem('isCompany');
             if(isCompany){
-                let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
+                try {
+                    let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies/" + email, {
                     method:'GET',
                     headers:{
                         "Content-Type":'application/json',
                     }
                 });
-                result = await result.json();
-
-                //comprobar si el usuario ya tiene una cuenta
-                if (!isRegistered(result)) {
+                const data = await result.json();
+                console.log(data);
+                localStorage.setItem('isAuthenticated', true);
+                console.log(data.company.email);
+                localStorage.setItem('userID', email);
+                console.log(data.company._id);
+                localStorage.setItem('id', data.company._id);
+                navigate("/homeCompany");
+                } catch (error) {
                     alert('No company with this mail!')
                 }
-                else {
-                    //comprobar que la contraseña es correcta
-                    localStorage.setItem('isAuthenticated', true);
-                    localStorage.setItem('userID', email);
-                    localStorage.setItem('password', password);
-                    navigate("/homeCompany");
-                }
+
             }
             //login de user
             else{

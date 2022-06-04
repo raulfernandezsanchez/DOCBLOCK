@@ -49,12 +49,31 @@ const UploadImageToS3WithReactS3 = () => {
                             "Content-Type":'application/json',
                         },
                     });
-        console.log(resultPost);
+        
+        const cmp_id = localStorage.getItem("id");   
+        console.log(cmp_id);
+        let compcont = {
+            companyContractsuploaded: name
+        };
+        let resultPost2 = await fetch("https://vast-peak-05541.herokuapp.com/api/companies/" + cmp_id, {
+                    body: JSON.stringify(compcont),
+                        method:'PUT',
+                        headers:{
+                            "Content-Type":'application/json',
+                        },
+                    });
+        const data = await resultPost.json();
+        console.log(resultPost2.json());
     };
 
     const doublecall = async (file) => {
         console.log(name);
         handleUpload(file);
+    };
+
+    const doublecall2 = async (file) => {
+        const x = localStorage.getItem("id");
+        console.log(x);
     };
 
     return <div>
