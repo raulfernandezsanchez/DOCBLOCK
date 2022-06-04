@@ -31,13 +31,13 @@ class AboutPage extends Component{
                 </div>
                 <div className="column">
                     <div className="card">
-                    <img src={require("../Assets/orange.jpg")} alt="Raúl Sánchez" id='memberImage'/>
-                    <div className="container">
-                        <h2>Raúl Fernández</h2>
-                        <p className="title">Back-end developer</p>
-                        <p>UPC 4th year student with software expertise.</p>
-                        <p><button className="button">Contact</button></p>
-                    </div>
+                        <img src={require("../Assets/orange.jpg")} alt="Raúl Sánchez" id='memberImage'/>
+                        <div className="container">
+                            <h2>Raúl Fernández</h2>
+                            <p className="title">Back-end developer</p>
+                            <p>UPC 4th year student with software expertise.</p>
+                            <a href="mailto:raul.fernandez.sanchez@estudiantat.upc.edu" className="button">Contact</a>
+                        </div>
                     </div>
                 </div>
                 <div className="column">
@@ -47,7 +47,7 @@ class AboutPage extends Component{
                             <h2>Diego Núñez</h2>
                             <p className="title">Blockchain developer</p>
                             <p>UPC 4th year student with computer science expertise.</p>
-                            <p><button className="button">Contact</button></p>
+                            <a href="mailto:diego.nunez@estudiantat.upc.edu" className="button">Contact</a>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@ class AboutPage extends Component{
                             <h2>Xavier Gervilla</h2>
                             <p className="title">Front-end developer</p>
                             <p>UPC 4th year student with computer science expertise.</p>
-                            <p><button className="button">Contact</button></p>
+                            <a href="mailto:xavier.gervilla@estudiantat.upc.edu" className="button">Contact</a>
                         </div>
                     </div>
                 </div>
@@ -68,25 +68,25 @@ class AboutPage extends Component{
             <div className="row">
                 <div className="column-company">
                     <div className="card">
-                        <img src={require("../Assets/green.jpg")} alt="John" id='partnerImage'/>
+                        <img src={require("../Assets/upc-nom.png")} alt="Universitat Politècnica de Catalunya" id='partnerImage'/>
                         <div className="container">
                             <h2>Universitat Politècnica de Catalunya</h2>
-                            <p className="title">Lema</p>
-                            <p>Description of the company</p>
+                            <p className="title">BarcelonaTech</p>
+                            <p>Public institution of research and higher education in the fields of engineering, architecture, sciences and technology, and one of the leading technical universities in Europe</p>
                             <p></p>
-                            <a href="https://www.upc.edu/ca" className="button">Contact UPC</a>
+                            <a href="https://www.upc.edu/ca" className="button">Learn more about UPC</a>
                         </div>
                     </div>
                 </div>
                 <div className="column-company">
                     <div className="card">
-                        <img src={require("../Assets/light_blue.jpg")} alt="John" id='partnerImage'/>
+                        <img src={require("../Assets/light_blue.jpg")} alt="Èpica Foundation" id='partnerImage'/>
                         <div className="container">
-                            <h2>Fundació Èpica</h2>
-                            <p className="title">Lema</p>
-                            <p>Description of the company</p>
+                            <h2>Èpica Foundation</h2>
+                            <p className="title">LA FURA DELS BAUS</p>
+                            <p>Multidisciplinary learning space geared towards the performing arts</p>
                             <p></p>
-                            <a href="https://epicalab.com/es/" className="button">Contact Fundació Èpica</a>
+                            <a href="https://epicalab.com/es/" className="button">Learn more about Èpica Foundation</a>
                         </div>
                     </div>
                 </div>

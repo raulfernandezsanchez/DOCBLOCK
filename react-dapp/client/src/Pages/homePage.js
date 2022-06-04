@@ -19,7 +19,7 @@ class HomePage extends Component{
                 </div>
                 <div className="card text-white bg-secondary my-5 py-4 text-center">
                     <div className="card-body">
-                        <h3 className="text-white m-0" fontSize="xx-large">Managing contracts has never been easier</h3>
+                        <h3 className="text-white m-0" fontSize="xx-large">Benefit from the immutability of Blockchain to manage your contracts</h3>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@ class HomePage extends Component{
                     <div className="card h-100">
                         <div className="card-body">
                             <h2 className="card-title">Our product</h2>
-                            <p className="card-text">Platform to manage and sign documents</p>
+                            <p className="card-text">The future of transactions, today</p>
                         </div>
                         <div className="card-footer"><a className="btn btn-primary btn-sm" href="/services">Learn more</a></div>
                     </div>
@@ -48,8 +48,8 @@ class HomePage extends Component{
                 <div className="col-sm-3 mb-5">
                     <div className="card h-100">
                         <div className="card-body">
-                            <h2 className="card-title">Our team</h2>
-                            <p className="card-text">Young professionals</p>
+                            <h2 className="card-title">Our team and partners</h2>
+                            <p className="card-text">Young professionals and companies that trust in our product</p>
                         </div>
                         <div className="card-footer"><a className="btn btn-primary btn-sm" href="/about">Learn more</a></div>
                     </div>
@@ -57,8 +57,8 @@ class HomePage extends Component{
                 <div className="col-sm-3 mb-5">
                     <div className="card h-100">
                         <div className="card-body">
-                            <h2 className="card-title">Our partners</h2>
-                            <p className="card-text">Companies that trust in our product</p>
+                            <h2 className="card-title">Blockchain</h2>
+                            <p className="card-text">Learn more about the technology behind DocBlock </p>
                         </div>
                         <div className="card-footer"><a className="btn btn-primary btn-sm" href="/about">Learn more</a></div>
                     </div>
