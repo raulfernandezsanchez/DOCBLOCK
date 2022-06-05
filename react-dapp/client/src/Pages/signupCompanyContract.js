@@ -10,8 +10,8 @@ export default function SignupPage() {
     const [isCompany, setChecked] = useState(false);
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [firstname, setFirstname] = useState();
-    const [lastname, setLastname] = useState()
+    const [companyName, setFirstname] = useState();
+
 
     function isRegistered(registered){
         for(let i = 0; i < registered.length; ++i){
@@ -23,12 +23,12 @@ export default function SignupPage() {
     async function handleSubmit (event) {
         event.preventDefault();
         //comprobacion de que los campos tienen contenido:
-        if (typeof email === 'undefined' || typeof password === 'undefined'  || typeof firstname === 'undefined' || typeof lastname === 'undefined'){
+        if (typeof email === 'undefined' || typeof password === 'undefined'  || typeof companyName === 'undefined'){
             alert('Wrong credentials, please try again');
         }
         //si tienen contenido, se comprueban con la api
         else{
-            setChecked(false);
+            setChecked(true);
             //signup de company
             if(isCompany){
                 let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies", {
@@ -42,7 +42,6 @@ export default function SignupPage() {
                 //comprobar si el usuario ya tiene una cuenta
                 if (!isRegistered(result)) {
 
-                    let companyName = firstname.concat(' ', lastname);
                     //nuevo usuario
                     let new_user = {
                         companyemail : email,
@@ -85,7 +84,7 @@ export default function SignupPage() {
                     let new_user = {
                         useremail : email,
                         userpassword : password,
-                        username : firstname.concat(' ', lastname),
+                        username : companyName,
                     };
                     let resultPost = await fetch("https://vast-peak-05541.herokuapp.com/api/users", {
                         body: JSON.stringify(new_user),
@@ -119,10 +118,9 @@ export default function SignupPage() {
         <div class="body">
             <body>
                 <div class="main2">
-                    <p class="sign" align="center">User Sign Up</p>
+                    <p class="sign" align="center">Company Sign Up</p>
                     <form class ="form1">
-                        <input class="fn" type="text" onChange={e => setFirstname(e.target.value)} placeholder="First Name" />
-                        <input class="ln" type="text" onChange={e => setLastname(e.target.value)} placeholder="Last Name" />
+                        <input class="fn" type="text" onChange={e => setFirstname(e.target.value)} placeholder="Company Name" />
                         <input class="un " type="email" onChange={e => setEmail(e.target.value)} align="center" placeholder='Email'></input>
                         <input class="pass " type="password" onChange={e => setPassword(e.target.value)} align="center" placeholder='Password'></input>
                         <button class="submit" onClick={handleSubmit} align="center">Sign Up</button>

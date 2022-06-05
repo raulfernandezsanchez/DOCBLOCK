@@ -38,7 +38,7 @@ const NavBar = () =>{
                             <NavLink to="/login" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")} onClick={loginUser} >User</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/login" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")} onClick={loginCompany} >Company</NavLink>
+                            <NavLink to="/loginCompany" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")} onClick={loginCompany} >Company</NavLink>
                         </li>
                     </ul>
                 </div>

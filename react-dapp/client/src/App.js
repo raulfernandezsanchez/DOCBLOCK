@@ -16,6 +16,8 @@ import ValidationPage from './Pages/validationPage';
 import CompanyPage from './Pages/companyPage';
 import CompanyContracts from './Pages/companyContracts';
 import CompanySettings from './Pages/companySettings';
+import LoginCompany from './Pages/loginCompanyPage';
+import SignUpCompany from './Pages/signupCompanyContract';
 
 import { PrivateRoute } from './Components/privateRoot';
 
@@ -32,7 +34,9 @@ function App() {
 
         <Route path='/validation' element={<ValidationPage/>}></Route>
         <Route path='/login' element={<LoginPage/>}></Route>
+        <Route path='/loginCompany' element={<LoginCompany/>}></Route>
         <Route path='/signup' element={<SignupPage/>}></Route>
+        <Route path='/signupCompany' element={<SignUpCompany/>}></Route>
 
 
         <Route path='/homeUser' element={<PrivateRoute><UserPage/></PrivateRoute>}></Route>

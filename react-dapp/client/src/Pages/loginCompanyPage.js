@@ -17,7 +17,6 @@ export default function LoginPage(){
         return false;
     }
 
-
     async function handleSubmit (event) {
         event.preventDefault();
         //comprobacion de que el email y la password tienen contenido:
@@ -26,7 +25,7 @@ export default function LoginPage(){
         }
         //si tienen contenido, se comprueban con la api
         else{
-            const isCompany = false;
+            const isCompany = true;
             if(isCompany){
                 try {
                     let result = await fetch("https://vast-peak-05541.herokuapp.com/api/companies/" + email, {
@@ -79,7 +78,7 @@ export default function LoginPage(){
         <div class="body">
             <body>
                 <div class="main">
-                    <p class="sign" align="center">User Log in</p>
+                    <p class="sign" align="center"> Company Log in</p>
                     <form class ="form1">
                         <input class="un " type="email" onChange={e => setEmail(e.target.value)} align="center" placeholder='Email'></input>
                         <input class="pass " type="password" onChange={e => setPassword(e.target.value)} align="center" placeholder='Password'></input>
@@ -88,7 +87,7 @@ export default function LoginPage(){
                             <a href="/recovery">Forgot password? Reset</a>
                         </div>
                         <div class = "register" align="center">
-                            <a href="/signup" >New user? Sign up</a>
+                            <a href="/signupCompany" >New company? Sign up</a>
                         </div>
                     </form>
                 </div>
