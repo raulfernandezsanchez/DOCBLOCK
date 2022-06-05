@@ -108,15 +108,11 @@ export default function UserPage(){
     //para debugar
     let mail = 'infodocblock@gmail.com';
 
-    const sendEmail = (e) =>{
-        const firstNameInput = document.getElementById('signInput');
-        //const modalSigned = document.getElementById('signModal');
-        //modalSigned.hidden = false;
-        firstNameInput.disabled = false;
+    const sendEmail = (e, contractID) =>{
         var templateParams = {
-            user_email: mail, //user.mail,
+            user_email: user.email, //user.email,
             number: randomNum,
-            contract: popupContract
+            contract: contractID
         };
 
         e.preventDefault();
@@ -137,11 +133,11 @@ export default function UserPage(){
         setButtonPopup(true);
         setPopupContract(contractID);
         generateRandomNum();
-        //sendEmail(event);
+        sendEmail(event, contractID);
         setFileContent(contract.contractPDF);
     };
 
-    function removeUserContract(doc) {
+    function removeUserContract(doc) {
       let pendingContracts = [];
       for (let i = 0; i < userContracts.length; ++i) {
         let contractName = userContracts[i];
@@ -299,7 +295,7 @@ export default function UserPage(){
                           <td className="user-id">{contract}</td>
                           <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
                           <td>
-                            <button className="button" variant="primary" onClick={(e) => handleContractInfo(e, contract.name, contract.contractPDF)}>Sign</button>
+                            <button className="button" variant="primary" onClick={(e) => generateRandomNum()} onClick={(e) => handleContractInfo(e, contract.name, contract.contractPDF)}>Sign</button>
                           </td>
                         </tr>
                       ))

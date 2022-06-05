@@ -20,12 +20,10 @@ const UploadImageToS3WithReactS3 = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [name, setname] = useState();
     //const [url, seturl] = useState()
-    const [filename, setFilename] = useState('');
-    const [fileContent, setFileContent] = useState('');
 
     const handleFileInput = (e) => {
         console.log("LLEGA 1");
-        setSelectedFile(e.target.files[0]); 
+        setSelectedFile(e.target.files[0]);
     };
 
 
@@ -35,7 +33,7 @@ const UploadImageToS3WithReactS3 = () => {
         .then(console.log("LLEGAA"))
             .then(data => handlePost(data.location))
             .catch(err => console.error(err))
-        
+
     };
 
     const handlePost = async(url) => {
@@ -51,8 +49,8 @@ const UploadImageToS3WithReactS3 = () => {
                             "Content-Type":'application/json',
                         },
                     });
-        
-        const cmp_id = localStorage.getItem("id");   
+
+        const cmp_id = localStorage.getItem("id");
         console.log(cmp_id);
         let compcont = {
             companyContractsuploaded: name
@@ -78,38 +76,13 @@ const UploadImageToS3WithReactS3 = () => {
         console.log(x);
     };
 
-    function updateFilename(e){
-        e.preventDefault();
-        setFilename(e.target.files[0].name);
-        const reader = new FileReader();
-        reader.onload = async (e) =>{
-            setFileContent(e.target.result);
-        };
-        reader.readAsDataURL(e.target.files[0]);
-    }
-
-    return (
-        <>
-        <div className="row">
-            <div className="col-sm-4">
-                <br/>
-                <label>Name to save contract:<br/>
-                    <input type="text" onChange={e => setname(e.target.value)}/>
-                </label>
-                <br/><br/>
-                <label htmlFor="formFile" className="form-label">Select a contract to upload
-                    <input className="form-control" type="file" accept=".pdf" id="formFile" onChange={updateFilename}/>
-                </label>
-                <br/>
-                <br/>
-                <button onClick={() => doublecall(selectedFile)} className="btn btn-primary btn-block">Upload to S3</button>
-            </div>
-            <div className="col-sm-8">
-                {fileContent ? <iframe src={fileContent} title='PDF' width="100%" height={window.innerHeight*0.85}></iframe> : <></>}
-            </div>
-        </div>
-        </>
-    )
+    return <div>
+        <div>React S3 File Upload</div>
+        <p>Contract name</p>
+        <input type="text" onChange={e => setname(e.target.value)}/>
+        <input type="file" onChange={handleFileInput}/>
+        <button onClick={() => doublecall(selectedFile)}> Upload to S3</button>
+    </div>
 }
 
 export default UploadImageToS3WithReactS3;

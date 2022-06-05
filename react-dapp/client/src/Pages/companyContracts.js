@@ -146,7 +146,10 @@ export default function CompanyContracts(){
                 </div>
                 <div className="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
                     <div className="row justify-content-around">
-                      <UploadImageToS3WithReactS3></UploadImageToS3WithReactS3>  
+                        <div className="col-sm-4">
+                        <UploadImageToS3WithReactS3></UploadImageToS3WithReactS3>
+                        {fileContent ? <iframe src={fileContent} title='PDF' width="100%" height={window.innerHeight*0.85}></iframe> : <></>}
+                        </div>
                     </div>
                 </div>
             </div>

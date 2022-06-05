@@ -1,37 +1,49 @@
 import React, {Component} from "react";
-import '../css/servicesPage.css';
+import '../css/aboutPage.css';
 
 import Footer from "../Components/footer";
 import NavBar from "../Components/navbar";
 
 class ServicesPage extends Component{
-    render() {
-        return (
-            <>
-            <NavBar></NavBar>
-            <div className="about-section" width="100%">
-                <h1>Services</h1>
-                <p>DocBlock has different functionalities.</p>
-            </div>
-            <div className="row d-flex justify-content-center">
-              <div className="column">
-                <div className="card" id="serv">
-                  <h5>Companies</h5>
-                  <h2>Assign contracts to users.</h2>
-                  <h2>Follow and control the progress.</h2>
-                  <h2>External consult.</h2>
-                </div>
+  render() {
+      return (
+          <>
+          <NavBar></NavBar>
+          <div className="about-section" width="100%">
+              <h1>Services</h1>
+              <p>Functionalities we provide with DocBlock.</p>
+          </div>
+          <div className="row">
+              <div className="col d-flex justify-content-center">
+                  <div className="card">
+                      <img src={require("../Assets/User.jpeg")} alt="Diego Núñez" id='memberImage'/>
+                      <div className="container">
+                          <h2>Users</h2>
+                          <p className="title">Services for users:</p>
+                          <li>Tracking your contracts.</li>
+                          <li>Sign your contracts.</li>
+                          <li>Visualization of your contracts.</li>
+                          <li>Validate your experience.</li>
+                      </div>
+                  </div>
               </div>
-              <div className="column">
-                <div className="card" id="serv">
-                    <h5>Users</h5>
-                    <h2>Sign your documents.</h2>
-                    <h2>Validate your experience.</h2>
-                </div>
+              <div className="col d-flex justify-content-center">
+                  <div className="card">
+                      <img src={require("../Assets/Business.jpeg")} alt="Diego Núñez" id='memberImage'/>
+                      <div className="container">
+                          <h2>Companies</h2>
+                          <p className="title">Services for companies:</p>
+                          <li>Visualization of your documents.</li>
+                          <li>Assign documents to your employees.</li>
+                          <li>Control and monitoring of the contracts assigned.</li>
+                          <li>Validate a candidate's experience.</li>
+                      </div>
+                  </div>
               </div>
-            </div>
-            <Footer></Footer>
-            </>
-        );
-    }
+          </div>
+          <pre></pre>
+          <Footer></Footer>
+          </>
+      );
+  }
 } export default ServicesPage;

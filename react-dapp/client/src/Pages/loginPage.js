@@ -16,8 +16,6 @@ export default function LoginPage(){
         }
         return false;
     }
-
-
     async function handleSubmit (event) {
         event.preventDefault();
         //comprobacion de que el email y la password tienen contenido:
