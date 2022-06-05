@@ -22,7 +22,7 @@ const NavBarUser = () =>{
                 <div className="collapse navbar-collapse" id="menu">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <NavLink reloadDocument to="/homeUser" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>My page</NavLink>
+                            <NavLink reloadDocument to="/homeUser" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>My Page</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink reloadDocument to="/userHistory" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>History</NavLink>
@@ -31,7 +31,7 @@ const NavBarUser = () =>{
                             <NavLink to="/userSettings" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Settings</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")} onClick={handleClick}>Log out</NavLink>
+                            <NavLink to="/" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")} onClick={handleClick}>Log Out</NavLink>
                         </li>
                     </ul>
                 </div>

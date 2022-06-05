@@ -4,9 +4,12 @@ import emailjs from 'emailjs-com';
 import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
 
+import { ReactNotifications, Store } from 'react-notifications-component'
+
 import DocBlockContract from "./../contracts/DocBlock.json";
 import getWeb3 from "./../getWeb3";
 import Deploy from "./../deploy.json"
+import "../css/companyPage.css";
 
 export default function UserContracts(){
   const userID = localStorage.getItem('userID');
@@ -14,6 +17,7 @@ export default function UserContracts(){
   // user
   const [user, setUser] = useState('');
   const [name, setName] = useState('');
+  const [email, setEmail] = useState();
   const [userContracts, setUserContracts] = useState('');
 
   const [web3Provider, setWeb3Provider] = useState('');
@@ -27,6 +31,8 @@ export default function UserContracts(){
   const acc = Deploy.account; //account
   const pk  = Deploy.private_key;  // private key of your account
   const address = Deploy.contract_address; //Contract Address
+
+  const [companyEmail, setCompanyEmail] = useState();
 
   async function connectWeb3() {
     try {
@@ -131,6 +137,40 @@ export default function UserContracts(){
       );
   }
 
+  function handleShareProfile(event) {
+      event.preventDefault();
+      sendEmail(event);
+  };
+
+  const sendEmail = (e) =>{
+      e.preventDefault();
+      var templateParams = {
+        from_name: user.name,
+        profile_id: user._id,
+        company_email: companyEmail
+      };
+
+
+      emailjs.send('DocBlocksupport', 'ShareIDDocBlock', templateParams, 'kospe_feDXzROu0q-').then((result) =>{
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+
+      /*Store.addNotification({
+        message: "Profile shared successfully!",
+        type: "success",
+        insert: "top",
+        container: "top-right",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 5000,
+          onScreen: true
+        }
+      });*/
+  };
+
   const showDocsList = showSignedDocs;
 
   return (
@@ -139,6 +179,17 @@ export default function UserContracts(){
       <div className="about-section" width="100%">
           <h1>History</h1>
           <p>Transaction tracking.</p>
+      </div>
+      <div className="row mx-5 my-5" style={{'textAlign':'center'}}>
+        <h2>SHARE MY EXPERIENCE</h2>
+        <div className="col-lg-12">
+          <div>
+              <input type="email" onChange={e => setCompanyEmail(e.target.value)} placeholder="company@domain.com"></input>
+          </div><br/>
+        </div>
+        <div>
+            <button type='submit' className="btn btn-primary btn-block" onClick={(e) => handleShareProfile(e)}>Share</button>
+        </div>
       </div>
       <div className="row mx-5 my-5">
         <div className="col-lg-12">
