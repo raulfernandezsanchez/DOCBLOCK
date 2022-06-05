@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import Footer from "../Components/footer";
 import NavBarCompany from "../Components/navbarcompany";
+import UploadImageToS3WithReactS3 from "../Components/UploadImageToS3WithReactS3"
+import Popup from "../Components/popup";
 
 function getUnique(arr, index) {
   const unique = arr
@@ -24,6 +26,12 @@ export default function CompanyContracts(){
     // loaded contracts
     const [loadedContracts, setLoadedContracts] = useState('');
 
+    const [progress , setProgress] = useState(0);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const [buttonPopup, setButtonPopup] = useState(false);
+    const [popupContract, setPopupContract] = useState('');
+
     React.useEffect(() => {
        fetch("https://vast-peak-05541.herokuapp.com/api/contracts", {
          method:'GET',
@@ -37,22 +45,6 @@ export default function CompanyContracts(){
          setLoadedContracts(contracts);
        });
    }, []);
-
-    function updateFilename(e){
-        e.preventDefault();
-        setFilename(e.target.files[0].name);
-        const reader = new FileReader();
-        reader.onload = async (e) =>{
-            setFileContent(e.target.result);
-        };
-        reader.readAsDataURL(e.target.files[0]);
-    }
-
-    function uploadFile(){
-      alert('File '+ filename +' updated')
-      localStorage.setItem('contractFile', filename);
-      localStorage.setItem('contractContent', fileContent);
-    }
 
 
    const filter = (e) => {
@@ -69,6 +61,19 @@ export default function CompanyContracts(){
        // If the text field is empty, show all users
      }
      setFilename(keyword);
+   };
+
+   async function handleContractInfo(event, contractID, contractURL) {
+    event.preventDefault();
+    setButtonPopup(true);
+    setPopupContract(contractID);
+    setFileContent(contractURL);
+   };
+
+   function closePopup(event) {
+    event.preventDefault();
+    setButtonPopup(false);
+    setFileContent('');
    };
 
     return (
@@ -111,7 +116,9 @@ export default function CompanyContracts(){
                                   foundContract.map((contract) => (
                                     <tr key={contract.id} className="contract">
                                       <td className="user-id">{contract.name}</td>
-                                      <td className="user-name">{contract.url}</td>
+                                      <td className="user-name">
+                                      <button className="button" variant="primary" onClick={(e) => handleContractInfo(e, contract.name, contract.contractPDF)}>View contract</button>
+                                      </td>
                                       <td>
                                         <a href="#" className="table-link">
                         									<span className="fa-stack">
@@ -140,14 +147,7 @@ export default function CompanyContracts(){
                 <div className="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
                     <div className="row justify-content-around">
                         <div className="col-sm-4">
-                            <label htmlFor="formFile" className="form-label">Select a contract to upload
-                                <input className="form-control" type="file" accept=".pdf" id="formFile" onChange={updateFilename}/>
-                            </label>
-                            <br/>
-                            {/*<a href={filename} target='_blank' className="btn btn-primary btn-block" rel='noopener noreferrer' onClick={() => alert(filename)}>Upload</a>*/}
-                            <button className="btn btn-primary btn-block" onClick={uploadFile}>Upload</button>
-                        </div>
-                        <div className="col-sm-8">
+                        <UploadImageToS3WithReactS3></UploadImageToS3WithReactS3>
                         {fileContent ? <iframe src={fileContent} title='PDF' width="100%" height={window.innerHeight*0.85}></iframe> : <></>}
                         </div>
                     </div>
@@ -155,6 +155,21 @@ export default function CompanyContracts(){
             </div>
         </div>
         <Footer></Footer>
+        <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+            <div className="row">
+              <div className="col d-flex justify-content-center">
+                <h4>Document {popupContract}</h4>
+              </div>
+            </div>
+            <div className="row">
+              {fileContent ? <iframe src={fileContent} title='PDF' width='100%' height={window.innerHeight*0.8}></iframe> : <></>}
+            </div>
+            <div className="row">
+              <div className="col d-flex justify-content-end">
+                <button type="button" className="btn btn-secondary mx-2" onClick={(e) => closePopup(e)}>Close</button>
+              </div>
+            </div>
+          </Popup>
         </>
     );
 }

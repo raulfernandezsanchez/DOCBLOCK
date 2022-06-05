@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import '../css/navbar.css'
 
 const NavBar = () =>{
-    const [display, setDisplay] = useState('none');
-    const handleCheck = () =>{
-        if (display === 'none'){
-            setDisplay('block')
-        }
-        else{
-            setDisplay('none')
-        }
+    function loginCompany(){
+        localStorage.setItem('isCompany', true);
     }
+    function loginUser(){
+        localStorage.removeItem('isCompany');
+    }
+
+
     return (
         <>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -35,12 +34,11 @@ const NavBar = () =>{
                         <li className="nav-item">
                             <NavLink to="/validation" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Validation</NavLink>
                         </li>
-                        <li>
-                          <a href="#"> User</a>
-                          <ul className="menu-vertical">
-                            <li><a href="/login">Log in</a></li>
-                            <li><a href="/signup">Sign up</a></li>
-                          </ul>
+                        <li className="nav-item">
+                            <NavLink to="/login" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")} onClick={loginUser} >User</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink to="/login" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")} onClick={loginCompany} >Company</NavLink>
                         </li>
                     </ul>
                 </div>

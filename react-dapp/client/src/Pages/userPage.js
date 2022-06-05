@@ -1,185 +1,344 @@
-import React from "react";
-import { useState } from 'react';
+import React, {useState} from "react";
+import emailjs from 'emailjs-com';
 import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
 import Popup from "../Components/popup"
-import "../css/companyPage.css"
+import "../css/companyPage.css";
 
-function getUnique(arr, index) {
-  const unique = arr
-       .map(e => e[index])
-       // store the keys of the unique objects
-       .map((e, i, final) => final.indexOf(e) === i && i)
-       // eliminate the dead keys & store unique objects
-      .filter(e => arr[e]).map(e => arr[e]);
-   return unique;
-}
+import { ReactNotifications, Store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 
-function getMyUser(arr, email) {
-  const myuser = arr.filter(user => user.email == email);
-  return myuser;
-}
+import DocBlockContract from "./../contracts/DocBlock.json";
+import getWeb3 from "./../getWeb3";
+import Deploy from "./../deploy.json"
 
-export default function CompanyPage(){
 
-    //popup button info
-    const [buttonPopupInfo, setButtonPopupInfo] = useState(false);
-    //popup button assigned
-    const [buttonPopupAssign, setButtonPopupAssign] = useState(false);
-
-    //popup info
-    const [popupUserName, setPopupUserName] = useState('');
-    const [popupUserEmail, setPopupUserEmail] = useState('');
-    const [popupUserContracts, setPopupUserContracts] = useState([]);
+export default function UserPage(){
 
     const userID = localStorage.getItem('userID');
-    //const userName = localStorage.getItem('userName');
-    // the value of the search field
+
+    // user
+    const [user, setUser] = useState('');
     const [name, setName] = useState('');
+    const [userContracts, setUserContracts] = useState('');
+    const [renderPending, setRenderPending] = useState(false);
 
-    // the search result
-    const [foundUsers, setFoundUsers] = useState('');
+    //popup de contrato
+    const [buttonPopup, setButtonPopup] = useState(false);
+    const [popupContract, setPopupContract] = useState('');
+    const [minVal] = useState(1000000);
+    const [maxVal] = useState(1000000000);
+    const [randomNum, setRandomNum] = useState(0);
+    const [fileContent, setFileContent] = useState();
 
-    // loaded users
-    const [loadedUsers, setLoadedUsers] = useState('');
-    // loaded contracts
-    const [foundContracts, setFoundContracts] = useState('');
-    //
-    const [assignedUser, setAssignedUser] = useState('');
+    //web3
+    const [web3Provider, setWeb3Provider] = useState('');
+    const [account, setAccount] = useState('');
+    const [contract, setContract] = useState('');
+    const [accountBalance, setAccountBalance] = useState('');
+    const [signMap, setSignMap] = useState('');
+
+    const acc = Deploy.account; //account
+    const pk  = Deploy.private_key;  // private key of your account
+    const address = Deploy.contract_address; //Contract Address
+
+    async function connectWeb3() {
+      try {
+        // Get network provider and web3 instance.
+        const web3 = await getWeb3();
+
+        // Get the contract instance.
+        const networkId = await web3.eth.net.getId();
+        const deployedNetwork = DocBlockContract.networks[networkId];
+
+        const instance = new web3.eth.Contract(
+           DocBlockContract.abi,
+           deployedNetwork && deployedNetwork.address,
+        );
+
+        let ethBalance = await web3.eth.getBalance(acc);
+        ethBalance = web3.utils.fromWei(ethBalance, 'ether');
+        setAccountBalance(ethBalance);
+
+        // Set web3, account, and contract to the state, and then proceed with an
+        // example of interacting with the contract's methods.
+        setWeb3Provider(web3);
+        setAccount(acc);
+        setContract(instance);
+        setTimeout(() => {
+          getPastLog(instance)
+          setTimeout(() => setRenderPending(true), "100")
+        }, "500")
+        logEvents(instance);
+
+      } catch (error) {
+        // Catch any errors for any of the above operations.
+        alert(
+          `Failed to load web3, account, or contract. Check console for details.`,
+        );
+        console.error(error);
+      }
+    };
 
     // load users and contracts
-     React.useEffect(() => {
-       fetch("https://vast-peak-05541.herokuapp.com/api/users/", {
+    React.useEffect(() => {
+
+        fetch("https://vast-peak-05541.herokuapp.com/api/users/" + userID, {
            method:'GET',
            headers:{
                "Content-Type":'application/json',
            }
-       }).then(response => response.json())
-         .then(data => {
-           let user = getUnique(data, 'name');
-           let myUser = getMyUser(user, userID);
-           setFoundUsers(myUser);
-           setLoadedUsers(myUser);
-         });
-        fetch("https://vast-peak-05541.herokuapp.com/api/contracts", {
-            method:'GET',
-            headers:{
-                "Content-Type":'application/json',
+         }).then(response => response.json())
+           .then(data => {
+             setUser(data.user);
+             setName(data.user.name);
+             setUserContracts(data.user.assignedContracts);
+        });
+
+        connectWeb3();
+
+    }, []);
+
+    const generateRandomNum = () =>{
+        let newVal = Math.floor(Math.random() * (maxVal - minVal + 1) + minVal);
+        setRandomNum(newVal);
+        console.log(newVal)
+    };
+
+    //para debugar
+    let mail = 'infodocblock@gmail.com';
+
+    const sendEmail = (e, contractID) =>{
+        var templateParams = {
+            user_email: user.email, //user.email,
+            number: randomNum,
+            contract: contractID
+        };
+
+        e.preventDefault();
+        emailjs.send('Docblock_support', 'Signature_template', templateParams, 'XWMGER03w0eoay02e').then((result) =>{
+            console.log(result.text);
+        }, (error) => {
+            console.log(error.text);
+        });
+    };
+
+    function closePopup(event) {
+        event.preventDefault();
+        setButtonPopup(false);
+    };
+
+    function handleContractInfo(event, contractID, contractURL) {
+        event.preventDefault();
+        setButtonPopup(true);
+        setPopupContract(contractID);
+        generateRandomNum();
+        sendEmail(event, contractID);
+        setFileContent(contract.contractPDF);
+    };
+
+    function removeUserContract(doc) {
+      let pendingContracts = [];
+      for (let i = 0; i < userContracts.length; ++i) {
+        let contractName = userContracts[i];
+        if (contractName !== doc) {
+          pendingContracts.push(contractName);
+        }
+      }
+      setUserContracts(pendingContracts);
+    }
+
+    function signTransaction(name, doc) {
+     const EthereumTx = require('ethereumjs-tx').Transaction;
+
+     web3Provider.eth.getTransactionCount(account, function (err, nonce) {
+       //console.log("nonce value is ", nonce);
+       const functionAbi = contract.methods.signDocument(String(name), String(doc)).encodeABI();
+
+       var details = {
+         "nonce": nonce,
+         "gasPrice": web3Provider.utils.toHex(web3Provider.utils.toWei('47', 'gwei')),
+         "gas": 300000,
+         "to": address,
+         "value": 0,
+         "data": functionAbi,
+       };
+
+       const transaction = new EthereumTx(details);
+       transaction.sign(Buffer.from(pk, 'hex'));
+       var rawData = '0x' + transaction.serialize().toString('hex');
+
+       web3Provider.eth.sendSignedTransaction(rawData)
+
+       .on('transactionHash', function(hash) {
+       console.log(['transferToStaging Trx Hash:' + hash]);
+       })
+       .on('receipt', function(receipt){
+       console.log(['transferToStaging Receipt:', receipt]);
+       })
+       .on('error', console.error);
+     });
+    }
+
+    function getPastLog(contract) {
+      console.log(`Returns all the past events`);
+
+      contract.getPastEvents("signAdded", {fromBlock: 0}, (error, events) => {
+        if(!error) {
+          let list = document.getElementById("contracts-list");
+          for(let i = 0; i < events.length; ++i) {
+            let event = events[i];
+            list.innerHTML += `
+              <tr>
+                <td class="user-id">${event.returnValues.document}</td>
+                <td class="user-name" style="width:62.2%"><span class="c-pill c-pill--success">Signed</span></td>
+              </tr>
+            `;
+            removeUserContract(event.returnValues.document);
+          }
+          console.log(events);
+        } else {
+          console.log(error);
+        } });
+    }
+
+    function logEvents(contract) {
+      console.log(`Listening Transfer events`);
+      contract.events
+          .signAdded()
+          .on("data", (event) => {
+          document.getElementById("contracts-list").innerHTML += `
+            <tr>
+              <td class="user-id">${event.returnValues.document}</td>
+              <td class="user-name" style="width:62.2%"><span class="c-pill c-pill--success">Signed</span></td>
+            </tr>
+          `;
+          removeUserContract(event.returnValues.document);
+          console.log(event);
+          })
+          .on("error", (error) => console.log(error));
+    }
+
+
+    async function handleSign(event, doc) {
+        event.preventDefault();
+        const signInput = document.getElementById('signInput');
+        if (parseInt(signInput.value,10) !== randomNum){
+          alert('Wrong number, try again');
+          console.log(randomNum);
+        }
+        else{
+          const response = await contract.methods.getSignedDocuments(name).call();
+          var alreadySigned = false;
+          if(response.length !== 0) {
+            for (let i = 0; i < response.length; i++) {
+              if (response[i].document === doc) {
+                alreadySigned = true;
+                alert(doc + " already signed.")
+              }
             }
-        }).then(response => response.json())
-          .then(data => {
-            let contracts = getUnique(data, 'name');
-            setFoundContracts(contracts);
-          });
+          }
+          if(!alreadySigned) {
+            var x = document.getElementById("contracts-list");
+            await signTransaction(name, doc);
+            setSignMap([...signMap, {name: name, document: doc}]);
 
-       }, []);
+            var pendingContracts = userContracts.filter(x => {
+              return x != doc;
+            })
+            setUserContracts(pendingContracts);
 
-       function handlePopupInfo(event, username, useremail, contracts) {
-         event.preventDefault();
-         setPopupUserName(username);
-         setPopupUserEmail(useremail);
-         setPopupUserContracts(contracts);
-         setButtonPopupInfo(true);
-       }
+            setButtonPopup(false);
+
+            Store.addNotification({
+              message: doc + " signed successfully!",
+              type: "success",
+              insert: "top",
+              container: "top-right",
+              animationIn: ["animate__animated", "animate__fadeIn"],
+              animationOut: ["animate__animated", "animate__fadeOut"],
+              dismiss: {
+                duration: 5000,
+                onScreen: true
+              }
+            });
+
+          }
+        }
+
+    };
 
     return (
         <>
         <NavBarUser></NavBarUser>
+        <ReactNotifications/>
         <div className="about-section" width="100%">
-            <h1>{userID}</h1>
-            <p>{userID}</p>
+            <h1>{user.name}</h1>
+            <p>{user.email}</p>
         </div>
-        <div className="container search-wrapper">
-          <h2>{userID}</h2>
-          <div className="row">
-          	<div className="col-lg-12">
-          		<div className="main-box clearfix">
-          			<div className="table-responsive">
+        <div className="row mx-5 my-5">
+          <div className="col-lg-12">
+            <div className="main-box clearfix">
+              <div className="table-responsive">
+                <table className="table user-list">
+                  <thead>
+                    <tr>
+                      <th><span>Contract</span></th>
+                      <th><span>Status</span></th>
+                      <th><span>Action</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userContracts && userContracts.length && renderPending > 0 ? (
+                      userContracts.map((contract) => (
+                        <tr key={contract}>
+                          <td className="user-id">{contract}</td>
+                          <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
+                          <td>
+                            <button className="button" variant="primary" onClick={(e) => generateRandomNum()} onClick={(e) => handleContractInfo(e, contract.name, contract.contractPDF)}>Sign</button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                      </tr>
+                    )}
+                  </tbody>
+                  </table>
+                </div>
+                <div className="table-responsive">
                   <table className="table user-list">
                     <thead>
-                      <tr>
-                        <th><span>User</span></th>
-                        <th><span>Email</span></th>
-                        <th>&nbsp;</th>
-                      </tr>
                     </thead>
-                    <tbody>
-                      {foundUsers && foundUsers.length > 0 ? (
-                        foundUsers.map((user) => (
-                          <tr key={user.id} className="user">
-                            <td className="user-id">{user.name}</td>
-                            <td className="user-name">{user.email}</td>
-                            <td>
-                              <div className="col d-flex justify-content-center">
-                                <a onClick={(e) => handlePopupInfo(e, user.name, user.email, user.assignedContracts)} className="table-link">
-                                  <span className="fa-stack info-button">
-                                    <i className="fa fa-square fa-stack-2x"></i>
-                                    <i className="fa fa-info-circle fa-stack-1x fa-inverse"></i>
-                                  </span>
-                                  <div className="hide hide-info-button">User information</div>
-                                </a>
-                              </div>
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan="3">User not found.</td>
-                        </tr>
-                      )}
+                    <tbody id="contracts-list">
                     </tbody>
                     </table>
-            			</div>
-            		</div>
-            	</div>
+                  </div>
+              </div>
             </div>
           </div>
           <Footer></Footer>
-          <Popup trigger={buttonPopupInfo} setTrigger={setButtonPopupInfo}>
-            <div className="popup-user-info">
-              <div className="row name">
-                {popupUserName}
-              </div>
-              <div className="row">
-                {popupUserEmail}
+          <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+            <div className="row">
+              <div className="col d-flex justify-content-center">
+                <h4>Sign {popupContract}</h4>
               </div>
             </div>
             <div className="row">
-              <div className="col-lg-12">
-                <div className="main-box clearfix">
-                  <div className="table-responsive">
-                    <table className="table user-list">
-                      <thead>
-                        <tr>
-                          <th><span>Contract</span></th>
-                          <th><span>Status</span></th>
-                          <th><span>Action</span></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {popupUserContracts && popupUserContracts.length > 0 ? (
-                          popupUserContracts.map((contract) => (
-                            <tr key={contract} className="">
-                              <td className="user-id">{contract}</td>
-                              <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
-                              <td>
-                                <div className="col d-flex justify-content-center">
-                                    <button className="button" variant="primary">Firm</button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan="2">No contracts assigned!</td>
-                          </tr>
-                        )}
-                      </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
+              <div className="col-sm-4">
+                  <p>Enter the code from your email:</p>
+                  <input type='text' id='signInput'/>
               </div>
+              <div className="col-sm-8">
+                  {fileContent ? <iframe src={fileContent} title='PDF' width='100%' height={window.innerHeight*0.8}></iframe> : <></>}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col d-flex justify-content-end">
+                <button type="button" className="btn btn-secondary mx-2" onClick={(e) => closePopup(e)}>Close</button>
+                <button type="button" className="btn btn-primary" hidden={false} onClick={(e) => handleSign(e, popupContract)}>Confirm signature</button>
+              </div>
+            </div>
           </Popup>
         </>
     );

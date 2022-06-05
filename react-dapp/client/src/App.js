@@ -11,7 +11,7 @@ import ServicesPage from './Pages/servicesPage';
 import SignupPage from './Pages/signupPage';
 import UserPage from './Pages/userPage';
 import UserSettings from './Pages/userSettings';
-import UserContracts from './Pages/userContracts';
+import UserHistory from './Pages/userHistory';
 import ValidationPage from './Pages/validationPage';
 import CompanyPage from './Pages/companyPage';
 import CompanyContracts from './Pages/companyContracts';
@@ -37,7 +37,7 @@ function App() {
 
         <Route path='/homeUser' element={<PrivateRoute><UserPage/></PrivateRoute>}></Route>
         <Route path='/userSettings' element={<PrivateRoute><UserSettings/></PrivateRoute>}></Route>
-        <Route path='/userContracts' element={<PrivateRoute><UserContracts/></PrivateRoute>}></Route>
+        <Route path='/userHistory' element={<PrivateRoute><UserHistory/></PrivateRoute>}></Route>
 
         <Route path='/homeCompany' element={<PrivateRoute><CompanyPage/></PrivateRoute>}></Route>
         <Route path='/companySettings' element={<PrivateRoute><CompanySettings/></PrivateRoute>}></Route>

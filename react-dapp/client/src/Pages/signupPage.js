@@ -134,12 +134,12 @@ export default function SignupPage() {
                 <p>Password</p>
                 <input type="password" onChange={e => setPassword(e.target.value)} placeholder="password" />
                 <br/><br/><br/>
-                <label><input type="checkbox" checked={isCompany} onChange={handleCheck}/> Create account as company</label>
-                <br/><br/>
             </div>
             <br/>
             <button type="submit" className="btn btn-primary btn-block" onClick={handleSubmit} >Sign Up</button>
             <br/><br/>
+            <label><input type="checkbox" checked={isCompany} onChange={handleCheck}/> Create account as company</label>
+                <br/><br/>
             <p className="forgot-password text-right">
                 <a href="/login">Already registered? Sign in</a>
             </p>

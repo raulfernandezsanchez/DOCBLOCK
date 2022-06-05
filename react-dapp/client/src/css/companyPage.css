@@ -93,11 +93,6 @@
 }
 
 .search-wrapper {
-  border: 1px solid;
-  border-image: black;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 0 5px #000;
   margin-top: 30px;
   margin-bottom: 30px;
 }
