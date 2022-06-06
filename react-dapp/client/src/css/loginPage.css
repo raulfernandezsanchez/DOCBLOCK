@@ -1,6 +1,6 @@
 .body {
     background-color: #FFFFFF;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .main {
@@ -23,7 +23,7 @@
 .sign {
     padding-top: 40px;
     color: #0d6efd;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     font-size: 23px;
 }
@@ -45,7 +45,7 @@ margin-bottom: 50px;
 margin-left: 46px;
 text-align: center;
 margin-bottom: 27px;
-font-family: 'Ubuntu', sans-serif;
+font-family: Arial, Helvetica, sans-serif;
 }
 
 form.form1 {
@@ -69,7 +69,7 @@ margin-bottom: 50px;
 margin-left: 46px;
 text-align: center;
 margin-bottom: 27px;
-font-family: 'Ubuntu', sans-serif;
+font-family: Arial, Helvetica, sans-serif;
 }
 
 .fn {
@@ -89,7 +89,7 @@ margin-bottom: 50px;
 margin-left: 46px;
 text-align: center;
 margin-bottom: 27px;
-font-family: 'Ubuntu', sans-serif;
+font-family: Arial, Helvetica, sans-serif;
 }
 
 .ln {
@@ -109,13 +109,13 @@ margin-bottom: 50px;
 margin-left: 46px;
 text-align: center;
 margin-bottom: 27px;
-font-family: 'Ubuntu', sans-serif;
+font-family: Arial, Helvetica, sans-serif;
 }
 
 
 .un:focus, .pass:focus {
     border: px solid rgba(0, 0, 0, 0.18) !important;
-    
+
 }
 
 .submit {
@@ -128,7 +128,7 @@ font-family: 'Ubuntu', sans-serif;
     padding-right: 40px;
     padding-bottom: 10px;
     padding-top: 10px;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     margin-left: 35%;
     font-size: 13px;
     box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);

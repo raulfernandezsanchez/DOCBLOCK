@@ -5,6 +5,7 @@ import Footer from "../Components/footer";
 import NavBarUser from "../Components/navbaruser";
 
 import { ReactNotifications, Store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 
 import DocBlockContract from "./../contracts/DocBlock.json";
 import getWeb3 from "./../getWeb3";
@@ -123,6 +124,7 @@ export default function UserContracts(){
     return (
       <>
       <NavBarUser></NavBarUser>
+      <ReactNotifications/>
       <div className="about-section" width="100%">
           <h1>History</h1>
           <p>Transaction tracking.</p>
@@ -157,7 +159,7 @@ export default function UserContracts(){
           console.log(error.text);
       });
 
-      /*Store.addNotification({
+      Store.addNotification({
         message: "Profile shared successfully!",
         type: "success",
         insert: "top",
@@ -168,7 +170,7 @@ export default function UserContracts(){
           duration: 5000,
           onScreen: true
         }
-      });*/
+      });
   };
 
   const showDocsList = showSignedDocs;
