@@ -13,7 +13,7 @@ const NavBarCompany = () =>{
         <>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container px-5">
-                <a className="navbar-brand" href="/">
+                <a className="navbar-brand" href="/homeCompany">
                   <img className="img-fluid rounded mx-2 mb-4 mb-lg-0" src={require("../Assets/logo_no_background.png")} width="30" height="30" alt="Dockblock logo" />
                   DocBlock
                 </a>

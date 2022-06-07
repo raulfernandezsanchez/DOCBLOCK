@@ -20,11 +20,6 @@ function getUnique(arr, index) {
    return unique;
 }
 
-function getMyUser(arr, email) {
-  const myuser = arr.filter(user => user.email == email);
-  return myuser;
-}
-
 export default function CompanyPage(){
 
     //popup button info

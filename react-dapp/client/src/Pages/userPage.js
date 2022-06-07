@@ -149,34 +149,34 @@ export default function UserPage(){
     }
 
     function signTransaction(name, doc) {
-     const EthereumTx = require('ethereumjs-tx').Transaction;
+      const EthereumTx = require('ethereumjs-tx').Transaction;
 
-     web3Provider.eth.getTransactionCount(account, function (err, nonce) {
-       //console.log("nonce value is ", nonce);
-       const functionAbi = contract.methods.signDocument(String(name), String(doc)).encodeABI();
+      web3Provider.eth.getTransactionCount(account, function (err, nonce) {
+        //console.log("nonce value is ", nonce);
+        const functionAbi = contract.methods.signDocument(String(name), String(doc)).encodeABI();
 
-       var details = {
-         "nonce": nonce,
-         "gasPrice": web3Provider.utils.toHex(web3Provider.utils.toWei('47', 'gwei')),
-         "gas": 300000,
-         "to": address,
-         "value": 0,
-         "data": functionAbi,
-       };
+        var details = {
+           "nonce": nonce,
+           "gasPrice": web3Provider.utils.toHex(web3Provider.utils.toWei('47', 'gwei')),
+           "gas": 300000,
+           "to": address,
+           "value": 0,
+           "data": functionAbi,
+        };
 
-       const transaction = new EthereumTx(details);
-       transaction.sign(Buffer.from(pk, 'hex'));
-       var rawData = '0x' + transaction.serialize().toString('hex');
+        const transaction = new EthereumTx(details);
+        transaction.sign(Buffer.from(pk, 'hex'));
+        var rawData = '0x' + transaction.serialize().toString('hex');
 
-       web3Provider.eth.sendSignedTransaction(rawData)
+        web3Provider.eth.sendSignedTransaction(rawData)
 
-       .on('transactionHash', function(hash) {
-       console.log(['transferToStaging Trx Hash:' + hash]);
-       })
-       .on('receipt', function(receipt){
-       console.log(['transferToStaging Receipt:', receipt]);
-       })
-       .on('error', console.error);
+        .on('transactionHash', function(hash) {
+        console.log(['transferToStaging Trx Hash:' + hash]);
+        })
+        .on('receipt', function(receipt){
+        console.log(['transferToStaging Receipt:', receipt]);
+        })
+        .on('error', console.error);
      });
     }
 
