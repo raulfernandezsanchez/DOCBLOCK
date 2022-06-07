@@ -9,16 +9,11 @@ import NavBarCompany from "../Components/navbarcompany";
 import Popup from "../Components/popup"
 import "../css/companyPage.css"
 
+import DocBlockContract from "./../contracts/DocBlock.json";
+import getWeb3 from "./../getWeb3";
+import Deploy from "./../deploy.json"
 
-function getUnique(arr, index) {
-  const unique = arr
-       .map(e => e[index])
-       // store the keys of the unique objects
-       .map((e, i, final) => final.indexOf(e) === i && i)
-       // eliminate the dead keys & store unique objects
-      .filter(e => arr[e]).map(e => arr[e]);
-   return unique;
-}
+
 
 export default function CompanyPage(){
 
@@ -47,8 +42,51 @@ export default function CompanyPage(){
     const [loadedUsers, setLoadedUsers] = useState('');
     // loaded contracts
     const [loadedContracts, setLoadedContracts] = useState('');
-    //
     const [assignedUser, setAssignedUser] = useState('');
+
+    //web3
+    const [web3Provider, setWeb3Provider] = useState('');
+    const [account, setAccount] = useState('');
+    const [contract, setContract] = useState('');
+    const [accountBalance, setAccountBalance] = useState('');
+
+    const acc = Deploy.account; //account
+    const pk  = Deploy.private_key;  // private key of your account
+    const address = Deploy.contract_address; //Contract Address
+
+    async function connectWeb3() {
+      try {
+        // Get network provider and web3 instance.
+        const web3 = await getWeb3();
+
+        // Get the contract instance.
+        const networkId = await web3.eth.net.getId();
+        const deployedNetwork = DocBlockContract.networks[networkId];
+
+        const instance = new web3.eth.Contract(
+           DocBlockContract.abi,
+           deployedNetwork && deployedNetwork.address,
+        );
+
+        let ethBalance = await web3.eth.getBalance(acc);
+        ethBalance = web3.utils.fromWei(ethBalance, 'ether');
+        setAccountBalance(ethBalance);
+
+        // Set web3, account, and contract to the state, and then proceed with an
+        // example of interacting with the contract's methods.
+        setWeb3Provider(web3);
+        setAccount(acc);
+        setContract(instance);
+        getTransactionLog(instance);
+
+      } catch (error) {
+        // Catch any errors for any of the above operations.
+        alert(
+          `Failed to load web3, account, or contract. Check console for details.`,
+        );
+        console.error(error);
+      }
+    };
 
     // load users and contracts
      React.useEffect(() => {
@@ -67,8 +105,7 @@ export default function CompanyPage(){
               "Content-Type":'application/json',
           }
         }).then(response => response.json())
-        .then(data => {
-          let users = getUnique(data, 'name');
+        .then(users => {
           setFoundUsers(users);
           setLoadedUsers(users);
         });
@@ -78,18 +115,78 @@ export default function CompanyPage(){
                 "Content-Type":'application/json',
             }
         }).then(response => response.json())
-          .then(data => {
-            let contracts = getUnique(data, 'name');
+          .then(contracts => {
             setLoadedContracts(contracts);
           });
 
+          connectWeb3();
+
        }, []);
+
+     function getPastLog(contract, username) {
+       console.log("Loading signed documents.");
+
+       contract.getPastEvents("signAdded", {fromBlock: 0}, (error, events) => {
+         if(!error) {
+           let list = document.getElementById("contracts-list");
+           for(let i = 0; i < events.length; ++i) {
+             let event = events[i];
+             if (event.returnValues.name === username) {
+               list.innerHTML += `
+               <tr>
+                 <td class="user-id">${event.returnValues.document}</td>
+                 <td class="user-name" style="width:48.5%"><span class="c-pill c-pill--success">Signed</span></td>
+               </tr>
+             `;
+             }
+           }
+           console.log(events);
+         } else {
+           console.log(error);
+         } });
+     }
+
+     function getDate(timestamp) {
+      let t = new Date(timestamp * 1000);
+      return ('0' + t.getDate()).slice(-2) + '/' + ('0' + (t.getMonth() + 1) ).slice(-2) + '/' + (t.getFullYear());
+     }
+
+     function getTime(timestamp) {
+      let t = new Date(timestamp * 1000);
+      return ('0' + t.getHours()).slice(-2) + ':' + ('0' + t.getMinutes()).slice(-2) + ':' + ('0' + t.getSeconds()).slice(-2);
+     }
+
+     function getTransactionLog(contract, username) {
+       console.log(`Returns all the past events`);
+
+       contract.getPastEvents("signAdded", {fromBlock: 0}, (error, events) => {
+         if(!error) {
+           let log = document.getElementById("log");
+           for(let i = 0; i < events.length; ++i) {
+             let event = events[i];
+             log.innerHTML += `
+                     <tr class="table-success">
+                       <td class="table-success">${event.transactionHash}</td>
+                       <td class="table-success">${event.returnValues.name}</td>
+                       <td class="table-success">${event.returnValues.document}</td>
+                       <td class="table-success">${getDate(event.returnValues.timestamp)}</td>
+                       <td class="table-success">${getTime(event.returnValues.timestamp)}</td>
+                     </tr>
+             `;
+
+           }
+           console.log(events);
+         } else {
+           console.log(error);
+         } });
+     }
 
     function handlePopupInfo(event, username, useremail, contracts) {
       event.preventDefault();
       setPopupUserName(username);
       setPopupUserEmail(useremail);
       setPopupUserContracts(contracts);
+      getPastLog(contract, username);
       setButtonPopupInfo(true);
     }
 
@@ -188,7 +285,7 @@ export default function CompanyPage(){
             <h1>{myUser.name}</h1>
             <p>{myUser.email}</p>
         </div>
-        <div className="search-wrapper p-5 m-5">
+        <div className="search-wrapper p-2 m-5">
         <h2>Users</h2>
         <div className="rounded">
           <input type="search" value={name} onChange={filter} className="input form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
@@ -196,7 +293,7 @@ export default function CompanyPage(){
         <div className="row">
         	<div className="col-lg-12">
         		<div className="main-box clearfix">
-        			<div className="table-responsive">
+        			<div className="table-responsive scrollable">
                 <table className="table user-list">
                   <thead>
                     <tr>
@@ -247,6 +344,38 @@ export default function CompanyPage(){
           	</div>
           </div>
         </div>
+        <div className="search-wrapper">
+        <h2>Transactions</h2>
+        <div className="row mx-5 my-2">
+          <div className="col-lg-12">
+            <div className="main-box clearfix">
+              <div className="table-responsive">
+                <table className="table user-list">
+                  <thead>
+                    <tr>
+                      <th><span>Hash</span></th>
+                      <th><span>User</span></th>
+                      <th><span>Document</span></th>
+                      <th><span>Date</span></th>
+                      <th><span>Time</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="log"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div className="row mx-5 justify-content-center">
+          <div className="account-balance card border-secondary px-0">
+             <div className="card-header">My account</div>
+             <div className="card-body text-secondary">
+               <h5 className="card-title">{account}</h5>
+               <p className="card-text">Balance: {accountBalance} ETH</p>
+             </div>
+          </div>
+        </div>
         <Footer></Footer>
         <Popup trigger={buttonPopupInfo} setTrigger={setButtonPopupInfo}>
           <div className="popup-user-info">
@@ -278,10 +407,17 @@ export default function CompanyPage(){
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="2">No contracts assigned!</td>
                         </tr>
                       )}
                     </tbody>
+                    </table>
+                  </div>
+                  <div className="table-responsive">
+                    <table className="table user-list">
+                      <thead>
+                      </thead>
+                      <tbody id="contracts-list">
+                      </tbody>
                     </table>
                   </div>
                 </div>
@@ -292,7 +428,7 @@ export default function CompanyPage(){
           <div className="row">
             <div className="col-lg-12">
               <div className="main-box clearfix">
-                <div className="table-responsive">
+                <div className="table-responsive scrollable">
                   <table className="table user-list">
                     <thead>
                       <tr>

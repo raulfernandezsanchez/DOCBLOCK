@@ -102,7 +102,7 @@ export default function CompanyContracts(){
                     <div className="row">
                     	<div className="col-lg-12">
                     		<div className="main-box clearfix">
-                    			<div className="table-responsive">
+                    			<div className="table-responsive scrollable">
                             <table className="table user-list">
                               <thead>
                                 <tr>

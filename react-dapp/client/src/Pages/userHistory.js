@@ -58,7 +58,8 @@ export default function UserContracts(){
       setWeb3Provider(web3);
       setAccount(acc);
       setContract(instance);
-      getPastLog(instance);
+      const userName = localStorage.getItem('userName');
+      getPastLog(instance, userName);
 
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -79,7 +80,8 @@ export default function UserContracts(){
      }).then(response => response.json())
        .then(data => {
          setUser(data.user);
-         setName(data.user.name)
+         setName(data.user.name);
+         localStorage.setItem('userName', data.user.name);
        });
 
        connectWeb3();
@@ -96,7 +98,7 @@ export default function UserContracts(){
    return ('0' + t.getHours()).slice(-2) + ':' + ('0' + t.getMinutes()).slice(-2) + ':' + ('0' + t.getSeconds()).slice(-2);
   }
 
-  function getPastLog(contract) {
+  function getPastLog(contract, username) {
     console.log(`Returns all the past events`);
 
     contract.getPastEvents("signAdded", {fromBlock: 0}, (error, events) => {
@@ -104,15 +106,17 @@ export default function UserContracts(){
         let log = document.getElementById("log");
         for(let i = 0; i < events.length; ++i) {
           let event = events[i];
-          log.innerHTML += `
-                  <tr class="table-success">
-                    <td class="table-success">${event.transactionHash}</td>
-                    <td class="table-success">${event.returnValues.name}</td>
-                    <td class="table-success">${event.returnValues.document}</td>
-                    <td class="table-success">${getDate(event.returnValues.timestamp)}</td>
-                    <td class="table-success">${getTime(event.returnValues.timestamp)}</td>
-                  </tr>
-          `;
+          if (event.returnValues.name === username) {
+            log.innerHTML += `
+                    <tr class="table-success">
+                      <td class="table-success">${event.transactionHash}</td>
+                      <td class="table-success">${event.returnValues.name}</td>
+                      <td class="table-success">${event.returnValues.document}</td>
+                      <td class="table-success">${getDate(event.returnValues.timestamp)}</td>
+                      <td class="table-success">${getTime(event.returnValues.timestamp)}</td>
+                    </tr>
+            `;
+          }
         }
         console.log(events);
       } else {
@@ -182,17 +186,6 @@ export default function UserContracts(){
           <h1>History</h1>
           <p>Transaction tracking.</p>
       </div>
-      <div className="row mx-5 my-5" style={{'textAlign':'center'}}>
-        <h2>SHARE MY EXPERIENCE</h2>
-        <div className="col-lg-12">
-          <div>
-              <input type="email" onChange={e => setCompanyEmail(e.target.value)} placeholder="company@domain.com"></input>
-          </div><br/>
-        </div>
-        <div>
-            <button type='submit' className="btn btn-primary btn-block" onClick={(e) => handleShareProfile(e)}>Share</button>
-        </div>
-      </div>
       <div className="row mx-5 my-5">
         <div className="col-lg-12">
           <div className="main-box clearfix">
@@ -211,6 +204,17 @@ export default function UserContracts(){
               </table>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="row mx-5 justify-content-center">
+        <div className="account-balance card border-secondary px-0">
+           <div className="card-header">Share my experience</div>
+           <div className="row card-body text-secondary">
+               <div className="col-lg d-flex justify-content-between">
+                 <input type="email" className="form-control" onChange={e => setCompanyEmail(e.target.value)} placeholder="company@domain.com"></input>
+                 <button type='submit' className="btn btn-primary btn-block mx-3" onClick={(e) => handleShareProfile(e)}>Share</button>
+               </div>
+           </div>
         </div>
       </div>
       <Footer></Footer>

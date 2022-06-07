@@ -21,6 +21,7 @@ export default function UserPage(){
     const [user, setUser] = useState('');
     const [name, setName] = useState('');
     const [userContracts, setUserContracts] = useState('');
+    const [userSignedContracts, setUserSignedContracts] = useState([]);
     const [renderPending, setRenderPending] = useState(false);
 
     //popup de contrato
@@ -36,7 +37,6 @@ export default function UserPage(){
     const [account, setAccount] = useState('');
     const [contract, setContract] = useState('');
     const [accountBalance, setAccountBalance] = useState('');
-    const [signMap, setSignMap] = useState('');
 
     const acc = Deploy.account; //account
     const pk  = Deploy.private_key;  // private key of your account
@@ -65,8 +65,9 @@ export default function UserPage(){
         setWeb3Provider(web3);
         setAccount(acc);
         setContract(instance);
+        const userName = localStorage.getItem('userName');
         setTimeout(() => {
-          getPastLog(instance)
+          getPastLog(instance, userName)
           setTimeout(() => setRenderPending(true), "100")
         }, "500")
         logEvents(instance);
@@ -92,6 +93,7 @@ export default function UserPage(){
            .then(data => {
              setUser(data.user);
              setName(data.user.name);
+             localStorage.setItem('userName', data.user.name);
              setUserContracts(data.user.assignedContracts);
         });
 
@@ -137,15 +139,13 @@ export default function UserPage(){
         setFileContent(contract.contractPDF);
     };
 
-    function removeUserContract(doc) {
-      let pendingContracts = [];
-      for (let i = 0; i < userContracts.length; ++i) {
-        let contractName = userContracts[i];
-        if (contractName !== doc) {
-          pendingContracts.push(contractName);
+    function notAlreadySignedContract(doc) {
+      for (let i = 0; i < userSignedContracts.length; ++i) {
+        if (userSignedContracts[i] === doc) {
+          return false;
         }
       }
-      setUserContracts(pendingContracts);
+      return true;
     }
 
     function signTransaction(name, doc) {
@@ -180,21 +180,22 @@ export default function UserPage(){
      });
     }
 
-    function getPastLog(contract) {
-      console.log(`Returns all the past events`);
+    function getPastLog(contract, username) {
+      console.log("Loading signed documents.");
 
       contract.getPastEvents("signAdded", {fromBlock: 0}, (error, events) => {
         if(!error) {
           let list = document.getElementById("contracts-list");
           for(let i = 0; i < events.length; ++i) {
             let event = events[i];
-            list.innerHTML += `
+            if (event.returnValues.name === username) {
+              list.innerHTML += `
               <tr>
                 <td class="user-id">${event.returnValues.document}</td>
-                <td class="user-name" style="width:62.2%"><span class="c-pill c-pill--success">Signed</span></td>
+                <td class="user-name" style="width:62.5%"><span class="c-pill c-pill--success">Signed</span></td>
               </tr>
             `;
-            removeUserContract(event.returnValues.document);
+            }
           }
           console.log(events);
         } else {
@@ -213,7 +214,7 @@ export default function UserPage(){
               <td class="user-name" style="width:62.2%"><span class="c-pill c-pill--success">Signed</span></td>
             </tr>
           `;
-          removeUserContract(event.returnValues.document);
+          setUserSignedContracts(userSignedContracts.push(event.returnValues.document))
           console.log(event);
           })
           .on("error", (error) => console.log(error));
@@ -247,12 +248,26 @@ export default function UserPage(){
             // To sign contract without Metamask:
             //await signTransaction(name, doc);
 
-            setSignMap([...signMap, {name: name, document: doc}]);
-
             var pendingContracts = userContracts.filter(x => {
               return x != doc;
             })
             setUserContracts(pendingContracts);
+
+            let remove_contract = {
+              userassignedContracts : doc
+            }
+
+            //remove pending contract
+            fetch("https://vast-peak-05541.herokuapp.com/api/users/" + user._id + "/deletecontract", {
+                body: JSON.stringify(remove_contract),
+                method:'PUT',
+                headers:{
+                    "Content-Type":'application/json',
+                }
+            }).then(response => response.json())
+              .then(data => {
+                console.log(data);
+              });
 
             setButtonPopup(false);
 
@@ -297,13 +312,13 @@ export default function UserPage(){
                   <tbody>
                     {userContracts && userContracts.length && renderPending > 0 ? (
                       userContracts.map((contract) => (
-                        <tr key={contract}>
-                          <td className="user-id">{contract}</td>
-                          <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
-                          <td>
-                            <button className="button" variant="primary" onClick={(e) => generateRandomNum()} onClick={(e) => handleContractInfo(e, contract, contract.contractPDF)}>Sign</button>
-                          </td>
-                        </tr>
+                          <tr key={contract}>
+                            <td className="user-id">{contract}</td>
+                            <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
+                            <td>
+                              <button className="button" variant="primary" onClick={(e) => generateRandomNum()} onClick={(e) => handleContractInfo(e, contract, contract.contractPDF)}>Sign</button>
+                            </td>
+                          </tr>
                       ))
                     ) : (
                       <tr>
@@ -318,8 +333,8 @@ export default function UserPage(){
                     </thead>
                     <tbody id="contracts-list">
                     </tbody>
-                    </table>
-                  </div>
+                  </table>
+                </div>
               </div>
             </div>
           </div>

@@ -73,11 +73,16 @@
   }
 }
 
+.table-link {
+  position: relative;
+}
+
 .info-button:hover + .hide {
   display: block;
   color: white;
   padding: 3px;
   border-radius: 5px;
+  width: 85px;
 }
 
 .assign-button:hover + .hide {
@@ -85,6 +90,7 @@
   color: white;
   padding: 3px;
   border-radius: 5px;
+  width: 85px;
 }
 
 .check-assign {
@@ -117,6 +123,13 @@
   display: flex;
   justify-content: center;
 }
+
+.table-responsive.scrollable {
+   overflow:hidden;
+   overflow-y:scroll;
+   height: 400px;
+}
+
 
 .c-pill {
   align-items: center;
@@ -162,3 +175,10 @@
   background: #ffd5d1; }
   .c-pill--danger:before {
     background: #ff4436; }
+
+/* ACCOUNT BALANCE */
+
+.account-balance {
+  width: 600px;
+  margin-bottom: 40px;
+}
