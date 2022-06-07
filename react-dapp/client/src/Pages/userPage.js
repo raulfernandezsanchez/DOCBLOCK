@@ -133,7 +133,7 @@ export default function UserPage(){
         setButtonPopup(true);
         setPopupContract(contractID);
         generateRandomNum();
-        sendEmail(event, contractID);
+        //sendEmail(event, contractID);
         setFileContent(contract.contractPDF);
     };
 
@@ -240,7 +240,13 @@ export default function UserPage(){
           }
           if(!alreadySigned) {
             var x = document.getElementById("contracts-list");
-            await signTransaction(name, doc);
+
+            // To sign contract with MetaMask:
+            await contract.methods.signDocument(name, doc).send({from: account});
+
+            // To sign contract without Metamask:
+            //await signTransaction(name, doc);
+
             setSignMap([...signMap, {name: name, document: doc}]);
 
             var pendingContracts = userContracts.filter(x => {
@@ -295,7 +301,7 @@ export default function UserPage(){
                           <td className="user-id">{contract}</td>
                           <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
                           <td>
-                            <button className="button" variant="primary" onClick={(e) => generateRandomNum()} onClick={(e) => handleContractInfo(e, contract.name, contract.contractPDF)}>Sign</button>
+                            <button className="button" variant="primary" onClick={(e) => generateRandomNum()} onClick={(e) => handleContractInfo(e, contract, contract.contractPDF)}>Sign</button>
                           </td>
                         </tr>
                       ))
