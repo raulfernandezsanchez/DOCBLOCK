@@ -182,6 +182,7 @@ export default function UserContracts(){
   return (
       <>
       <NavBarUser></NavBarUser>
+      <ReactNotifications/>
       <div className="about-section" width="100%">
           <h1>History</h1>
           <p>Transaction tracking.</p>

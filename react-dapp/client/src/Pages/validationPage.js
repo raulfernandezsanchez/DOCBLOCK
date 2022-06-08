@@ -5,9 +5,11 @@ import Footer from "../Components/footer";
 import NavBar from "../Components/navbar";
 import DocBlockContract from "./../contracts/DocBlock.json";
 import Deploy from "./../deploy.json"
+import "../css/companyPage.css";
 
 function ValidationPage(){
     const [searchShow, setSearchShow] = useState(false);
+    const [profileName, setProfileName] = useState('');
     const [searchField, setSearchField] = useState("");
 
     const [user, setUser] = useState('');
@@ -103,7 +105,7 @@ function ValidationPage(){
           for(let i = 0; i < events.length; ++i) {
             let event = events[i];
             if(event.returnValues.name == name) {
-              log.innerHTML = `
+              log.innerHTML += `
                       <tr class="table-success">
                         <td class="table-success">${event.transactionHash}</td>
                         <td class="table-success">${event.returnValues.document}</td>
@@ -122,12 +124,14 @@ function ValidationPage(){
 
     function handleSearch() {
       if(searchField !== '') setSearchShow(true);
+      let log = document.getElementById("log");
+      log.innerHTML = ``;
       getPastLog(smartContract);
+      setProfileName(name);
     };
 
     function changeSubmit(e){
         setSearchField(e.target.value)
-        setSearchShow(false);
         fetch("https://vast-peak-05541.herokuapp.com/api/users/", {
             method:'GET',
             headers:{
@@ -143,15 +147,23 @@ function ValidationPage(){
     return (
         <>
         <NavBar></NavBar>
-        <div id="validation" style={{'textAlign': 'center'}}>
-            <h4>Enter an ID to validate a candidate experience</h4>
-            <input onChange={changeSubmit} placeholder="User code" size="30"></input>
-            <br/><br/>
-            <button type='submit' onClick={handleSearch} className="btn btn-primary btn-block">Search</button>
-            <br/><br/><br/><br/>
+        <div className="about-section" width="100%">
+            <h1>Validation</h1>
+            <p>Validate a person's experience.</p>
+        </div>
+        <div className="row mx-5 justify-content-center">
+          <div className="account-balance card border-secondary px-0">
+             <div className="card-header">Profile ID</div>
+             <div className="row card-body text-secondary">
+                 <div className="col-lg d-flex justify-content-between">
+                   <input type="email" className="form-control" onChange={changeSubmit}placeholder="User code" size="30"></input>
+                   <button type='submit' onClick={handleSearch} className="btn btn-primary btn-block">Search</button>
+                 </div>
+             </div>
+          </div>
         </div>
         <div style={{'textAlign': 'center'}}>
-            {searchShow ? (<h2>{name}'s profile</h2>) : (<p></p>)}
+            {searchShow ? (<h2>{profileName}</h2>) : (<p></p>)}
         </div>
         <div className="row mx-5 my-5">
           <div className="col-lg-12">

@@ -117,15 +117,10 @@ export default function CompanyContracts(){
                                     <tr key={contract.id} className="contract">
                                       <td className="user-id">{contract.name}</td>
                                       <td className="user-name">
-                                      <button className="button" variant="primary" onClick={(e) => handleContractInfo(e, contract.name, contract.contractPDF)}>View contract</button>
-                                      </td>
-                                      <td>
-                                        <a href="#" className="table-link">
-                        									<span className="fa-stack">
-                        										<i className="fa fa-square fa-stack-2x"></i>
+                                      <button type="button" className="btn btn-primary"  onClick={(e) => handleContractInfo(e, contract.name, contract.contractPDF)}>
+                                      <span className="fa-stack">
                         										<i className="fa fa-search-plus fa-stack-1x fa-inverse"></i>
-                        									</span>
-                        								</a>
+                        									</span>View contract</button>
                                       </td>
                                     </tr>
                                   ))

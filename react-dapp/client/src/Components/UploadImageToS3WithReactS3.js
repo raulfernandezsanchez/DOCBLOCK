@@ -102,7 +102,7 @@ const UploadImageToS3WithReactS3 = () => {
                 </label>
                 <br/>
                 <br/>
-                <button onClick={() => doublecall(selectedFile)} className="btn btn-primary btn-block">Upload to S3</button>
+                <button onClick={() => doublecall(selectedFile)} className="btn btn-primary btn-block">Upload Contract</button>
             </div>
             <div className="col-sm-8">
                 {fileContent ? <iframe src={fileContent} title='PDF' width="100%" height={window.innerHeight*0.85}></iframe> : <></>}

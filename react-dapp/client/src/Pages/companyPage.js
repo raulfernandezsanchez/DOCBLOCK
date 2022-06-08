@@ -54,6 +54,8 @@ export default function CompanyPage(){
     const pk  = Deploy.private_key;  // private key of your account
     const address = Deploy.contract_address; //Contract Address
 
+    const [fileContent, setFileContent] = useState();
+
     async function connectWeb3() {
       try {
         // Get network provider and web3 instance.
@@ -214,7 +216,7 @@ export default function CompanyPage(){
       let assign = false;
       let i = 0;
       while (!assign && i < already_assigned_contracts.length) {
-        if (contract == already_assigned_contracts[i]) {
+        if (contract === already_assigned_contracts[i]) {
           assign = true;
         }
         ++i;
@@ -226,6 +228,7 @@ export default function CompanyPage(){
       event.preventDefault();
 
       if (!isContractAssigned(contract)) {
+        console.log(contract)
         let new_contract = {
           userassignedContracts : contract
         }
@@ -259,6 +262,16 @@ export default function CompanyPage(){
 
       } else {
         console.log("Contract already assigned!");
+      }
+    }
+
+    function obtainFileContent(contractID){
+      let found = false;
+      for(let i = 0; !found && i < loadedContracts.length; ++i){
+        if (loadedContracts[i].name === contractID){
+          found = true;
+          setFileContent(loadedContracts[i].contractPDF);
+        }
       }
     }
 
@@ -443,6 +456,9 @@ export default function CompanyPage(){
                             <td className="user-id">{contract}</td>
                             <td>
                               <button onClick={(e) => assignContract(e, contract)} type="button" className="btn btn-primary">Assign</button>
+                            </td>
+                            <td>
+                              <a onClick={() => obtainFileContent(contract)} href={fileContent} className="btn btn-primary" target='_blank'>View contract</a>
                             </td>
                           </tr>
                         ))

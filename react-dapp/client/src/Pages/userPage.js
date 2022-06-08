@@ -104,16 +104,18 @@ export default function UserPage(){
     const generateRandomNum = () =>{
         let newVal = Math.floor(Math.random() * (maxVal - minVal + 1) + minVal);
         setRandomNum(newVal);
+        numRand = newVal;
         console.log(newVal)
     };
 
     //para debugar
     let mail = 'infodocblock@gmail.com';
+    let numRand = 0;
 
     const sendEmail = (e, contractID) =>{
         var templateParams = {
-            user_email: user.email, //user.email,
-            number: randomNum,
+            user_email: mail, //user.email,
+            number: numRand,
             contract: contractID
         };
 
@@ -130,13 +132,20 @@ export default function UserPage(){
         setButtonPopup(false);
     };
 
-    function handleContractInfo(event, contractID, contractURL) {
-        event.preventDefault();
-        setButtonPopup(true);
-        setPopupContract(contractID);
-        generateRandomNum();
-        //sendEmail(event, contractID);
-        setFileContent(contractURL);
+    async function handleContractInfo(event, contractID) {
+            event.preventDefault();
+            setButtonPopup(true);
+            setPopupContract(contractID);
+            generateRandomNum();
+            //sendEmail(event, contractID);
+            let result = await fetch("https://vast-peak-05541.herokuapp.com/api/contracts/" + contractID, {
+                method:'GET',
+                headers:{
+                    "Content-Type":'application/json',
+                }
+            });
+            const data = await result.json();
+            setFileContent(data.company.contractPDF);
     };
 
     function notAlreadySignedContract(doc) {
@@ -223,6 +232,7 @@ export default function UserPage(){
 
     async function handleSign(event, doc) {
         event.preventDefault();
+
         const signInput = document.getElementById('signInput');
         if (parseInt(signInput.value,10) !== randomNum){
           alert('Wrong number, try again');
@@ -316,7 +326,7 @@ export default function UserPage(){
                             <td className="user-id">{contract}</td>
                             <td className="user-name"><span className="c-pill c-pill--warning">Pending</span></td>
                             <td>
-                              <button className="button" variant="primary" onClick={(e) => handleContractInfo(e, contract, contract.contractPDF)}>Sign</button>
+                              <button className="button" variant="primary" onClick={(e) => handleContractInfo(e, contract)}>Sign</button>
                             </td>
                           </tr>
                       ))
