@@ -55,7 +55,7 @@ Inicialitzar truffle:
 
   Al fer `truffle develop` apareix la URL que s'utilitza (De l'estil: http://127.0.0.1:8545/)
 
-  Configurar en el fitxer src/getWeb3.js el port utilitzat.
+  També apareix en el fitxer src/getWeb3.js el port utilitzat.
 
   1.3. Identificador de cadena: *1337*
 

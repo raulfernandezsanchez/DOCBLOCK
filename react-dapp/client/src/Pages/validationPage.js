@@ -22,6 +22,7 @@ function ValidationPage(){
     const [signMap, setSignMap] = useState('');
     const [showName, setShowName] = useState('');
     const [showSignedDocs, setShowSignedDocs] = useState(false);
+    const [smartContract, setSmartContract] = useState();
 
     const acc = Deploy.account; //account
     const pk  = Deploy.private_key;  // private key of your account
@@ -29,10 +30,8 @@ function ValidationPage(){
 
     async function connectWeb3() {
       try {
-        console.log("web3")
         // Get network provider and web3 instance.
         const web3 = await getWeb3();
-
         // Get the contract instance.
         const networkId = await web3.eth.net.getId();
         const deployedNetwork = DocBlockContract.networks[networkId];
@@ -42,6 +41,7 @@ function ValidationPage(){
            deployedNetwork && deployedNetwork.address,
         );
 
+        setSmartContract(instance);
         let ethBalance = await web3.eth.getBalance(acc);
         ethBalance = web3.utils.fromWei(ethBalance, 'ether');
         setAccountBalance(ethBalance);
@@ -51,7 +51,7 @@ function ValidationPage(){
         setWeb3Provider(web3);
         setAccount(acc);
         setContract(instance);
-        getPastLog(instance);
+        //getPastLog(instance);
 
       } catch (error) {
         // Catch any errors for any of the above operations.
@@ -63,8 +63,7 @@ function ValidationPage(){
     };
 
     // load users and contracts
-    const handleSearch = () => {
-      console.log("me conecto")
+    React.useEffect(() => {
        if(searchField !== '') setSearchShow(true);
        fetch("https://vast-peak-05541.herokuapp.com/api/users/", {
            method:'GET',
@@ -73,17 +72,15 @@ function ValidationPage(){
            }
        }).then(response => response.json())
          .then(data => {
-           let my_user = getMyUser(data);
-           setEmail(my_user.email);
-           setName(my_user.name)
          });
 
          connectWeb3();
 
-       }
+       }, []);
 
     function getMyUser(arr) {
        const myuser = arr.filter(user => user._id == searchField);
+       setUser(myuser[0].name)
        return myuser[0];
     }
 
@@ -105,14 +102,16 @@ function ValidationPage(){
           let log = document.getElementById("log");
           for(let i = 0; i < events.length; ++i) {
             let event = events[i];
-            log.innerHTML += `
-                    <tr class="table-success">
-                      <td class="table-success">${event.transactionHash}</td>
-                      <td class="table-success">${event.returnValues.document}</td>
-                      <td class="table-success">${getDate(event.returnValues.timestamp)}</td>
-                      <td class="table-success">${getTime(event.returnValues.timestamp)}</td>
-                    </tr>
-            `;
+            if(event.returnValues.name == name) {
+              log.innerHTML = `
+                      <tr class="table-success">
+                        <td class="table-success">${event.transactionHash}</td>
+                        <td class="table-success">${event.returnValues.document}</td>
+                        <td class="table-success">${getDate(event.returnValues.timestamp)}</td>
+                        <td class="table-success">${getTime(event.returnValues.timestamp)}</td>
+                      </tr>
+              `;
+            }
           }
           console.log(events);
         } else {
@@ -120,13 +119,27 @@ function ValidationPage(){
         } });
     }
 
-    function handleSubmit(){
-        if(name !== '') setSearchShow(true);
+
+    function handleSearch() {
+      if(searchField !== '') setSearchShow(true);
+      getPastLog(smartContract);
     };
+
     function changeSubmit(e){
         setSearchField(e.target.value)
         setSearchShow(false);
+        fetch("https://vast-peak-05541.herokuapp.com/api/users/", {
+            method:'GET',
+            headers:{
+                "Content-Type":'application/json',
+            }
+        }).then(response => response.json())
+          .then(data => {
+            let my_user = getMyUser(data);
+            setName(my_user.name);
+          });
     };
+
     return (
         <>
         <NavBar></NavBar>
