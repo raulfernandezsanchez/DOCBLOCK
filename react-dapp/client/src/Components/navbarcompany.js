@@ -21,7 +21,7 @@ const NavBarCompany = () =>{
                 <div className="collapse navbar-collapse" id="menu">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <NavLink to="/homeCompany" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>My page</NavLink>
+                            <NavLink reloadDocument to="/homeCompany" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>My page</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink to="/companyContracts" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Contracts</NavLink>

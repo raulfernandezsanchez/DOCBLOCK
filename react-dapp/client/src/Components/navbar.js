@@ -32,7 +32,7 @@ const NavBar = () =>{
                             <NavLink to="/services" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Services</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/validation" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Validation</NavLink>
+                            <NavLink reloadDocument to="/validation" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")}>Validation</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink to="/login" className={({isActive})=>(isActive ? "nav-link active" : "nav-link")} onClick={loginUser} >User</NavLink>

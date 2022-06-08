@@ -137,7 +137,7 @@ export default function UserPage(){
             setButtonPopup(true);
             setPopupContract(contractID);
             generateRandomNum();
-            //sendEmail(event, contractID);
+            sendEmail(event, contractID);
             let result = await fetch("https://vast-peak-05541.herokuapp.com/api/contracts/" + contractID, {
                 method:'GET',
                 headers:{

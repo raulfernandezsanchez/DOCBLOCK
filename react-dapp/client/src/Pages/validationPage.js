@@ -11,6 +11,7 @@ function ValidationPage(){
     const [searchShow, setSearchShow] = useState(false);
     const [profileName, setProfileName] = useState('');
     const [searchField, setSearchField] = useState("");
+    const [users, setUsers] = useState('');
 
     const [user, setUser] = useState('');
     const [name, setName] = useState('');
@@ -74,14 +75,15 @@ function ValidationPage(){
            }
        }).then(response => response.json())
          .then(data => {
+           setUsers(data);
          });
 
          connectWeb3();
 
        }, []);
 
-    function getMyUser(arr) {
-       const myuser = arr.filter(user => user._id == searchField);
+    function getMyUser(arr, searchfield) {
+       const myuser = arr.filter(user => user._id == searchfield);
        setUser(myuser[0].name)
        return myuser[0];
     }
@@ -121,27 +123,18 @@ function ValidationPage(){
         } });
     }
 
-
     function handleSearch() {
-      if(searchField !== '') setSearchShow(true);
+      setSearchShow(true);
       let log = document.getElementById("log");
       log.innerHTML = ``;
       getPastLog(smartContract);
       setProfileName(name);
     };
 
-    function changeSubmit(e){
-        setSearchField(e.target.value)
-        fetch("https://vast-peak-05541.herokuapp.com/api/users/", {
-            method:'GET',
-            headers:{
-                "Content-Type":'application/json',
-            }
-        }).then(response => response.json())
-          .then(data => {
-            let my_user = getMyUser(data);
-            setName(my_user.name);
-          });
+    async function changeSubmit(e){
+      let userId = e.target.value;
+      let my_user = getMyUser(users, userId);
+      setName(my_user.name);
     };
 
     return (
@@ -151,13 +144,13 @@ function ValidationPage(){
             <h1>Validation</h1>
             <p>Validate a person's experience.</p>
         </div>
-        <div className="row mx-5 justify-content-center">
+        <div className="row mx-5 my-3 justify-content-center">
           <div className="account-balance card border-secondary px-0">
              <div className="card-header">Profile ID</div>
              <div className="row card-body text-secondary">
                  <div className="col-lg d-flex justify-content-between">
-                   <input type="email" className="form-control" onChange={changeSubmit}placeholder="User code" size="30"></input>
-                   <button type='submit' onClick={handleSearch} className="btn btn-primary btn-block">Search</button>
+                   <input type="email" className="form-control" onChange={changeSubmit} placeholder="Enter user code" size="30"></input>
+                   <button type='submit' onClick={handleSearch} className="btn btn-primary btn-block mx-3">Search</button>
                  </div>
              </div>
           </div>
@@ -165,7 +158,7 @@ function ValidationPage(){
         <div style={{'textAlign': 'center'}}>
             {searchShow ? (<h2>{profileName}</h2>) : (<p></p>)}
         </div>
-        <div className="row mx-5 my-5">
+        <div className="row mx-5">
           <div className="col-lg-12">
             <div className="main-box clearfix">
               <div className="table-responsive">
