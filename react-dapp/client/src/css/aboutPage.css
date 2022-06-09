@@ -78,6 +78,13 @@
     }
   }
 
+  @media screen and (max-width: 1200px) {
+    .column-company {
+      width: 100%;
+      display: block;
+    }
+  }
+
   #titleSection{
     text-align: center;
   }

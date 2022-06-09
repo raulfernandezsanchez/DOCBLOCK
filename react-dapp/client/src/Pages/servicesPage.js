@@ -14,10 +14,10 @@ class ServicesPage extends Component{
               <p>Functionalities we provide with DocBlock.</p>
           </div>
           <div className="row">
-              <div className="col d-flex justify-content-center">
+              <div className="col-md d-flex justify-content-center">
                   <div className="card">
-                      <img src={require("../Assets/User.jpeg")} alt="Diego Núñez" id='memberImage'/>
-                      <div className="container">
+                      <img src={require("../Assets/User.jpeg")} alt="Users generic image" id='memberImage'/>
+                      <div className="card-body">
                           <h2>Users</h2>
                           <p className="title">Services for users:</p>
                           <li>Tracking your contracts.</li>
@@ -27,10 +27,10 @@ class ServicesPage extends Component{
                       </div>
                   </div>
               </div>
-              <div className="col d-flex justify-content-center">
+              <div className="col-md d-flex justify-content-center">
                   <div className="card">
-                      <img src={require("../Assets/Business.jpeg")} alt="Diego Núñez" id='memberImage'/>
-                      <div className="container">
+                      <img src={require("../Assets/Business.jpeg")} alt="Companies generic image" id='memberImage'/>
+                      <div className="card-body">
                           <h2>Companies</h2>
                           <p className="title">Services for companies:</p>
                           <li>Visualization of your documents.</li>

@@ -100,7 +100,7 @@ export default function UserSettings(){
     return (
         <>
         <NavBarUser></NavBarUser>
-        <div style={{'marginLeft': '20px'}}>
+        <div style={{'marginLeft': '20px', 'marginTop': '20px'}}>
         <h4>User settings</h4>
             <ul className="nav nav-tabs" id="myTab" role="tablist">
                 <li className="nav-item" role="presentation">

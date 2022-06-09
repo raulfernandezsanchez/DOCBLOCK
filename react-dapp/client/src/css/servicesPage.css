@@ -47,13 +47,6 @@ h5{
   color: rgb(0, 0, 0);
 }
 
-@media screen and (max-width: 650px) {
-  .column {
-    width: 100%;
-    display: block;
-  }
-}
-
 #titleSection{
   text-align: center;
 }

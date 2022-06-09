@@ -447,6 +447,7 @@ export default function CompanyPage(){
                       <tr>
                         <th><span>Contract</span></th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                       </tr>
                     </thead>
                     <tbody>

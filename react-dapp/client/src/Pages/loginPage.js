@@ -74,23 +74,18 @@ export default function LoginPage(){
     return(
         <>
         <NavBar></NavBar>
-        <div class="body">
-            <body>
-                <div class="main">
-                    <p class="sign" align="center">User Log in</p>
-                    <form class ="form1">
-                        <input class="un " type="email" onChange={e => setEmail(e.target.value)} align="center" placeholder='Email'></input>
-                        <input class="pass " type="password" onChange={e => setPassword(e.target.value)} align="center" placeholder='Password'></input>
-                        <button class="submit" onClick={handleSubmit} align="center">Log in</button>
-                        <div class = "forgot" align="center">
-                            <a href="/recovery">Forgot password? Reset</a>
-                        </div>
-                        <div class = "register" align="center">
-                            <a href="/signup" >New user? Sign up</a>
-                        </div>
-                    </form>
-                </div>
-            </body>
+        <div className="body">
+          <div className="main">
+              <p className="sign" align="center">User Log in</p>
+              <form className ="form1">
+                  <input className="un " type="email" onChange={e => setEmail(e.target.value)} align="center" placeholder='Email'></input>
+                  <input className="pass " type="password" onChange={e => setPassword(e.target.value)} align="center" placeholder='Password'></input>
+                  <button type="button" className="submit btn btn-primary" onClick={handleSubmit} align="center">Log in</button>
+                  <div className = "register m-3" align="center">
+                      <a href="/signup" >New user? Sign up</a>
+                  </div>
+              </form>
+          </div>
         </div>
         <Footer></Footer>
         </>

@@ -115,23 +115,20 @@ export default function SignupPage() {
     return (
         <>
         <NavBar></NavBar>
-        <div class="body">
-            <body>
-                <div class="main2">
-                    <p class="sign" align="center">Company Sign Up</p>
-                    <form class ="form1">
-                        <input class="fn" type="text" onChange={e => setFirstname(e.target.value)} placeholder="Company Name" />
-                        <input class="un " type="email" onChange={e => setEmail(e.target.value)} align="center" placeholder='Email'></input>
-                        <input class="pass " type="password" onChange={e => setPassword(e.target.value)} align="center" placeholder='Password'></input>
-                        <button class="submit" onClick={handleSubmit} align="center">Sign Up</button>
-                        <div class = "forgot" align="center">
-                            <a href="/login">Already registered? Sign in</a>
-                        </div>
-                    </form>
-                </div>
-            </body>
+        <div className="body">
+          <div className="main2">
+              <p className="sign" align="center">Company Sign Up</p>
+              <form className ="form1">
+                  <input className="fn" type="text" onChange={e => setFirstname(e.target.value)} placeholder="Company Name" />
+                  <input className="un " type="email" onChange={e => setEmail(e.target.value)} align="center" placeholder='Email'></input>
+                  <input className="pass " type="password" onChange={e => setPassword(e.target.value)} align="center" placeholder='Password'></input>
+                  <button type="button" className="submit btn btn-primary" onClick={handleSubmit} align="center">Sign Up</button>
+                  <div className = "forgot" align="center">
+                      <a href="/login">Already registered? Sign in</a>
+                  </div>
+              </form>
+          </div>
         </div>
-
         <Footer></Footer>
         </>
     );
